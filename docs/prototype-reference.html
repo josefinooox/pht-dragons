@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PHT Dragons</title>
+<!-- Ve finále skutečné URL (/zapas/...) vykreslené serverem, aby každý zápas měl vlastní náhled pro WhatsApp -->
+<meta property="og:title" content="PHT Dragons – rozpis zápasů">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ice:#EDF2F7; --paper:#FFFFFF; --ink:#10213D; --muted:#5D6A80; --line:#D2DBE6; --soft:#E3EAF2;
+  --us:#C8202F; --them:#1F5FD0;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ice:#0C1626;--paper:#14223A;--ink:#E8EEF7;--muted:#93A1B8;--line:#26375A;--soft:#1C2D4A;--us:#E5414E;--them:#5B8FF0}
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--ice);color:var(--ink);font:16px/1.5 var(--body);padding-bottom:env(safe-area-inset-bottom,0px)}
+a,button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--them);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.narrow{max-width:760px;margin:0 auto}
+[hidden]{display:none!important}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:12px;padding:14px 0;padding-top:max(14px,env(safe-area-inset-top,0px))}
+.top .logo{width:40px;height:40px}
+.top b{display:block;font:800 24px/1 var(--display)}
+.top small{color:var(--muted);font-size:13px}
+.top .form{margin-left:auto}
+
+/* result chips: neutral, not brand colours */
+.form{display:flex;gap:4px;align-items:center}
+.res{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;font-weight:700;font-size:13px;flex:none}
+.res.V{background:var(--ink);color:var(--paper)}
+.res.R{background:var(--soft);color:var(--ink)}
+.res.P{border:2px solid var(--line);color:var(--muted)}
+.formwrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+
+/* banners */
+.banner{display:flex;align-items:center;gap:12px;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:12px;text-decoration:none}
+.banner .logo{width:32px;height:32px}
+.banner .t{flex:1;line-height:1.3}
+.banner .t small{display:block;color:var(--muted)}
+.banner .sc{font:900 28px/1 var(--display)}
+.banner.wait{border-style:dashed}
+
+/* hero = rink */
+.rink{position:relative;background:var(--paper);border:2px solid var(--line);border-radius:26px;overflow:hidden;padding:22px 18px 18px}
+.rink::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.08;
+  background:
+    linear-gradient(90deg,transparent calc(50% - 3px),var(--us) calc(50% - 3px),var(--us) calc(50% + 3px),transparent calc(50% + 3px)),
+    linear-gradient(90deg,transparent calc(22% - 5px),var(--them) calc(22% - 5px),var(--them) calc(22% + 5px),transparent calc(22% + 5px)),
+    linear-gradient(90deg,transparent calc(78% - 5px),var(--them) calc(78% - 5px),var(--them) calc(78% + 5px),transparent calc(78% + 5px))}
+.rink > *{position:relative}
+.when{text-align:center;font-weight:600;color:var(--muted)}
+.when .rel{display:inline-block;background:var(--ink);color:var(--paper);border-radius:999px;padding:1px 11px;margin-right:6px;font-weight:700}
+.when .rel.live{background:var(--us);color:#fff}
+.faceoff{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:10px;margin:16px 0 6px}
+.side{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.side .logo{width:clamp(72px,20vw,128px);height:clamp(72px,20vw,128px)}
+.side .name{font:800 clamp(20px,5vw,32px)/1 var(--display)}
+.side .meta{color:var(--muted);font-size:13px;line-height:1.2}
+.side .tag{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.center{text-align:center;padding-top:clamp(14px,4vw,30px)}
+.big{font:900 clamp(54px,15vw,104px)/.85 var(--display)}
+.sraz{color:var(--muted);font-size:14px;margin-top:6px}
+.venue{display:flex;justify-content:center;margin:10px 0 4px}
+.venue a{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:17px;text-decoration:none;border-bottom:2px solid var(--line);padding-bottom:2px}
+.venue a:hover{border-color:var(--ink)}
+.actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:999px;padding:8px 16px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn svg{width:18px;height:18px}
+.glance{margin-top:18px;border-top:2px solid var(--line);padding-top:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+.glance .label{color:var(--muted);font-size:14px}
+.glance p{grid-column:1/-1;margin:6px 0 0}
+.glance a{grid-column:1/-1;font-weight:600;margin-top:4px}
+.stars{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:12px}
+.star{background:var(--soft);border-radius:999px;padding:3px 12px;font-size:14px;font-weight:600}
+
+/* sections */
+.cols{display:grid;gap:12px;margin:12px 0}
+@media (min-width:900px){.cols{grid-template-columns:1.2fr 1fr;align-items:start}}
+.panel{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px}
+.panel+.panel{margin-top:12px}
+h2{font:800 24px/1.1 var(--display);margin:0 0 6px}
+h3{font:700 16px/1.3 var(--body);margin:22px 0 8px}
+.lede{color:var(--muted);margin:0}
+.more{display:block;width:100%;margin-top:10px;background:none;border:2px solid var(--line);border-radius:12px;padding:9px;font-weight:600;cursor:pointer}
+.month{font:700 14px/1 var(--body);color:var(--muted);margin:16px 0 4px}
+
+.games{list-style:none;margin:0;padding:0}
+.games a,.games .x{display:grid;grid-template-columns:56px 30px 1fr auto;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line);text-decoration:none}
+.games li:last-child a,.games li:last-child .x{border-bottom:0}
+.games a:hover{background:var(--ice)}
+.games .d{font-size:13px;color:var(--muted);line-height:1.2}
+.games .d b{display:block;color:var(--ink);font-size:15px}
+.games .logo{width:30px;height:30px}
+.games .o{font-weight:600;line-height:1.2}
+.games .o small{display:block;color:var(--muted);font-weight:400}
+.games .r{display:flex;align-items:center;gap:8px;font:800 20px/1 var(--display)}
+.games .r.time{font:600 15px/1 var(--body)}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{font-weight:600;color:var(--muted);text-align:right;padding:6px;border-bottom:2px solid var(--line)}
+td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:nth-child(2),td:nth-child(2){text-align:left}
+td.team{display:flex;align-items:center;gap:8px;font-weight:600}
+td.team .logo{width:24px;height:24px}
+td.z{font-weight:700}
+td.pts{font:800 19px/1 var(--display)}
+tr.me td:first-child{box-shadow:inset 4px 0 var(--us)}
+tr.op td:first-child{box-shadow:inset 4px 0 var(--them)}
+tr.gap td{text-align:center;color:var(--muted);padding:2px}
+@media (max-width:520px){.hide-s{display:none}}
+
+/* detail */
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;text-decoration:none;padding:8px 0;margin-bottom:6px}
+.insight{font-size:18px;line-height:1.45;margin:8px 0 0}
+.tape{display:grid;grid-template-columns:1fr auto 1fr;border-top:2px solid var(--line);margin-top:6px}
+.tape div{padding:9px 0;border-bottom:1px solid var(--line)}
+.tape .l,.tape .r{font:800 22px/1 var(--display);color:var(--muted)}
+.tape .l{text-align:right;padding-right:12px}.tape .r{padding-left:12px}
+.tape .win{color:var(--ink)}
+.tape .k{text-align:center;color:var(--muted);font-size:13px;min-width:120px;align-self:center}
+.tape .hd{font:700 14px/1.2 var(--body);color:var(--ink)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 5px;vertical-align:0}
+.note{color:var(--muted);font-size:13px;margin:6px 0 0}
+.formrow{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.common{width:100%}
+.common td{text-align:left;vertical-align:top}
+.common td.sc{font:800 18px/1.3 var(--display);white-space:nowrap}
+.common th{text-align:left}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+
+.logo{object-fit:contain;flex:none}
+.logo.fb{display:inline-grid;place-items:center;border-radius:50%;background:var(--soft);font:800 12px var(--display);color:var(--muted)}
+footer{color:var(--muted);font-size:13px;padding:14px 0 40px}
+@media (prefers-reduced-motion:no-preference){.faceoff .side{animation:in .45s ease-out both}.faceoff .side:last-child{animation-name:in2}}
+@keyframes in{from{opacity:0;transform:translateX(-18px)}}
+@keyframes in2{from{opacity:0;transform:translateX(18px)}}
+
+/* variant D */
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.top{gap:14px}
+.pos{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;text-decoration:none;line-height:1.1;border:2px solid var(--line);border-radius:12px;padding:5px 10px;background:var(--paper)}
+.pos b{font:800 18px/1 var(--display)}
+.pos span{font-size:12px;color:var(--muted)}
+.pos:hover{border-color:var(--ink)}
+.top .form{margin-left:0}
+@media (max-width:440px){.hide-xs{display:none!important}}
+h1{font:800 clamp(30px,7vw,40px)/1.05 var(--display);margin:4px 0 8px}
+h1:focus{outline:none}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#app{max-width:1040px;margin:0 auto}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:2px 0 12px}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:999px;padding:3px;background:var(--paper)}
+.seg a{padding:6px 14px;border-radius:999px;text-decoration:none;font-weight:600;color:var(--muted);white-space:nowrap}
+.seg a[aria-current="page"]{background:var(--ink);color:var(--paper)}
+@media (max-width:440px){.toolbar .btn span{display:none}.toolbar .btn{padding:8px}}
+.cols{margin:0}
+@media (min-width:900px){.cols{grid-template-columns:1fr 360px}.side-table{position:sticky;top:12px}}
+@media (max-width:899px){.side-table{display:none}}
+.feature{margin-bottom:12px}
+.feature .detail{display:block;text-align:center;font-weight:600;margin-top:14px}
+.panel .month:first-child{margin-top:0}
+.shead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:4px}
+.shead a{font-weight:600;white-space:nowrap}
+.pn{display:flex;justify-content:space-between;gap:12px;margin:10px 4px 12px;font-weight:600}
+.pn a{text-decoration:none}
+td.team a{display:flex;align-items:center;gap:8px;text-decoration:none}
+td.team a:hover span{text-decoration:underline}
+.common td.team{display:table-cell}
+.common td.team .logo{width:22px;height:22px;vertical-align:middle}
+.detailgrid{display:grid;gap:12px}
+@media (min-width:900px){.detailgrid{grid-template-columns:1fr 360px;align-items:start}.detailgrid aside{position:sticky;top:12px}}
+.ai{background:var(--ice);border-radius:14px;padding:14px 16px;margin-top:10px}
+.ai p{margin:4px 0 0;font-size:17px;line-height:1.5}
+.ailabel{font-weight:700;font-size:13px;color:var(--muted)}
+details summary{list-style:none;text-align:center}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top" id="top"></header>
+  <main id="app"></main>
+  <footer>Prototyp D. Data z HMS (PHM Cup), snímek ze 6. 10. 2026. Shrnutí soupeře je v prototypu simulované šablonou. Test stavů: přidej do adresy ?now=2026-10-07T09:00</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const T=[["Golden Bears","GOB","Team_GOLDEN_BEARS_USZfatMWcEq3",6,6,0,0,12,"42:14"],["HC Ducks Stars","DST","Team_HC_DUCKS_STARS_dfHnejUb1H6K",5,5,0,0,10,"41:8"],["HC Gladiators","GLA","Team_HC_GLADIATORS_MXx6lapNTybt",5,4,0,1,8,"44:13"],["Winter Foxes","WFX","Team_NORTH_FOXES_Jl3t5hUBPHs2",6,4,0,2,8,"25:20"],["HC Strašáci","SCR","Team_HC_STRASACI_hccN9YY0Nbm1",6,3,1,2,7,"36:19"],["HC Scorpions Praha","SCO","Team_SCORPIONS_CswAg8qogV6d",6,3,1,2,7,"26:27"],["HC Raptors","RAP","Team_HC_RAPTORS_ndn8Q9CLCKbm",5,3,0,2,6,"43:14"],["PHT Dragons","PDG","Team_PHT_DRAGONS_0BW9W0KORaNr",5,3,0,2,6,"10:13"],["Gaston Seals","GAS","Team_GASTON_SEALS_4R9K9bLSGQ4X",5,2,0,3,4,"13:16"],["HC Taste","TAS","Team_HC_TASTE_wUL8dYVL04MM",5,2,0,3,4,"19:43"],["HC Prague Wolves B","WLB","Team_HC_PRAGUE_WOLVES_B_KBQx9nKCYDMs",3,1,1,1,3,"5:8"],["Prague Pigeons B","PPB","Team_PRAGUE_PIGEONS_B_Z6Z5HEKXxkJd",3,1,0,2,2,"21:11"],["Projektový ústav","PRO","Team_PROJEKTOVY_USTAV_PfPYBELi0Wgx",2,1,0,1,2,"13:10"],["HC Alligators","ALI","Team_HC_ALLIGATORS_ArIIR5lsC1uy",5,0,2,3,2,"19:25"],["HC Car-Back","CAR","Team_HC_CARBACK_euyjBOSqUgNc",5,0,1,4,1,"8:21"],["HC Rekreanti Praha","REK","Team_REKREANTI_P7vVm4Ez1ph3",5,0,0,5,0,"9:39"],["Mechenice Caesars","MEC","Team_PHM_MECHENICE_OwKP14jqaj3Z",5,0,0,5,0,"6:79"]];
+const V=["Sportovní hala Fortuna","ICERINK (Yellow)","ICEARENA Kateřinky","ICERINK (Red)","SPM Aréna","ICEARENA Letňany"];
+const G=[["09-01","22:00",4,1,0,5,0,[[4,90,"Vojtěch Pilch"],[1,61,"Mário Ábel"]]],["09-02","18:45",0,8,4,0,1,[[0,19,"Petr Hruška"],[8,1,"David Ježek"]]],["09-02","20:15",13,10,2,3,1,[[13,10,"Ladislav Folkman"],[10,38,"Matúš Machovič"]]],["09-03","20:00",6,16,23,1,1,[[6,3,"Luděk Stašek"],[16,79,"Jan Čihák"]]],["09-03","21:30",1,15,9,1,1,[[1,17,"Robert Kysela"],[15,22,"Marek Zralý"]]],["09-03","22:00",7,11,2,1,0,[[7,1,"Michal Kružlík"],[11,48,"Martin Taimr"]]],["09-06","15:45",7,3,1,6,2,[[3,23,"Dominik Krásný"],[7,39,"Martin Vrbka"]]],["09-06","17:15",15,4,0,7,2,[[4,41,"Jakub Čížek"],[15,29,"Stanislav Tvrz"]]],["09-06","17:15",13,14,1,1,1,[[14,86,"Eduard Synák"],[13,21,"Petr Linhart"]]],["09-06","18:45",5,6,2,6,2,[[6,88,"Petr Volek"],[5,86,"Dominik Bláha"]]],["09-06","18:45",9,2,0,19,1,[[9,98,"Michal Malík"],[2,17,"Jan Pravda"]]],["09-07","21:30",1,16,5,1,3,[[1,88,"Martin Fabík"],[16,1,"Jindřich Berka"]]],["09-08","20:30",13,5,6,6,0,[[13,11,"Milan Kovář"],[5,1,"Alexandr Grof"]]],["09-08","21:30",14,0,2,7,3,[[14,99,"Tomáš Kriesman"],[0,89,"David Nidl"]]],["09-09","19:45",1,3,6,3,2,[[3,88,"Dominik Krásný"],[1,92,"Václav Mácha"]]],["09-09","20:15",4,10,1,1,1,[[10,25,"Jonáš Krása"],[4,18,"Marek Nejedlý"]]],["09-09","21:15",11,16,16,0,2,[[11,52,"Martin Metlička"],[16,70,"Ruben Karapetyan"]]],["09-10","20:15",6,8,5,6,1,[[6,3,"Luděk Stašek"],[8,20,"Jakub Marek"]]],["09-10","21:45",5,15,6,3,1,[[15,9,"Václav Procházka"],[5,27,"Michal Hellar"]]],["09-10","22:00",0,9,13,4,0,[[9,55,"Alexey Kazakov"],[0,89,"Kamil Schvarcz"]]],["09-13","15:45",8,7,1,3,1,[[7,4,"Jakub Vožeh"],[8,66,"Matyáš Hájek"]]],["09-13","17:15",15,2,4,11,1,[[15,89,"Marek Moucha"],[2,17,"Jan Pravda"]]],["09-13","18:45",3,9,3,6,1,[[3,96,"Jaroslav Král"],[9,83,"Michal Bureš"]]],["09-14","20:00",4,16,19,1,3,[[4,24,"Jakub Voslář"],[16,20,"Michal Boháč"]]],["09-14","21:30",5,14,3,1,4,[[14,86,"Eduard Synák"],[5,27,"Tomáš Kluch"]]],["09-15","21:30",2,0,1,3,3,[[0,55,"Luděk Stašek"],[2,78,"Jaroslav Braun"]]],["09-15","22:00",3,10,5,1,0,[[3,78,"Radek Duda"],[10,4,"Milan Žižka"]]],["09-16","19:45",15,6,1,6,2,[[15,43,"Ondřej Kadleček"],[6,3,"Jan Anýž"]]],["09-20","17:15",12,13,10,6,1,[[13,2,"David Soukup"],[12,46,"Lukáš Halota"]]],["09-20","18:45",9,7,0,2,1,[[7,88,"Martin Znamenáček"],[9,33,"Tomáš Podroužek"]]],["09-21","20:00",5,8,3,2,3,[[8,80,"Jaroslav Blecha"],[5,27,"Michal Hellar"]]],["09-21","21:30",16,1,3,16,4,[[1,19,"Matyáš Vostrý"],[16,1,"Jindřich Berka"]]],["09-22","22:00",6,3,3,4,0,[[6,21,"Josef Odehnal"],[3,11,"Filip Farkaš"]]],["09-23","20:00",2,4,8,4,4,[[4,21,"Miroslav Král"],[2,77,"Daniel Hnízdil"]]],["09-29","21:30",11,0,4,9,3,[[11,61,"František Rochl"],[0,8,"Jakub Šimičák"]]],["09-30","21:15",14,8,1,4,2,[[14,22,"Lukáš Basík"],[8,10,"Marek Lubojacký"]]],["10-01","22:00",13,4,4,5,0,[[13,22,"Jakub Čejka"],[4,44,"Ondřej Babka"]]],["10-04","15:45",12,3,3,4,1,[[12,69,"Petr Novák"],[3,8,"Jan Rychtář"]]],["10-04","15:45",0,14,6,3,2,[[0,66,"Petr Kadlec"],[14,18,"Eduard Synák"]]],["10-04","18:45",9,5,9,6,1,[[5,86,"Dominik Bláha"],[9,86,"Martin Zvoníček"]]],["10-04","20:15",2,7,5,2,2,[[2,44,"Jakub Najberk"],[7,22,"Michal Lázňovský"]]],["10-06","22:00",7,6,null,null,0],["10-11","20:15",7,8,null,null,2],["10-13","22:00",7,4,null,null,0],["10-18","20:00",13,7,null,null,4],["11-04","18:30",4,7,null,null,5],["11-09","19:30",7,16,null,null,2],["11-26","22:00",7,12,null,null,0],["11-30","20:00",7,15,null,null,4],["12-13","17:15",5,7,null,null,1],["12-15","22:00",16,7,null,null,0],["12-20","20:15",7,9,null,null,2],["01-06","19:45",3,7,null,null,2],["01-10","15:45",15,7,null,null,2],["01-13","19:45",10,7,null,null,2],["01-17","18:45",12,7,null,null,2],["01-24","17:15",0,7,null,null,1],["01-27","20:00",14,7,null,null,4],["02-07","15:45",11,7,null,null,1],["02-10","21:30",7,2,null,null,4],["02-21","17:15",1,7,null,null,1],["02-28","18:45",6,7,null,null,1],["03-02","22:00",7,1,null,null,0],["03-09","22:00",7,13,null,null,0],["03-18","22:00",7,5,null,null,0],["03-21","20:00",7,14,null,null,4],["04-08","20:15",7,0,null,null,1],["04-11","20:15",7,10,null,null,2]];
+// trestné minuty v pořadí tabulky (API: "Total Penalty Minutes", mm:ss)
+const PIM=["40:45","20:30","10:30","45:15","15:45","21:00","10:30","15:45","45:45","52:30","15:45","12:15","15:30","8:45","19:15","14:00","15:15"];
+const ME=7;
+const SRAZ_MIN=45;          // sraz před zápasem – nastav podle týmových zvyklostí
+const GAME_MIN=90;          // jak dlouho po začátku považujeme zápas za rozehraný
+const FRESH_H=20;           // jak dlouho po zápase ukazovat výsledek nahoře
+const LOGO_BASE="https://prod-hms-wootera.s3.eu-central-1.amazonaws.com/";
+
+// ---- time ----
+const qNow=new URLSearchParams(location.search).get("now");
+const NOW=qNow?new Date(qNow):new Date();
+
+// ---- model ----
+const games=G.map((g,id)=>{const[m,d]=g[0].split("-").map(Number),[hh,mm]=g[1].split(":").map(Number);
+  return{id,date:new Date(m>=7?2026:2027,m-1,d,hh,mm),h:g[2],a:g[3],hg:g[4],ag:g[5],venue:V[g[6]],stars:g[7]||[],final:g[4]!==null}});
+const mine=games.filter(g=>g.h===ME||g.a===ME);
+const opp=(g,t=ME)=>g.h===t?g.a:g.h;
+const forT=(g,t)=>{const f=g.h===t?g.hg:g.ag,a=g.h===t?g.ag:g.hg;return{f,a,r:f>a?"V":f<a?"P":"R"}};
+const state=g=>{if(g.final)return"final";const m=(NOW-g.date)/6e4;if(m<0)return"upcoming";if(m<GAME_MIN)return"live";return"pending"};
+const played=t=>games.filter(g=>g.final&&(g.h===t||g.a===t));
+const finals=mine.filter(g=>g.final);
+const pending=mine.filter(g=>state(g)==="pending");
+const ahead=mine.filter(g=>["upcoming","live"].includes(state(g)));
+const heroGame=ahead[0];
+const lastFinal=finals[finals.length-1];
+
+// ---- team stats (per game) ----
+const mins=s=>{const[a,b]=s.split(":").map(Number);return a+b/60};
+const stats=T.map((t,i)=>{const[gf,ga]=t[8].split(":").map(Number),gp=t[3]||0;
+  return{i,gp,pts:t[7],w:t[4],d:t[5],l:t[6],gf,ga,ppg:gp?t[7]/gp:0,gfpg:gp?gf/gp:0,gapg:gp?ga/gp:0,pimpg:gp?mins(PIM[i])/gp:0}});
+const active=stats.filter(s=>s.gp>0);
+const rankBy=(key,desc=true)=>{const a=[...active].sort((x,y)=>desc?y[key]-x[key]:x[key]-y[key]);return i=>a.findIndex(s=>s.i===i)+1};
+const attackRank=rankBy("gfpg"),defenseRank=rankBy("gapg",false),pimRank=rankBy("pimpg");
+const rank=i=>i+1;
+
+// ---- formatting ----
+const WD=["neděle","pondělí","úterý","středa","čtvrtek","pátek","sobota"],WDS=["Ne","Po","Út","St","Čt","Pá","So"];
+const MG=["ledna","února","března","dubna","května","června","července","srpna","září","října","listopadu","prosince"];
+const MN=["Leden","Únor","Březen","Duben","Květen","Červen","Červenec","Srpen","Září","Říjen","Listopad","Prosinec"];
+const pad=n=>String(n).padStart(2,"0");
+const time=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const longDate=d=>`${WD[d.getDay()]} ${d.getDate()}. ${MG[d.getMonth()]}`;
+const shortDate=d=>`${WDS[d.getDay()]} ${d.getDate()}. ${d.getMonth()+1}.`;
+const num=(x,dp=1)=>x.toFixed(dp).replace(".",",");
+const plural=(n,a,b,c)=>n===1?a:n>=2&&n<=4?b:c;
+function dayDiff(d){const a=new Date(NOW),b=new Date(d);a.setHours(0,0,0,0);b.setHours(0,0,0,0);return Math.round((b-a)/864e5)}
+function rel(d){const n=dayDiff(d);if(n===0)return"Dnes";if(n===1)return"Zítra";if(n===-1)return"Včera";
+  if(n>1&&n<7)return `Za ${n} ${plural(n,"den","dny","dní")}`;return null}
+const resName={V:"Výhra",R:"Remíza",P:"Prohra"};
+const chip=r=>`<span class="res ${r}" title="${resName[r]}" aria-label="${resName[r]}">${r}</span>`;
+
+function logo(t){const k=T[t][2];
+  return `<img class="logo" alt="" loading="lazy" src="${LOGO_BASE}${k}_cropped_md" data-k="${k}">`}
+window.logoFail=img=>{if(!img.dataset.tried){img.dataset.tried=1;img.src=LOGO_BASE+img.dataset.k+"_md";return}
+  const s=document.createElement("span");s.className=img.className+" fb";
+  const w=getComputedStyle(img).width;s.style.width=s.style.height=w;
+  const t=T.find(x=>x[2]===img.dataset.k);s.textContent=t?t[1]:"?";img.replaceWith(s)};
+const mapUrl=v=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v.replace(/\s*\(.*?\)/,"")+", Praha");
+const sraz=g=>new Date(g.date.getTime()-SRAZ_MIN*6e4);
+const ICON={
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>'};
+
+// ---- insights (one-liners for non-experts) ----
+function insights(o){const s=stats[o],n=T[o][0],N=active.length,out=[];
+  if(!s.gp)return[`${n} v této sezóně ještě nehráli.`];
+  const ar=attackRank(o),dr=defenseRank(o),pr=pimRank(o);
+  const res=played(o).map(g=>forT(g,o).r);let k=0;const last=res[res.length-1];for(let i=res.length-1;i>=0&&res[i]===last;i--)k++;
+  if(k>=3&&last!=="R")out.push(`${last==="V"?"Vyhráli":"Prohráli"} posledních ${k} zápasů.`);
+  if(ar<=3)out.push(`Mají ${ar===1?"nejlepší":ar+". nejlepší"} útok ve skupině, ${num(s.gfpg)} gólu na zápas.`);
+  if(dr<=3)out.push(`Dostávají jen ${num(s.gapg)} gólu na zápas, ${dr===1?"nejlepší":dr+". nejlepší"} obrana.`);
+  else if(dr>N-3)out.push(`Obrana je jejich slabina, dostávají ${num(s.gapg)} gólu na zápas.`);
+  if(pr<=3)out.push(`Patří k nejtrestanějším týmům, ${num(s.pimpg)} trestných minut na zápas.`);
+  if(!out.length)out.push(`Průměrně dávají ${num(s.gfpg)} a dostávají ${num(s.gapg)} gólu na zápas.`);
+  return out}
+
+// ---- calendar & share ----
+function ics(list,name){const st=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const ev=list.map(g=>{const end=new Date(g.date.getTime()+GAME_MIN*6e4);
+    return["BEGIN:VEVENT",`UID:phtdragons-${g.id}@prototyp`,`DTSTAMP:${st(NOW)}`,`DTSTART;TZID=Europe/Prague:${st(g.date)}`,`DTEND;TZID=Europe/Prague:${st(end)}`,
+      `SUMMARY:${T[g.h][0]} vs ${T[g.a][0]}`,`LOCATION:${g.venue}`,`DESCRIPTION:Sraz ${time(sraz(g))}. PHM Cup\\, skupina KLASIK.`,"END:VEVENT"].join("\r\n")}).join("\r\n");
+  const body=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//PHT Dragons//CS",ev,"END:VCALENDAR"].join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([body],{type:"text/calendar"}));a.download=name;a.click();
+  toast(list.length>1?`Staženo ${list.length} zápasů do kalendáře`:"Zápas stažen do kalendáře")}
+window.addCal=id=>ics([games[id]],`dragons-${id}.ics`);
+window.addSeason=()=>ics(ahead,"dragons-sezona.ics");
+window.share=async id=>{const g=games[id],url=location.href.split("#")[0]+"#zapas-"+id;
+  const text=`${T[g.h][0]} vs ${T[g.a][0]}, ${longDate(g.date)} ${time(g.date)}, ${g.venue}`;
+  if(navigator.share){try{await navigator.share({title:"PHT Dragons",text,url})}catch(e){}return}
+  try{await navigator.clipboard.writeText(text+"\n"+url);toast("Odkaz zkopírován")}catch(e){toast("Kopírování se nepovedlo")}};
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),2200)}
+
+// ---- routes (v prototypu přes #, ve finále skutečné URL) ----
+const slug=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const teamSlug=T.map(t=>slug(t[0]));
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const gameSlug=g=>`${ymd(g.date)}-${teamSlug[opp(g)]}`;
+const R={home:t=>t==="odehrane"?"#/odehrane":"#/",zapas:g=>"#/zapas/"+gameSlug(g),tabulka:"#/tabulka"};
+window.share=async id=>{const g=games[id],url=location.href.split("#")[0]+R.zapas(g);
+  const text=`${T[g.h][0]} vs ${T[g.a][0]}, ${longDate(g.date)} ${time(g.date)}, ${g.venue}`;
+  if(navigator.share){try{await navigator.share({title:"PHT Dragons",text,url})}catch(e){}return}
+  try{await navigator.clipboard.writeText(text+"\n"+url);toast("Odkaz zkopírován")}catch(e){toast("Kopírování se nepovedlo")}};
+window.addSeason=()=>ics(mine.filter(g=>!g.final&&g.date>NOW),"dragons-sezona.ics");
+// zápas, na který vede tým (z tabulky apod.): nejbližší vzájemný, jinak poslední
+const teamTarget=t=>{const vs=mine.filter(g=>opp(g)===t);return vs.find(g=>!g.final)||vs[vs.length-1]};
+
+// ---- "AI" shrnutí: v prototypu šablona nad spočítanými fakty ----
+// Ve finále: server spočítá stejná fakta, pošle je modelu ("napiš 2–3 věty, nic nepřidávej") a text uloží.
+function aiSummary(o){const s=stats[o],n=T[o][0],N=active.length,me=stats[ME];
+  if(!s.gp)return `${n} v sezóně ještě nehráli, takže zatím není z čeho vycházet. Rozbor se doplní po jejich prvním zápase.`;
+  const out=[];
+  const res=played(o).map(g=>forT(g,o).r);let k=0;const last=res[res.length-1];for(let i=res.length-1;i>=0&&res[i]===last;i--)k++;
+  let s1=`${n} jsou ${rank(o)}. v tabulce s ${s.pts} ${s.pts===1?"bodem":"body"} z ${s.gp} ${s.gp===1?"zápasu":"zápasů"}`;
+  if(k>=2&&last!=="R")s1+=` a ${last==="V"?"vyhráli":"prohráli"} posledn${k<5?"í":"ích"} ${k} ${plural(k,"zápas","zápasy","zápasů")}`;
+  out.push(s1+".");
+  const ar=attackRank(o),dr=defenseRank(o);
+  if(ar<=3&&dr<=3)out.push(`Patří k nejvyrovnanějším týmům skupiny: ${ar===1?"":ar+". "}nejlepší útok (${num(s.gfpg)} gólu na zápas) a ${dr===1?"":dr+". "}nejlepší obrana (${num(s.gapg)}).`);
+  else if(ar<=3)out.push(`Jejich zbraní je útok, s průměrem ${num(s.gfpg)} gólu na zápas jsou ${ar===1?"nejlepší":ar+". nejlepší"} ve skupině.`);
+  else if(dr<=3)out.push(`Stojí na obraně, dostávají jen ${num(s.gapg)} gólu na zápas, což je ${dr===1?"nejméně":dr+". nejméně"} ve skupině.`);
+  else if(dr>N-3)out.push(`Slabinou je obrana, dostávají ${num(s.gapg)} gólu na zápas.`);
+  else out.push(`Útok i obrana jsou průměrné, dávají ${num(s.gfpg)} a dostávají ${num(s.gapg)} gólu na zápas.`);
+  // srovnání se společnými soupeři
+  let dUs=0,dThem=0,c=0;T.forEach((_,x)=>{if(x===ME||x===o)return;
+    const us=finals.filter(z=>opp(z)===x),th=played(o).filter(z=>opp(z,o)===x);if(!us.length||!th.length)return;c++;
+    us.forEach(z=>{const r=forT(z,ME);dUs+=r.f-r.a});th.forEach(z=>{const r=forT(z,o);dThem+=r.f-r.a})});
+  if(c)out.push(`Proti ${c===1?"společnému soupeři":`${c} společným soupeřům`} si vedli ${dThem>dUs?"lépe než my":dThem<dUs?"hůř než my":"podobně jako my"} (rozdíl skóre ${dThem>0?"+":""}${dThem} oproti našim ${dUs>0?"+":""}${dUs}).`);
+  else if(me.gp){const diff=s.gfpg-s.gapg,ours=me.gfpg-me.gapg;
+    out.push(diff>ours+1?"Na papíře jsou silnější než my, hlavně díky lepšímu poměru skóre.":diff<ours-1?"Na papíře jsme favorité, máme lepší poměr skóre.":"Na papíře jsou zhruba na naší úrovni.")}
+  if(pimRank(o)<=3)out.push(`Hodně faulují (${num(s.pimpg)} trestných minut na zápas), takže počítejte s přesilovkami.`);
+  return out.join(" ")}
+
+// ---- pieces ----
+function topbar(){const f=finals.slice(-5).map(g=>forT(g,ME).r);
+  document.getElementById("top").innerHTML=`<a class="brand" href="${R.home()}">${logo(ME)}<b>PHT Dragons</b></a>
+  <a class="pos" href="${R.tabulka}"><b>${rank(ME)}. místo</b><span>${T[ME][7]} ${plural(T[ME][7],"bod","body","bodů")}</span></a>
+  <div class="formwrap form hide-xs" aria-label="Forma, posledních ${f.length} zápasů">${f.map(chip).join("")}</div>`}
+
+function faceoff(g){const s=state(g);
+  const side=t=>`<div class="side">${logo(t)}<div class="name">${T[t][0]}</div>
+    <div class="meta"><span class="tag" style="background:var(${t===ME?"--us":"--them"})"></span>${rank(t)}. místo</div></div>`;
+  const center=s==="final"?`<div class="big">${g.hg}:${g.ag}</div><div class="sraz">Konečný výsledek</div>`
+    :s==="pending"?`<div class="big">–:–</div><div class="sraz">Čeká se na výsledek</div>`
+    :`<div class="big">${time(g.date)}</div><div class="sraz">Sraz ${time(sraz(g))}</div>`;
+  return `<div class="faceoff">${side(g.h)}<div class="center">${center}</div>${side(g.a)}</div>`}
+function whenLine(g){const s=state(g),r=rel(g.date);
+  const pill=s==="live"?`<span class="rel live">Právě se hraje</span>`:r&&s==="upcoming"?`<span class="rel">${r}</span>`:"";
+  return `<div class="when">${pill}${longDate(g.date)}</div>`}
+const venueLink=g=>`<div class="venue"><a href="${mapUrl(g.venue)}" target="_blank" rel="noopener">${ICON.pin}${g.venue}</a></div>`;
+const actions=g=>`<div class="actions"><button class="btn" data-act="cal" data-id="${g.id}">${ICON.cal}Do kalendáře</button>
+  <button class="btn ghost" data-act="share" data-id="${g.id}">${ICON.share}Sdílet</button></div>`;
+const starsHTML=g=>g.stars.length?`<div class="stars">${g.stars.map(s=>`<span class="star">★ ${s[2]} (${s[1]}), ${T[s[0]][1]}</span>`).join("")}</div>`:"";
+
+function gameRow(g){const o=opp(g),s=state(g);let right;
+  if(s==="final"){const r=forT(g,ME);right=`<span class="r">${r.f}:${r.a}${chip(r.r)}</span>`}
+  else if(s==="pending")right=`<span class="r time">Bez výsledku</span>`;
+  else right=`<span class="r time">${time(g.date)}</span>`;
+  return `<li><a href="${R.zapas(g)}"><span class="d"><b>${shortDate(g.date)}</b>${rel(g.date)||""}</span>${logo(o)}
+    <span class="o">${T[o][0]}<small>${rank(o)}. v tabulce, ${g.venue}</small></span>${right}</a></li>`}
+function grouped(list){let out="",key="";
+  list.forEach(g=>{const k=g.date.getFullYear()+"-"+g.date.getMonth();if(k!==key){key=k;out+=`${out?"</ul>":""}<div class="month">${MN[g.date.getMonth()]} ${g.date.getFullYear()}</div><ul class="games">`}out+=gameRow(g)});
+  return out+(out?"</ul>":"")}
+function tableHTML(hl,mode){// mode: "full" | "around" (okolí Dragons + hl)
+  const keep=new Set();
+  if(mode==="full")T.forEach((_,i)=>keep.add(i));
+  else{const c=[ME,...hl.filter(x=>x!=null)];c.forEach(x=>{for(let i=x-1;i<=x+1;i++)if(i>=0&&i<T.length)keep.add(i)})}
+  let rows="",prev=-1;
+  T.forEach((t,i)=>{if(!keep.has(i))return;if(prev!==-1&&i-prev>1)rows+=`<tr class="gap"><td colspan="6">⋯</td></tr>`;
+    const tg=i===ME?null:teamTarget(i);
+    const name=`${logo(i)}<span>${t[0]}</span>`;
+    rows+=`<tr class="${i===ME?"me":hl.includes(i)?"op":""}"><td>${i+1}.</td><td class="team">${tg?`<a href="${R.zapas(tg)}">${name}</a>`:name}</td><td class="z">${t[3]}</td><td class="hide-s">${t[4]}–${t[5]}–${t[6]}</td><td class="hide-s">${t[8]}</td><td class="pts">${t[7]}</td></tr>`;prev=i});
+  return `<table><thead><tr><th>#</th><th>Tým</th><th title="Odehrané zápasy">Z</th><th class="hide-s">V–R–P</th><th class="hide-s">Skóre</th><th>Body</th></tr></thead><tbody>${rows}</tbody></table>`}
+const formRow=o=>{const f=played(o).slice(-5).map(x=>forT(x,o).r);
+  return f.length?`<div class="formrow"><span>nejstarší</span>${f.map(chip).join("")}<span>nejnovější</span></div>`:`<p class="lede">Zatím bez odehraného zápasu.</p>`};
+const backLink=(href,label)=>`<a class="back" href="${href}" data-act="back">← ${stack.length?"Zpět":label}</a>`;
+
+// ---- page: rozpis (hlavní) ----
+function pageHome(tab){const past=tab==="odehrane";let main="";
+  const up=mine.filter(g=>!g.final);
+  if(!past){
+    pending.forEach(g=>{const o=opp(g);
+      main+=`<a class="banner wait" href="${R.zapas(g)}">${logo(o)}<span class="t">Zápas s ${T[o][0]}<small>${rel(g.date)||shortDate(g.date)} ${time(g.date)}, čeká se na výsledek</small></span></a>`});
+    if(lastFinal&&(NOW-lastFinal.date)/36e5<FRESH_H+GAME_MIN/60){const r=forT(lastFinal,ME),o=opp(lastFinal);
+      main+=`<a class="banner" href="${R.zapas(lastFinal)}">${logo(o)}<span class="t">${resName[r.r]} s ${T[o][0]}<small>${rel(lastFinal.date)||shortDate(lastFinal.date)}, ${lastFinal.venue}</small></span><span class="sc">${r.f}:${r.a}</span></a>`}
+    if(heroGame){const g=heroGame;
+      main+=`<section class="rink feature" aria-label="Nejbližší zápas">${whenLine(g)}${faceoff(g)}${venueLink(g)}${actions(g)}
+        <a class="detail" href="${R.zapas(g)}">Detail zápasu a rozbor soupeře</a></section>`}
+    const rest=ahead.slice(1);
+    main+=`<section class="panel">${grouped(rest)||'<p class="lede">Žádné další zápasy.</p>'}</section>`;
+  } else main+=`<section class="panel">${grouped(finals.slice().reverse())||'<p class="lede">Zatím žádné odehrané zápasy.</p>'}</section>`;
+  const h=`<h1 id="ph" class="sr" tabindex="-1">Rozpis PHT Dragons</h1>
+    <div class="toolbar"><nav class="seg" aria-label="Filtr zápasů"><a href="${R.home()}" ${past?"":'aria-current="page"'}>Nadcházející (${up.length})</a><a href="${R.home("odehrane")}" ${past?'aria-current="page"':""}>Odehrané (${finals.length})</a></nav>
+    <button class="btn ghost" data-act="season">${ICON.cal}<span>Všechny do kalendáře</span></button></div>
+    <div class="cols"><div>${main}</div>
+      <aside class="panel side-table" aria-label="Tabulka">${`<div class="shead"><h2>Tabulka</h2><a href="${R.tabulka}">Celá tabulka</a></div>`}${tableHTML(heroGame?[opp(heroGame)]:[],"around")}</aside></div>`;
+  return{title:past?"Výsledky – PHT Dragons":"PHT Dragons – rozpis",html:h}}
+
+// ---- page: zápas + soupeř ----
+function pageZapas(g){const o=opp(g),s=state(g),i=mine.indexOf(g),prev=mine[i-1],next=mine[i+1],a=stats[ME],b=stats[o],of=played(o);
+  const better=(x,y,hi=true)=>x===y?["",""]:(hi?x>y:x<y)?["win",""]:["","win"];
+  const rows=[["Body na zápas",num(a.ppg),num(b.ppg),better(a.ppg,b.ppg)],
+    ["Vstřelené góly na zápas",num(a.gfpg),num(b.gfpg),better(a.gfpg,b.gfpg)],
+    ["Obdržené góly na zápas",num(a.gapg),num(b.gapg),better(a.gapg,b.gapg,false)],
+    ["Trestné minuty na zápas",num(a.pimpg),num(b.pimpg),better(a.pimpg,b.pimpg,false)],
+    ["Odehrané zápasy",a.gp,b.gp,["",""]]];
+  const meet=mine.filter(x=>opp(x)===o&&x!==g);
+  const common=[];T.forEach((_,x)=>{if(x===ME||x===o)return;const us=finals.filter(z=>opp(z)===x),them=of.filter(z=>opp(z,o)===x);if(us.length&&them.length)common.push({x,us,them})});
+  const scs=(list,t)=>list.map(z=>{const r=forT(z,t);return `${r.f}:${r.a} ${chip(r.r)}`}).join("<br>");
+  const theirRow=z=>{const v=opp(z,o),r=forT(z,o);return `<li><div class="x"><span class="d"><b>${shortDate(z.date)}</b></span>${logo(v)}<span class="o">${T[v][0]}<small>${rank(v)}. v tabulce</small></span><span class="r">${r.f}:${r.a}${chip(r.r)}</span></div></li>`};
+  const theirs=of.slice().reverse();
+  const h=`${backLink(R.home(g.final?"odehrane":""),g.final?"Výsledky":"Rozpis")}
+    <div class="detailgrid"><div>
+    <section class="rink" aria-labelledby="ph"><h1 id="ph" class="sr" tabindex="-1">${T[g.h][0]} vs ${T[g.a][0]}</h1>
+      ${whenLine(g)}${faceoff(g)}${venueLink(g)}${s==="upcoming"||s==="live"?actions(g):""}${s==="final"?starsHTML(g):""}</section>
+    <nav class="pn" aria-label="Předchozí a další zápas">${prev?`<a href="${R.zapas(prev)}">← ${shortDate(prev.date)} ${T[opp(prev)][1]}</a>`:"<span></span>"}${next?`<a href="${R.zapas(next)}">${shortDate(next.date)} ${T[opp(next)][1]} →</a>`:""}</nav>
+    <section class="panel"><h2>Soupeř: ${T[o][0]}</h2>
+      <div class="ai"><div class="ailabel">✦ Shrnutí</div><p>${aiSummary(o)}</p></div>
+      <h3>Forma</h3>${formRow(o)}
+      <h3>Srovnání</h3>
+      <div class="tape"><div class="l hd">PHT Dragons<span class="dot" style="background:var(--us)"></span></div><div class="k"></div><div class="r hd"><span class="dot" style="background:var(--them)"></span>${T[o][1]}</div>
+      ${rows.map(r=>`<div class="l ${r[3][0]}">${r[1]}</div><div class="k">${r[0]}</div><div class="r ${r[3][1]}">${r[2]}</div>`).join("")}</div>
+      <p class="note">Tmavší číslo je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů.</p>
+      <h3>Jejich poslední zápasy</h3>${theirs.length?`<ul class="games">${theirs.slice(0,5).map(theirRow).join("")}</ul>
+        ${theirs.length>5?`<details><summary class="more">Všechny jejich zápasy (${theirs.length})</summary><ul class="games">${theirs.slice(5).map(theirRow).join("")}</ul></details>`:""}`:'<p class="lede">Zatím bez odehraného zápasu.</p>'}
+      ${common.length?`<h3>Společní soupeři</h3><p class="lede">Jak jsme proti stejným týmům hráli my a jak oni.</p>
+        <table class="common"><thead><tr><th>Soupeř</th><th>Dragons</th><th>${T[o][1]}</th></tr></thead><tbody>
+        ${common.map(c=>`<tr><td class="team">${logo(c.x)} ${T[c.x][0]} <span class="lede">(${rank(c.x)}.)</span></td><td class="sc">${scs(c.us,ME)}</td><td class="sc">${scs(c.them,o)}</td></tr>`).join("")}</tbody></table>`:""}
+      ${meet.length?`<h3>Další vzájemný zápas v sezóně</h3><ul class="games">${meet.map(gameRow).join("")}</ul>`:""}
+    </section></div>
+    <aside class="panel"><div class="shead"><h2>Tabulka</h2><a href="${R.tabulka}">Celá tabulka</a></div>${tableHTML([o],"around")}</aside></div>`;
+  return{title:`${T[g.h][0]} vs ${T[g.a][0]}, ${shortDate(g.date)}`,html:h}}
+
+// ---- page: tabulka ----
+function pageTabulka(){const o=heroGame?opp(heroGame):null;
+  return{title:"Tabulka – PHT Dragons",html:`${backLink(R.home(),"Rozpis")}<h1 id="ph" tabindex="-1">Tabulka</h1>
+    <p class="lede">Skupina KLASIK, základní část. Z = odehrané zápasy. Klikni na tým a uvidíš náš nejbližší zápas s ním.</p>
+    <section class="panel" style="margin-top:12px">${tableHTML(o!=null?[o]:[],"full")}</section>
+    <p class="note"><span class="dot" style="background:var(--us)"></span>PHT Dragons <span class="dot" style="background:var(--them)"></span>nejbližší soupeř</p>`}}
+
+function page404(){return{title:"Stránka nenalezena",html:`<section class="panel"><h1 id="ph" tabindex="-1">Tahle stránka neexistuje</h1><p class="lede">Odkaz je možná starý nebo se zápas přesunul.</p><a class="btn" href="${R.home()}" style="margin-top:12px">Na rozpis</a></section>`}}
+
+// ---- router (funguje i v sandboxu bez změny adresy) ----
+let cur=location.hash||"#/";const stack=[];
+const inApp={valueOf:()=>stack.length};
+function setUrl(h,replace){try{history[replace?"replaceState":"pushState"](null,"",h)}catch(e){}}
+function navigate(h){if(h===cur)return;stack.push(cur);cur=h;setUrl(h);route()}
+function goBack(){const h=stack.pop()||"#/";cur=h;setUrl(h,true);route()}
+function route(){const p=(cur.replace(/^#/,"")||"/").split("/").filter(Boolean);let r;
+  if(!p.length)r=pageHome();
+  else if(p[0]==="odehrane")r=pageHome("odehrane");
+  else if(p[0]==="tabulka")r=pageTabulka();
+  else if(p[0]==="zapas"){const g=mine.find(x=>gameSlug(x)===p[1]);r=g?pageZapas(g):page404()}
+  else r=page404();
+  document.title=r.title;document.getElementById("app").innerHTML=r.html;
+  try{window.scrollTo(0,0)}catch(e){}const h=document.getElementById("ph");if(h&&p.length)h.focus({preventScroll:true})}
+document.addEventListener("click",e=>{
+  const act=e.target.closest("[data-act]");
+  if(act){e.preventDefault();const id=+act.dataset.id;
+    ({cal:()=>addCal(id),share:()=>share(id),season:()=>addSeason(),back:()=>goBack()})[act.dataset.act]();return}
+  const a=e.target.closest('a[href^="#/"]');
+  if(a){e.preventDefault();navigate(a.getAttribute("href"))}});
+window.addEventListener("popstate",()=>{const h=location.hash||"#/";if(h!==cur){stack.pop();cur=h;route()}});
+document.addEventListener("error",e=>{if(e.target.tagName==="IMG"&&e.target.classList.contains("logo"))logoFail(e.target)},true);
+topbar();route();
+</script>
+</body>
+</html>
