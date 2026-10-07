@@ -1213,10 +1213,17 @@
     "status": "running",
     "homeTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
     "awayTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
-    "homeGoals": 5,
-    "awayGoals": 0,
+    "homeGoals": 10,
+    "awayGoals": 1,
     "venue": "ICEARENA Letňany",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+        "number": 77,
+        "firstName": "Zdeněk",
+        "lastName": "Gregar"
+      }
+    ]
   },
   {
     "gameId": "F6306AE2-98CA-11F1-8BDF-EF2495D048F3",
