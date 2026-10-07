@@ -1,3 +1,157 @@
-// Placeholder. The first Claude Code session replaces this with the real data layer
-// (see CLAUDE.md and README.md). It exits successfully so the pipeline works from day one.
-console.log("fetch-data: not implemented yet, building from existing /data");
+// Build-time data fetch from the HMS public API (see CLAUDE.md).
+// Writes data/{teams,games,standings,meta}.json and public/logos/{teamId}.webp.
+// Any fetch or validation failure keeps the existing /data and exits 0,
+// so the site still builds from the last good snapshot.
+import { mkdir, readFile, writeFile, access } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import sharp from "sharp";
+import { CompetitionInfoSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
+import { checkConsistency, discoverSeason, normalize, pragueDate } from "./lib/normalize.mjs";
+
+const API = process.env.HMS_API ?? "https://api.prod.hms.wootera.net/public"; // override for testing
+const COMPETITION_ID = "C7C0BB15-5D29-415D-851E-5D777C6CC621"; // PHM Cup
+const OUR_TEAM_ID = "E70C43E0-264E-11EF-BE38-052B0AF887CA"; // PHT Dragons
+const LOGO_SIZES = ["cropped_md", "md"];
+const TIMEOUT_MS = 30_000;
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const DATA_DIR = path.join(root, "data");
+const LOGO_DIR = path.join(root, "public", "logos");
+
+// "::warning::" shows up as an annotation in GitHub Actions.
+const warn = (msg) => console.log(`${process.env.GITHUB_ACTIONS ? "::warning::" : "WARN "}${msg}`);
+
+async function getJson(endpoint, params, schema) {
+  const url = `${API}/${endpoint}?${new URLSearchParams(params)}`;
+  const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+  if (!res.ok) throw new Error(`${endpoint}: HTTP ${res.status}`);
+  const parsed = schema.safeParse(await res.json());
+  if (!parsed.success) {
+    const issues = parsed.error.issues.slice(0, 5).map((i) => `${i.path.join(".")}: ${i.message}`);
+    throw new Error(`${endpoint}: validation failed\n  ${issues.join("\n  ")}`);
+  }
+  return parsed.data;
+}
+
+async function exists(file) {
+  return access(file).then(() => true, () => false);
+}
+
+async function readJsonOrNull(file) {
+  return readFile(file, "utf8").then(JSON.parse, () => null);
+}
+
+const toJson = (value) => JSON.stringify(value, null, 2) + "\n";
+
+/** Download missing logos. Failures are warnings only; the site renders a fallback. */
+async function syncLogos(teams) {
+  await mkdir(LOGO_DIR, { recursive: true });
+  let downloaded = 0;
+  const missing = [];
+  for (const team of teams) {
+    const file = path.join(LOGO_DIR, `${team.teamId}.webp`);
+    if (await exists(file)) continue;
+    if (!team.logoSource) {
+      missing.push(team.name);
+      continue;
+    }
+    let ok = false;
+    for (const size of LOGO_SIZES) {
+      try {
+        // No query strings: S3 answers 403.
+        const res = await fetch(team.logoSource.replace("[size]", size), {
+          signal: AbortSignal.timeout(TIMEOUT_MS),
+        });
+        if (!res.ok) continue;
+        const input = Buffer.from(await res.arrayBuffer());
+        await sharp(input)
+          .resize(256, 256, { fit: "inside", withoutEnlargement: true })
+          .webp({ quality: 85 })
+          .toFile(file);
+        ok = true;
+        downloaded++;
+        break;
+      } catch (err) {
+        warn(`logo ${team.name} (${size}): ${err.message}`);
+      }
+    }
+    if (!ok) missing.push(team.name);
+  }
+  if (missing.length) warn(`no logo for: ${missing.join(", ")}`);
+  return downloaded;
+}
+
+async function main() {
+  const today = pragueDate();
+
+  // 1. Discover current season + KLASIK regular-season phase (no hardcoded IDs).
+  const info = await getJson("competitionInfo", { competitionIds: COMPETITION_ID }, CompetitionInfoSchema);
+  const ctx = discoverSeason(info, COMPETITION_ID, today);
+
+  // 2. One call per endpoint.
+  const rawGames = await getJson("games", { seasonId: ctx.season.id }, GamesSchema);
+  const rawStandings = await getJson("standings", { phaseId: ctx.phase.id }, StandingsSchema);
+
+  // 3. Normalize + sanity-check before touching /data.
+  const result = normalize({ rawGames, rawStandings });
+  const problems = checkConsistency(result, OUR_TEAM_ID);
+  if (problems.length) throw new Error(`consistency check failed: ${problems.join("; ")}`);
+
+  // 4. Logos (best effort), then record which teams have one.
+  const downloaded = await syncLogos(result.teams);
+  const teams = [];
+  for (const { logoSource, ...t } of result.teams) {
+    const hasLogo = await exists(path.join(LOGO_DIR, `${t.teamId}.webp`));
+    teams.push({ ...t, logo: hasLogo ? `logos/${t.teamId}.webp` : null });
+  }
+
+  // 5. Write only when the content changed, so the workflow does not commit
+  //    a new snapshot every 30 minutes just because fetchedAt moved.
+  const files = { teams, games: result.games, standings: result.standings };
+  await mkdir(DATA_DIR, { recursive: true });
+  let changed = false;
+  for (const [name, value] of Object.entries(files)) {
+    const file = path.join(DATA_DIR, `${name}.json`);
+    const prev = await readFile(file, "utf8").catch(() => null);
+    if (prev !== toJson(value)) changed = true;
+  }
+  const prevMeta = await readJsonOrNull(path.join(DATA_DIR, "meta.json"));
+  const meta = {
+    fetchedAt: new Date().toISOString(),
+    ourTeamId: OUR_TEAM_ID,
+    ...ctx,
+    counts: { teams: teams.length, games: result.games.length, standings: result.standings.length },
+  };
+  if (changed || !prevMeta) {
+    for (const [name, value] of Object.entries(files)) {
+      await writeFile(path.join(DATA_DIR, `${name}.json`), toJson(value));
+    }
+    await writeFile(path.join(DATA_DIR, "meta.json"), toJson(meta));
+  }
+
+  // 6. Summary.
+  const byStatus = Object.groupBy(result.games, (g) => g.status);
+  const ours = result.games.filter((g) => g.homeTeamId === OUR_TEAM_ID || g.awayTeamId === OUR_TEAM_ID);
+  const nextOurs = ours.find((g) => g.status !== "finished");
+  const ourRow = result.standings.find((s) => s.teamId === OUR_TEAM_ID);
+  const nameOf = (id) => teams.find((t) => t.teamId === id)?.name ?? id;
+  console.log(
+    [
+      `fetch-data: ${ctx.competition.name} ${ctx.season.name}, ${ctx.group.name} / ${ctx.phase.name}`,
+      `  games:     ${result.games.length} (finished ${byStatus.finished?.length ?? 0}, running ${byStatus.running?.length ?? 0}, scheduled ${byStatus.scheduled?.length ?? 0}; skipped ${result.skippedGames} with undecided teams)`,
+      `  teams:     ${teams.length} (${teams.filter((t) => t.logo).length} with logo, ${downloaded} downloaded now)`,
+      `  standings: ${result.standings.length} rows; PHT Dragons #${ourRow.rank}, ${ourRow.points} pts from ${ourRow.played} games`,
+      `  ours:      ${ours.length} games` +
+        (nextOurs ? `; next ${nextOurs.date} ${nextOurs.time} ${nameOf(nextOurs.homeTeamId)} vs ${nameOf(nextOurs.awayTeamId)} @ ${nextOurs.venue}` : ""),
+      `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
+    ].join("\n"),
+  );
+}
+
+try {
+  await main();
+} catch (err) {
+  warn(`fetch-data failed, keeping existing /data: ${err.message}`);
+}
+process.exit(0);

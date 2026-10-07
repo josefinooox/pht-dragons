@@ -1,0 +1,27 @@
+{
+  "fetchedAt": "2026-10-06T19:03:14.433Z",
+  "ourTeamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+  "competition": {
+    "id": "C7C0BB15-5D29-415D-851E-5D777C6CC621",
+    "name": "PHM Cup"
+  },
+  "season": {
+    "id": "E6134160-47CF-11F1-A223-BFDFBDD3A64B",
+    "name": "2026-2027",
+    "startDate": "2026-09-01",
+    "endDate": "2027-05-31"
+  },
+  "group": {
+    "id": "1D7AC1F0-47D0-11F1-A223-BFDFBDD3A64B",
+    "name": "KLASIK"
+  },
+  "phase": {
+    "id": "FE03DED0-869D-11F1-BDD5-8958B510B6A2",
+    "name": "Základní část"
+  },
+  "counts": {
+    "teams": 17,
+    "games": 272,
+    "standings": 17
+  }
+}

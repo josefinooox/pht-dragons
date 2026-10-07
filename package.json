@@ -6,10 +6,15 @@
     "fetch": "node scripts/fetch-data.mjs",
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --test \"scripts/**/*.test.mjs\""
   },
   "dependencies": {
-    "astro": "^7.3.6"
+    "astro": "^7.3.6",
+    "sharp": "^0.35.5",
+    "zod": "^4.6.5"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  }
 }

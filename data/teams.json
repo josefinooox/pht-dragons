@@ -1,0 +1,104 @@
+[
+  {
+    "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+    "name": "Gaston Seals",
+    "shortName": "GAS",
+    "logo": "logos/C06BA05B-F15F-4E2F-8055-BC21A7F8087E.webp"
+  },
+  {
+    "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+    "name": "Golden Bears",
+    "shortName": "GOB",
+    "logo": "logos/0CACFC00-6966-11F1-901E-A1A35E19FF53.webp"
+  },
+  {
+    "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+    "name": "HC Alligators",
+    "shortName": "ALI",
+    "logo": "logos/7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2.webp"
+  },
+  {
+    "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+    "name": "HC Car-Back",
+    "shortName": "CAR",
+    "logo": "logos/7973D5A7-0DF3-4175-9CDE-E430DCB9B657.webp"
+  },
+  {
+    "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+    "name": "HC Ducks Stars",
+    "shortName": "DST",
+    "logo": "logos/6814C2F0-5632-11F0-AF34-49A61572EC3A.webp"
+  },
+  {
+    "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+    "name": "HC Gladiators",
+    "shortName": "GLA",
+    "logo": "logos/9072AFD0-F46B-4655-9A19-11658F2A390B.webp"
+  },
+  {
+    "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+    "name": "HC Prague Wolves B",
+    "shortName": "WLB",
+    "logo": "logos/053398E3-FF69-470F-87F2-7D570FF36820.webp"
+  },
+  {
+    "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+    "name": "HC Raptors",
+    "shortName": "RAP",
+    "logo": "logos/BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F.webp"
+  },
+  {
+    "teamId": "BC83FFA0-115E-11EF-ABB5-E111FF753123",
+    "name": "HC Rekreanti Praha",
+    "shortName": "REK",
+    "logo": "logos/BC83FFA0-115E-11EF-ABB5-E111FF753123.webp"
+  },
+  {
+    "teamId": "7B35DB20-5849-11F1-9FC5-B7618A8B7F6A",
+    "name": "HC Scorpions Praha",
+    "shortName": "SCO",
+    "logo": "logos/7B35DB20-5849-11F1-9FC5-B7618A8B7F6A.webp"
+  },
+  {
+    "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+    "name": "HC Strašáci",
+    "shortName": "SCR",
+    "logo": "logos/1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3.webp"
+  },
+  {
+    "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+    "name": "HC Taste",
+    "shortName": "TAS",
+    "logo": "logos/1004F911-326D-4952-8D08-B07517442A86.webp"
+  },
+  {
+    "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+    "name": "Mechenice Caesars",
+    "shortName": "MEC",
+    "logo": "logos/77F30C30-6960-11F1-901E-A1A35E19FF53.webp"
+  },
+  {
+    "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+    "name": "PHT Dragons",
+    "shortName": "PDG",
+    "logo": "logos/E70C43E0-264E-11EF-BE38-052B0AF887CA.webp"
+  },
+  {
+    "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+    "name": "Prague Pigeons B",
+    "shortName": "PPB",
+    "logo": "logos/3F423CC6-FBE3-4999-9234-0000F5BC5E8C.webp"
+  },
+  {
+    "teamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
+    "name": "Projektový ústav",
+    "shortName": "PRO",
+    "logo": "logos/5774291A-3411-4FBE-907F-F0F4EA43821D.webp"
+  },
+  {
+    "teamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
+    "name": "Winter Foxes",
+    "shortName": "WFX",
+    "logo": "logos/6F6C0020-1BDC-11F1-A295-7F76C73382B7.webp"
+  }
+]
