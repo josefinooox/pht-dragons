@@ -1,0 +1,97 @@
+---
+// Schedule page body for "/" (Nadcházející) and "/odehrane" (Odehrané).
+import {
+  FRESH_H,
+  GAME_MIN,
+  NOW,
+  OUR,
+  ahead,
+  finals,
+  forT,
+  gameSlug,
+  heroGame,
+  isFinal,
+  lastFinal,
+  mine,
+  opp,
+  pending,
+  team,
+} from "../lib/data";
+import { resultName, shortDate } from "../lib/format";
+import { url } from "../lib/url";
+import GameList from "./GameList.astro";
+import Logo from "./Logo.astro";
+import MatchCard from "./MatchCard.astro";
+import Standings from "./Standings.astro";
+import When from "./When.astro";
+
+interface Props {
+  tab: "upcoming" | "played";
+}
+const { tab } = Astro.props;
+const upcomingCount = mine.filter((g) => !isFinal(g)).length;
+
+// Result of the last game stays on top for a while after it was played.
+const freshUntil = lastFinal ? Date.parse(lastFinal.start) + (FRESH_H * 60 + GAME_MIN) * 60_000 : 0;
+const fresh = lastFinal && NOW.getTime() < freshUntil ? lastFinal : undefined;
+const freshResult = fresh ? forT(fresh, OUR) : null;
+
+const feedHttp = new URL(url("dragons.ics"), Astro.site);
+const feedWebcal = feedHttp.href.replace(/^https?:/, "webcal:");
+---
+
+<h1>Rozpis zápasů PHT Dragons</h1>
+<nav aria-label="Filtr zápasů">
+  <a href={url()} aria-current={tab === "upcoming" ? "page" : undefined}>Nadcházející ({upcomingCount})</a>
+  {" | "}
+  <a href={url("odehrane")} aria-current={tab === "played" ? "page" : undefined}>Odehrané ({finals.length})</a>
+</nav>
+<p>
+  <a href={feedWebcal}>Odebírat celou sezónu v kalendáři</a>
+  (<a href={feedHttp.href}>stáhnout .ics</a>)
+</p>
+
+<div class="cols">
+  <div>
+    {
+      tab === "upcoming" ? (
+        <>
+          {pending.map((g) => (
+            <p>
+              <a href={url(`zapas/${gameSlug(g)}`)}>
+                <Logo id={opp(g)} /> Zápas s {team(opp(g)).name}, {shortDate(g.date)} {g.time}
+              </a>{" "}
+              <When game={g} />
+            </p>
+          ))}
+          {fresh && freshResult && (
+            <p data-expires={new Date(freshUntil).toISOString()}>
+              <a href={url(`zapas/${gameSlug(fresh)}`)}>
+                <Logo id={opp(fresh)} /> {resultName[freshResult.r]} s {team(opp(fresh)).name}{" "}
+                <b>
+                  {freshResult.f}:{freshResult.a}
+                </b>
+              </a>{" "}
+              <When game={fresh} />
+            </p>
+          )}
+          {heroGame && <MatchCard game={heroGame} heading="Nejbližší zápas" detailLink />}
+          <section aria-labelledby="dalsi">
+            <h2 id="dalsi">Další zápasy</h2>
+            <GameList games={ahead.slice(1)} empty="Žádné další zápasy." />
+          </section>
+        </>
+      ) : (
+        <section aria-labelledby="odehrane">
+          <h2 id="odehrane">Odehrané zápasy</h2>
+          <GameList games={finals.slice().reverse()} empty="Zatím žádné odehrané zápasy." />
+        </section>
+      )
+    }
+  </div>
+  <aside class="side-table" aria-labelledby="tabulka-h">
+    <h2 id="tabulka-h">Tabulka</h2>
+    <Standings mode="around" highlight={heroGame ? [opp(heroGame)] : []} />
+    <p><a href={url("tabulka")}>Celá tabulka</a></p>
+  </aside>
+</div>

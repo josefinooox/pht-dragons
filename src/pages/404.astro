@@ -1,0 +1,10 @@
+---
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/url";
+---
+
+<Base title="Stránka nenalezena – PHT Dragons" description="Tahle stránka neexistuje.">
+  <h1>Tahle stránka neexistuje</h1>
+  <p>Odkaz je možná starý nebo se zápas přesunul.</p>
+  <p><a href={url()}>Na rozpis</a> · <a href={url("tabulka")}>Tabulka</a></p>
+</Base>

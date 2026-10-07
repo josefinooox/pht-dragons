@@ -1,0 +1,12 @@
+---
+// Placeholder for a relative/state label filled in by src/scripts/live.ts
+// (Dnes, Zítra, Právě se hraje, Čeká se na výsledek). Empty at build time on purpose.
+import type { Game } from "../lib/data";
+
+interface Props {
+  game: Game;
+}
+const { game } = Astro.props;
+---
+
+<strong data-when data-date={game.date} data-start={game.start} data-status={game.status} hidden></strong>

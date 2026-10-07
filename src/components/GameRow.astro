@@ -1,0 +1,38 @@
+---
+// One game from the perspective of team `perspective` (default: us).
+import { OUR, forT, gameSlug, isFinal, opp, rankOf, team, type Game } from "../lib/data";
+import { resultName, shortDate } from "../lib/format";
+import { url } from "../lib/url";
+import Logo from "./Logo.astro";
+import When from "./When.astro";
+
+interface Props {
+  game: Game;
+  perspective?: string;
+  link?: boolean;
+}
+const { game, perspective = OUR, link = true } = Astro.props;
+const o = opp(game, perspective);
+const r = isFinal(game) ? forT(game, perspective) : null;
+const rank = rankOf(o);
+const Tag = link ? "a" : "div";
+---
+
+<li>
+  <Tag href={link ? url(`zapas/${gameSlug(game)}`) : undefined}>
+    <time datetime={game.start}><b>{shortDate(game.date)}</b></time>
+    <When game={game} />
+    <Logo id={o} />
+    <span>{team(o).name}</span>
+    <small>{rank ? `${rank}. v tabulce` : ""}{perspective === OUR && game.venue ? `, ${game.venue}` : ""}</small>
+    {
+      r ? (
+        <span>
+          {r.f}:{r.a} <abbr title={resultName[r.r]}>{r.r}</abbr>
+        </span>
+      ) : (
+        <span>{game.time}</span>
+      )
+    }
+  </Tag>
+</li>

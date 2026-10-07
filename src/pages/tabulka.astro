@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import Standings from "../components/Standings.astro";
+import { OUR, heroGame, meta, opp, rankOf } from "../lib/data";
+import { url } from "../lib/url";
+---
+
+<Base
+  title="Tabulka – PHT Dragons"
+  description={`Tabulka skupiny KLASIK, ${meta.phase.name}. PHT Dragons na ${rankOf(OUR) ?? "–"}. místě.`}
+>
+  <p><a href={url()}>← Rozpis</a></p>
+  <h1>Tabulka</h1>
+  <p>
+    Skupina {meta.group.name}, {meta.phase.name.toLowerCase()}, sezóna {meta.season.name}. Z = odehrané zápasy.
+    Klikni na tým a uvidíš náš nejbližší zápas s ním.
+  </p>
+  <Standings mode="full" highlight={heroGame ? [opp(heroGame)] : []} />
+</Base>

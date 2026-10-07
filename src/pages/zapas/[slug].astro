@@ -1,0 +1,211 @@
+---
+import type { GetStaticPaths } from "astro";
+import Base from "../../layouts/Base.astro";
+import GameRow from "../../components/GameRow.astro";
+import Logo from "../../components/Logo.astro";
+import MatchCard from "../../components/MatchCard.astro";
+import Standings from "../../components/Standings.astro";
+import {
+  OUR,
+  commonOpponents,
+  forT,
+  gameSlug,
+  isFinal,
+  mine,
+  opp,
+  played,
+  rankOf,
+  stats,
+  team,
+  type Game,
+} from "../../lib/data";
+import { longDate, num, resultName, shortDate } from "../../lib/format";
+import { opponentSummary } from "../../lib/summary";
+import { url } from "../../lib/url";
+
+export const getStaticPaths = (() =>
+  mine.map((game) => ({ params: { slug: gameSlug(game) }, props: { game } }))) satisfies GetStaticPaths;
+
+const g = Astro.props.game as Game;
+const o = opp(g);
+const them = team(o);
+const themShort = them.shortName ?? them.name;
+const i = mine.indexOf(g);
+const prev = mine[i - 1];
+const next = mine[i + 1];
+const a = stats(OUR);
+const b = stats(o);
+const theirs = played(o).slice().reverse();
+const form = played(o)
+  .slice(-5)
+  .map((x) => forT(x, o).r);
+const meet = mine.filter((x) => opp(x) === o && x !== g);
+const common = commonOpponents(o);
+const final = isFinal(g);
+
+// Per-game comparison; "better" marks the better value (higher or lower is better).
+const better = (x: number, y: number, higher = true) => (x === y ? null : (higher ? x > y : x < y) ? "us" : "them");
+const rows = [
+  { label: "Body na zápas", us: num(a.ppg), them: num(b.ppg), better: better(a.ppg, b.ppg) },
+  { label: "Vstřelené góly na zápas", us: num(a.gfpg), them: num(b.gfpg), better: better(a.gfpg, b.gfpg) },
+  { label: "Obdržené góly na zápas", us: num(a.gapg), them: num(b.gapg), better: better(a.gapg, b.gapg, false) },
+  { label: "Trestné minuty na zápas", us: num(a.pimpg), them: num(b.pimpg), better: better(a.pimpg, b.pimpg, false) },
+  { label: "Odehrané zápasy", us: String(a.gp), them: String(b.gp), better: null },
+];
+
+const home = team(g.homeTeamId).name;
+const away = team(g.awayTeamId).name;
+const title = `${home} vs ${away}, ${shortDate(g.date)}`;
+const description = final
+  ? `${home} ${g.homeGoals}:${g.awayGoals} ${away}, ${longDate(g.date)}. Rozbor soupeře ${them.name}.`
+  : `${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}. Rozbor soupeře ${them.name}.`;
+---
+
+<Base title={title} description={description}>
+  <p><a href={final ? url("odehrane") : url()}>← {final ? "Výsledky" : "Rozpis"}</a></p>
+
+  <div class="cols">
+    <div>
+      <MatchCard game={g} heading={`${home} vs ${away}`} headingLevel={1} stars />
+
+      <nav class="pn" aria-label="Předchozí a další zápas">
+        {prev ? <a href={url(`zapas/${gameSlug(prev)}`)}>← {shortDate(prev.date)} {team(opp(prev)).name}</a> : <span />}
+        {next && <a href={url(`zapas/${gameSlug(next)}`)}>{shortDate(next.date)} {team(opp(next)).name} →</a>}
+      </nav>
+
+      <section aria-labelledby="souper">
+        <h2 id="souper">Soupeř: {them.name}</h2>
+
+        <h3>Shrnutí</h3>
+        <p>{opponentSummary(o)}</p>
+
+        <h3>Forma</h3>
+        {
+          form.length ? (
+            <p>
+              <small>nejstarší</small> {form.map((r) => <abbr title={resultName[r]}>{r}</abbr>)} <small>nejnovější</small>
+            </p>
+          ) : (
+            <p>Zatím bez odehraného zápasu.</p>
+          )
+        }
+
+        <h3>Srovnání</h3>
+        <div class="table-wrap">
+          <table class="compare">
+            <thead>
+              <tr>
+                <th scope="col">PHT Dragons</th>
+                <th scope="col"><span class="visually-hidden">Ukazatel</span></th>
+                <th scope="col">{themShort}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                rows.map((r) => (
+                  <tr>
+                    <td>{r.better === "us" ? <strong>{r.us}</strong> : r.us}</td>
+                    <th scope="row">{r.label}</th>
+                    <td>{r.better === "them" ? <strong>{r.them}</strong> : r.them}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p>
+          <small>Tučně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů.</small>
+        </p>
+
+        <h3>Jejich poslední zápasy</h3>
+        {
+          theirs.length ? (
+            <>
+              <ul class="games">
+                {theirs.slice(0, 5).map((x) => (
+                  <GameRow game={x} perspective={o} link={false} />
+                ))}
+              </ul>
+              {theirs.length > 5 && (
+                <details>
+                  <summary>Všechny jejich zápasy ({theirs.length})</summary>
+                  <ul class="games">
+                    {theirs.slice(5).map((x) => (
+                      <GameRow game={x} perspective={o} link={false} />
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </>
+          ) : (
+            <p>Zatím bez odehraného zápasu.</p>
+          )
+        }
+
+        {
+          common.length > 0 && (
+            <>
+              <h3>Společní soupeři</h3>
+              <p>Jak jsme proti stejným týmům hráli my a jak oni.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Soupeř</th>
+                      <th scope="col">Dragons</th>
+                      <th scope="col">{themShort}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {common.map((c) => (
+                      <tr>
+                        <th scope="row">
+                          <Logo id={c.x} /> {team(c.x).name} <small>({rankOf(c.x) ?? "–"}.)</small>
+                        </th>
+                        {[
+                          { list: c.us, t: OUR },
+                          { list: c.them, t: o },
+                        ].map(({ list, t }) => (
+                          <td>
+                            {list.map((z, k) => {
+                              const r = forT(z, t);
+                              return (
+                                <>
+                                  {k > 0 && <br />}
+                                  {r.f}:{r.a} <abbr title={resultName[r.r]}>{r.r}</abbr>
+                                </>
+                              );
+                            })}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )
+        }
+
+        {
+          meet.length > 0 && (
+            <>
+              <h3>Další vzájemný zápas v sezóně</h3>
+              <ul class="games">
+                {meet.map((x) => (
+                  <GameRow game={x} />
+                ))}
+              </ul>
+            </>
+          )
+        }
+      </section>
+    </div>
+
+    <aside aria-labelledby="tabulka-h">
+      <h2 id="tabulka-h">Tabulka</h2>
+      <Standings mode="around" highlight={[o]} />
+      <p><a href={url("tabulka")}>Celá tabulka</a></p>
+    </aside>
+  </div>
+</Base>

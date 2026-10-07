@@ -1,0 +1,94 @@
+---
+// The emphasized match: date, faceoff, venue with map link, calendar + share.
+import { SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, type Game } from "../lib/data";
+import { longDate, mapUrl, minusMinutes } from "../lib/format";
+import { url } from "../lib/url";
+import Logo from "./Logo.astro";
+import When from "./When.astro";
+
+interface Props {
+  game: Game;
+  heading: string;
+  headingLevel?: 1 | 2;
+  detailLink?: boolean;
+  stars?: boolean;
+}
+const { game: g, heading, headingLevel = 2, detailLink = false, stars = false } = Astro.props;
+const H = `h${headingLevel}`;
+const final = isFinal(g);
+const s = state(g);
+const slug = gameSlug(g);
+const home = team(g.homeTeamId);
+const away = team(g.awayTeamId);
+const shareText = `${home.name} vs ${away.name}, ${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}`;
+const rankText = (id: string) => (rankOf(id) ? `${rankOf(id)}. místo` : "");
+---
+
+<section aria-labelledby={`m-${slug}`}>
+  <H id={`m-${slug}`}>{heading}</H>
+  <p>
+    <When game={g} />
+    <time datetime={g.start}>{longDate(g.date)}</time>
+  </p>
+  <div class="faceoff">
+    <div>
+      <Logo id={g.homeTeamId} />
+      <div><b>{home.name}</b></div>
+      <small>{rankText(g.homeTeamId)}</small>
+    </div>
+    <div>
+      {
+        final ? (
+          <>
+            <div><b>{g.homeGoals}:{g.awayGoals}</b></div>
+            <small>Konečný výsledek</small>
+          </>
+        ) : (
+          <>
+            <div><b>{g.time}</b></div>
+            <small>Sraz {minusMinutes(g.time, SRAZ_MIN)}</small>
+          </>
+        )
+      }
+    </div>
+    <div>
+      <Logo id={g.awayTeamId} />
+      <div><b>{away.name}</b></div>
+      <small>{rankText(g.awayTeamId)}</small>
+    </div>
+  </div>
+  {
+    g.venue && (
+      <p>
+        Místo: <a href={mapUrl(g.venue)} target="_blank" rel="noopener">{g.venue}</a> (mapa)
+      </p>
+    )
+  }
+  {
+    (s === "upcoming" || s === "live") && (
+      <p>
+        <a href={url(`zapas/${slug}.ics`)} download={`dragons-${slug}.ics`}>
+          Přidat do kalendáře
+        </a>{" "}
+        <button type="button" data-share data-url={url(`zapas/${slug}`)} data-text={shareText} hidden>
+          Sdílet
+        </button>
+        <span role="status" />
+      </p>
+    )
+  }
+  {
+    stars && final && g.stars.length > 0 && (
+      <p>
+        Hvězdy zápasu:{" "}
+        {g.stars.map((st, i) => (
+          <>
+            {i > 0 && ", "}★ {st.firstName} {st.lastName}
+            {st.number !== null && ` (${st.number})`}, {team(st.teamId).shortName ?? team(st.teamId).name}
+          </>
+        ))}
+      </p>
+    )
+  }
+  {detailLink && <p><a href={url(`zapas/${slug}`)}>Detail zápasu a rozbor soupeře</a></p>}
+</section>

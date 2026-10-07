@@ -1,0 +1,35 @@
+---
+// Our games grouped by month.
+import type { Game } from "../lib/data";
+import { monthLabel } from "../lib/format";
+import GameRow from "./GameRow.astro";
+
+interface Props {
+  games: Game[];
+  empty: string;
+}
+const { games, empty } = Astro.props;
+const groups: { label: string; games: Game[] }[] = [];
+for (const g of games) {
+  const label = monthLabel(g.date);
+  if (groups.at(-1)?.label !== label) groups.push({ label, games: [] });
+  groups.at(-1)!.games.push(g);
+}
+---
+
+{
+  groups.length ? (
+    groups.map((m) => (
+      <section>
+        <h3>{m.label}</h3>
+        <ul class="games">
+          {m.games.map((g) => (
+            <GameRow game={g} />
+          ))}
+        </ul>
+      </section>
+    ))
+  ) : (
+    <p>{empty}</p>
+  )
+}

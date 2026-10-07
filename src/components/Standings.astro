@@ -1,0 +1,79 @@
+---
+// Standings: "full", or "around" = rows next to us and the highlighted teams, with gaps.
+import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
+import { url } from "../lib/url";
+import Logo from "./Logo.astro";
+
+interface Props {
+  highlight?: string[];
+  mode?: "full" | "around";
+}
+const { highlight = [], mode = "full" } = Astro.props;
+
+const keep = new Set<number>();
+if (mode === "full") standings.forEach((_, i) => keep.add(i));
+else
+  for (const id of [OUR, ...highlight]) {
+    const i = standings.findIndex((r) => r.teamId === id);
+    if (i >= 0) for (let j = i - 1; j <= i + 1; j++) if (j >= 0 && j < standings.length) keep.add(j);
+  }
+const rows: ({ gap: true } | { gap: false; row: (typeof standings)[number]; href: string | null })[] = [];
+let prev = -1;
+standings.forEach((row, i) => {
+  if (!keep.has(i)) return;
+  if (prev !== -1 && i - prev > 1) rows.push({ gap: true });
+  const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
+  rows.push({ gap: false, row, href: target ? url(`zapas/${gameSlug(target)}`) : null });
+  prev = i;
+});
+---
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Tým</th>
+        <th scope="col" class="num"><abbr title="Odehrané zápasy">Z</abbr></th>
+        <th scope="col" class="num"><abbr title="Výhry–remízy–prohry">V–R–P</abbr></th>
+        <th scope="col" class="num">Skóre</th>
+        <th scope="col" class="num">Body</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((r) =>
+          r.gap ? (
+            <tr>
+              <td colspan="6" aria-hidden="true">⋯</td>
+            </tr>
+          ) : (
+            <tr aria-current={r.row.teamId === OUR ? "true" : undefined}>
+              <td>{r.row.rank}.</td>
+              <td>
+                {r.href ? (
+                  <a href={r.href}>
+                    <Logo id={r.row.teamId} /> {team(r.row.teamId).name}
+                  </a>
+                ) : (
+                  <>
+                    <Logo id={r.row.teamId} /> {team(r.row.teamId).name}
+                  </>
+                )}
+                {r.row.teamId === OUR ? <small> (my)</small> : highlight.includes(r.row.teamId) ? <small> (soupeř)</small> : null}
+              </td>
+              <td class="num">{r.row.played}</td>
+              <td class="num">
+                {r.row.wins}–{r.row.draws}–{r.row.losses}
+              </td>
+              <td class="num">
+                {r.row.goalsFor}:{r.row.goalsAgainst}
+              </td>
+              <td class="num">{r.row.points}</td>
+            </tr>
+          ),
+        )
+      }
+    </tbody>
+  </table>
+</div>

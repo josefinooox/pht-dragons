@@ -1,14 +1,14 @@
 ---
-const base = import.meta.env.BASE_URL;
+import Base from "../layouts/Base.astro";
+import Schedule from "../components/Schedule.astro";
+import { heroGame, opp, team } from "../lib/data";
+import { longDate } from "../lib/format";
+
+const next = heroGame
+  ? `Nejbližší zápas: ${team(opp(heroGame)).name}, ${longDate(heroGame.date)} ${heroGame.time}.`
+  : "Rozpis zápasů v PHM Cupu, skupina KLASIK.";
 ---
-<html lang="cs">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PHT Dragons</title>
-  </head>
-  <body>
-    <h1>PHT Dragons</h1>
-    <p>Web se staví. Deploy funguje.</p>
-  </body>
-</html>
+
+<Base title="PHT Dragons – rozpis" description={next}>
+  <Schedule tab="upcoming" />
+</Base>
