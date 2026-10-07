@@ -1269,10 +1269,23 @@
     "status": "running",
     "homeTeamId": "053398E3-FF69-470F-87F2-7D570FF36820",
     "awayTeamId": "1004F911-326D-4952-8D08-B07517442A86",
-    "homeGoals": 1,
-    "awayGoals": 0,
+    "homeGoals": 5,
+    "awayGoals": 1,
     "venue": "SPM Aréna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "number": 18,
+        "firstName": "Matěj",
+        "lastName": "Řehák"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "number": 48,
+        "firstName": "Kryštof",
+        "lastName": "Knorr"
+      }
+    ]
   },
   {
     "gameId": "F62D369E-98CA-11F1-8BDF-EF2495D048F3",
