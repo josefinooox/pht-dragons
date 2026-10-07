@@ -1,18 +1,25 @@
 ---
-// Team logo, or the short name when there is none.
+// Team logo, or the short name when there is none. Size via class (e.g. "size-10").
 import { team } from "../lib/data";
 import { url } from "../lib/url";
 
 interface Props {
   id: string;
+  class?: string;
 }
-const t = team(Astro.props.id);
+const { id, class: cls = "size-8" } = Astro.props;
+const t = team(id);
 ---
 
 {
   t.logo ? (
-    <img class="logo" src={url(t.logo)} alt="" width="32" height="32" loading="lazy" />
+    <img class:list={["logo", cls]} src={url(t.logo)} alt="" width="64" height="64" loading="lazy" decoding="async" />
   ) : (
-    <abbr class="logo" title={t.name}>{t.shortName ?? "?"}</abbr>
+    <abbr
+      class:list={["logo label grid place-items-center rounded-full bg-card text-[0.65rem] text-muted-foreground", cls]}
+      title={t.name}
+    >
+      {t.shortName ?? "?"}
+    </abbr>
   )
 }

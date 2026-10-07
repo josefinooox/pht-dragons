@@ -5,8 +5,9 @@ import type { Game } from "../lib/data";
 
 interface Props {
   game: Game;
+  class?: string;
 }
-const { game } = Astro.props;
+const { game, class: cls } = Astro.props;
 ---
 
-<strong data-when data-date={game.date} data-start={game.start} data-status={game.status} hidden></strong>
+<span class={cls} data-when data-date={game.date} data-start={game.start} data-status={game.status} hidden></span>

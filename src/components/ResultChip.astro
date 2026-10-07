@@ -1,0 +1,22 @@
+---
+// V / R / P result square.
+import type { Result } from "../lib/data";
+import { resultName } from "../lib/format";
+
+interface Props {
+  result: Result;
+  size?: "sm" | "md";
+}
+const { result, size = "md" } = Astro.props;
+const bg = { V: "bg-win", R: "bg-draw", P: "bg-loss" }[result];
+---
+
+<abbr
+  title={resultName[result]}
+  aria-label={resultName[result]}
+  class:list={[
+    "label inline-grid shrink-0 place-items-center rounded-sm text-white",
+    bg,
+    size === "sm" ? "size-5 text-xs" : "size-6 text-sm",
+  ]}>{result}</abbr
+>

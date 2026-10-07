@@ -1,8 +1,8 @@
 ---
-// Our games grouped by month.
+// Our games grouped by month, as Sparta-style rows.
 import type { Game } from "../lib/data";
 import { monthLabel } from "../lib/format";
-import GameRow from "./GameRow.astro";
+import GameCard from "./GameCard.astro";
 
 interface Props {
   games: Game[];
@@ -19,17 +19,19 @@ for (const g of games) {
 
 {
   groups.length ? (
-    groups.map((m) => (
-      <section>
-        <h3>{m.label}</h3>
-        <ul class="games">
-          {m.games.map((g) => (
-            <GameRow game={g} />
-          ))}
-        </ul>
-      </section>
-    ))
+    <div class="space-y-8">
+      {groups.map((m) => (
+        <section>
+          <h3 class="mb-3 text-muted-foreground">{m.label}</h3>
+          <ul class="space-y-3">
+            {m.games.map((g) => (
+              <GameCard game={g} />
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
   ) : (
-    <p>{empty}</p>
+    <p class="text-muted-foreground">{empty}</p>
   )
 }

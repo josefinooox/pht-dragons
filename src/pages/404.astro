@@ -1,10 +1,20 @@
 ---
+import { ArrowRight } from "@lucide/astro";
 import Base from "../layouts/Base.astro";
 import { url } from "../lib/url";
 ---
 
 <Base title="Stránka nenalezena – PHT Dragons" description="Tahle stránka neexistuje.">
-  <h1>Tahle stránka neexistuje</h1>
-  <p>Odkaz je možná starý nebo se zápas přesunul.</p>
-  <p><a href={url()}>Na rozpis</a> · <a href={url("tabulka")}>Tabulka</a></p>
+  <p class="label text-2xl text-primary">404</p>
+  <h1 class="mt-2">Tahle stránka neexistuje</h1>
+  <p class="mt-4 text-muted-foreground">Odkaz je možná starý nebo se zápas přesunul.</p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <a
+      href={url()}
+      class="label cut-corner flex items-center gap-2 bg-primary px-6 py-3.5 text-lg leading-none text-primary-foreground hover:bg-[#0b3fc4]"
+    >
+      Na rozpis <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
+    </a>
+    <a href={url("tabulka")} class="label flex items-center px-4 text-lg text-primary hover:underline">Tabulka</a>
+  </div>
 </Base>

@@ -1,26 +1,38 @@
 ---
-import { OUR, finals, forT, rankOf, standingOf, team } from "../lib/data";
-import { plural, resultName } from "../lib/format";
+import { ChevronLeft } from "@lucide/astro";
+import { OUR, finals, forT, meta, rankOf, standingOf, team } from "../lib/data";
+import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "../components/Logo.astro";
+import ResultChip from "../components/ResultChip.astro";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description: string;
+  /** Which header nav item is current. */
+  nav?: "rozpis" | "odehrane" | "tabulka";
+  /** Back link in the grey sub-bar. */
+  back?: { href: string; label: string };
 }
-const { title, description } = Astro.props;
+const { title, description, nav, back } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const me = team(OUR);
 const myRank = rankOf(OUR);
 const myPoints = standingOf(OUR)?.points ?? 0;
 const form = finals.slice(-5).map((g) => forT(g, OUR).r);
+const links = [
+  { key: "rozpis", href: url(), label: "Rozpis" },
+  { key: "odehrane", href: url("odehrane"), label: "Výsledky" },
+  { key: "tabulka", href: url("tabulka"), label: "Tabulka" },
+] as const;
 ---
 
 <html lang="cs">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#121212" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -31,33 +43,84 @@ const form = finals.slice(-5).map((g) => forT(g, OUR).r);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     {me.logo && <meta property="og:image" content={new URL(url(me.logo), Astro.site).href} />}
+    {me.logo && <link rel="icon" href={url(me.logo)} type="image/webp" />}
     <link rel="alternate" type="text/calendar" title="Zápasy PHT Dragons" href={url("dragons.ics")} />
   </head>
-  <body>
-    <header class="site-header">
-      <a class="brand" href={url()}><Logo id={OUR} /> <b>{me.name}</b></a>
-      {
-        myRank && (
-          <a class="pos-chip" href={url("tabulka")}>
-            {myRank}. místo, {myPoints} {plural(myPoints, "bod", "body", "bodů")}
-          </a>
-        )
-      }
-      {
-        form.length > 0 && (
-          <span class="form" aria-label={`Forma, posledních ${form.length} zápasů`}>
-            {form.map((r) => <abbr title={resultName[r]}>{r}</abbr>)}
-          </span>
-        )
-      }
+  <body class="antialiased">
+    <header class="bg-secondary text-secondary-foreground">
+      <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+        <a href={url()} class="flex items-center gap-2.5">
+          <Logo id={OUR} class="size-9" />
+          <span class="label text-xl leading-none">{me.name}</span>
+        </a>
+        <nav aria-label="Hlavní" class="ml-auto hidden md:block">
+          <ul class="flex gap-6">
+            {
+              links.map((l) => (
+                <li>
+                  <a
+                    href={l.href}
+                    aria-current={nav === l.key ? "page" : undefined}
+                    class="label text-lg text-white/75 hover:text-white aria-[current=page]:text-white aria-[current=page]:underline aria-[current=page]:decoration-primary aria-[current=page]:decoration-[3px] aria-[current=page]:underline-offset-8"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        {
+          myRank && (
+            <a
+              href={url("tabulka")}
+              class="label ml-auto flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm leading-none md:hidden"
+            >
+              <span class="text-white">{myRank}. místo</span>
+              <span class="text-white/60">
+                {myPoints} {plural(myPoints, "bod", "body", "bodů")}
+              </span>
+            </a>
+          )
+        }
+      </div>
     </header>
-    <main>
+
+    <div class="bg-card">
+      <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5">
+        {
+          back ? (
+            <a href={back.href} class="label flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+              <ChevronLeft size={16} strokeWidth={3} aria-hidden="true" />
+              {back.label}
+            </a>
+          ) : (
+            form.length > 0 && (
+              <span class="flex items-center gap-2">
+                <span class="label text-sm text-muted-foreground">Forma</span>
+                <span class="flex gap-1" aria-label={`Forma, posledních ${form.length} zápasů`}>
+                  {form.map((r) => (
+                    <ResultChip result={r} size="sm" />
+                  ))}
+                </span>
+              </span>
+            )
+          )
+        }
+        <span class="label ml-auto text-sm">
+          {meta.group.name} <span class="text-muted-foreground">{meta.season.name.replace(/-20/, "/")}</span>
+        </span>
+      </div>
+    </div>
+
+    <main class="mx-auto w-full max-w-6xl px-4 pt-8 pb-16 md:pt-12">
       <slot />
     </main>
-    <footer>
-      <p>
-        <small>PHM Cup, skupina KLASIK. Data z HMS, aktualizace každých 30 minut.</small>
-      </p>
+
+    <footer class="border-t border-border">
+      <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-muted-foreground">
+        PHM Cup, skupina {meta.group.name}. Data z HMS, aktualizace každých 30 minut.
+      </div>
     </footer>
     <script>
       import "../scripts/live.ts";

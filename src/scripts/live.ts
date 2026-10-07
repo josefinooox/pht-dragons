@@ -24,19 +24,20 @@ function relDay(date: string) {
   return "";
 }
 
-function stateLabel(start: string, status: string) {
-  if (status === "finished") return "";
+function stateLabel(start: string, status: string): [string, string] | null {
+  if (status === "finished") return null;
   const m = (now.getTime() - Date.parse(start)) / 6e4;
-  if ((status === "running" && m < RUNNING_MAX_MIN) || (m >= 0 && m < GAME_MIN)) return "Právě se hraje";
-  if (m >= GAME_MIN) return "Čeká se na výsledek";
-  return "";
+  if ((status === "running" && m < RUNNING_MAX_MIN) || (m >= 0 && m < GAME_MIN)) return ["live", "Právě se hraje"];
+  if (m >= GAME_MIN) return ["pending", "Čeká se na výsledek"];
+  return null;
 }
 
-// <span data-when data-date data-start data-status hidden>
+// <span data-when data-date data-start data-status hidden>; data-kind is set for styling.
 for (const el of document.querySelectorAll<HTMLElement>("[data-when]")) {
   const { date = "", start = "", status = "" } = el.dataset;
-  const label = stateLabel(start, status) || relDay(date);
+  const [kind, label] = stateLabel(start, status) ?? ["day", relDay(date)];
   el.textContent = label;
+  el.dataset.kind = kind;
   el.hidden = !label;
 }
 

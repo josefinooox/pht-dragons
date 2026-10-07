@@ -1,0 +1,67 @@
+---
+// One of our games as a Sparta-style row: colored bar, both logos, big date/time, venue, CTA or score.
+import { ChevronRight } from "@lucide/astro";
+import { OUR, forT, gameSlug, isFinal, opp, rankOf, team, type Game } from "../lib/data";
+import { dayMonth, weekdayShort } from "../lib/format";
+import { url } from "../lib/url";
+import Logo from "./Logo.astro";
+import ResultChip from "./ResultChip.astro";
+import When from "./When.astro";
+
+interface Props {
+  game: Game;
+}
+const { game: g } = Astro.props;
+const o = opp(g);
+const r = isFinal(g) ? forT(g, OUR) : null;
+const bar = r ? { V: "bg-win", R: "bg-draw", P: "bg-loss" }[r.r] : "bg-primary";
+const rank = rankOf(o);
+---
+
+<li>
+  <a
+    href={url(`zapas/${gameSlug(g)}`)}
+    class="group flex items-stretch overflow-hidden rounded-r-lg bg-card transition-colors hover:bg-[#e8eaef]"
+  >
+    <span class:list={["w-1.5 shrink-0 sm:w-2", bar]} aria-hidden="true"></span>
+    <div class="flex min-w-0 flex-1 items-center gap-3 px-3 py-3.5 sm:gap-6 sm:px-6 sm:py-5">
+      <div class="flex shrink-0 items-center gap-2 sm:gap-4" aria-hidden="true">
+        <Logo id={g.homeTeamId} class="size-8 sm:size-12" />
+        <span class="h-8 w-0.5 bg-primary sm:h-12"></span>
+        <Logo id={g.awayTeamId} class="size-8 sm:size-12" />
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="label flex flex-wrap items-center gap-x-2 text-sm leading-tight sm:text-base">
+          <span class="truncate">{team(o).name}</span>
+          {rank && <span class="text-muted-foreground">{rank}. místo</span>}
+          <When game={g} />
+        </p>
+        <p class="label mt-0.5 text-2xl leading-none tabular-nums sm:text-[2.25rem]">
+          <time datetime={g.start} class="flex flex-wrap gap-x-[0.25em]">
+            <span class="text-muted-foreground/60">{weekdayShort(g.date)}</span>
+            {dayMonth(g.date)}
+            {!r && <span>{g.time}</span>}
+          </time>
+        </p>
+        {g.venue && <p class="label mt-1 truncate text-xs text-muted-foreground sm:text-sm">{g.venue}</p>}
+      </div>
+      {
+        r ? (
+          <div class="flex shrink-0 items-center gap-2">
+            <span class="label text-2xl leading-none tabular-nums sm:text-[2.25rem]">
+              {g.homeGoals}:{g.awayGoals}
+            </span>
+            <ResultChip result={r.r} />
+          </div>
+        ) : (
+          <>
+            <span class="label cut-corner hidden shrink-0 bg-primary px-6 py-3.5 text-lg leading-none text-primary-foreground transition-colors group-hover:bg-[#0b3fc4] xl:block">
+              Detail zápasu
+            </span>
+            <ChevronRight class="shrink-0 text-muted-foreground xl:hidden" size={22} strokeWidth={2.5} aria-hidden="true" />
+          </>
+        )
+      }
+    </div>
+  </a>
+</li>

@@ -1,5 +1,6 @@
 ---
 // Standings: "full", or "around" = rows next to us and the highlighted teams, with gaps.
+// `compact` hides V–R–P and score (narrow side column).
 import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -7,8 +8,9 @@ import Logo from "./Logo.astro";
 interface Props {
   highlight?: string[];
   mode?: "full" | "around";
+  compact?: boolean;
 }
-const { highlight = [], mode = "full" } = Astro.props;
+const { highlight = [], mode = "full", compact = false } = Astro.props;
 
 const keep = new Set<number>();
 if (mode === "full") standings.forEach((_, i) => keep.add(i));
@@ -26,53 +28,84 @@ standings.forEach((row, i) => {
   rows.push({ gap: false, row, href: target ? url(`zapas/${gameSlug(target)}`) : null });
   prev = i;
 });
+const cols = compact ? 4 : 6;
+const th = "label px-2 py-2.5 text-sm text-muted-foreground";
 ---
 
-<div class="table-wrap">
-  <table>
+<div class="overflow-x-auto">
+  <table class="w-full text-left">
     <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Tým</th>
-        <th scope="col" class="num"><abbr title="Odehrané zápasy">Z</abbr></th>
-        <th scope="col" class="num"><abbr title="Výhry–remízy–prohry">V–R–P</abbr></th>
-        <th scope="col" class="num">Skóre</th>
-        <th scope="col" class="num">Body</th>
+      <tr class="border-b-2 border-foreground">
+        <th scope="col" class:list={[th, "w-8 pl-3"]}>#</th>
+        <th scope="col" class={th}>Tým</th>
+        <th scope="col" class:list={[th, "text-right"]}><abbr title="Odehrané zápasy">Z</abbr></th>
+        {
+          !compact && (
+            <>
+              <th scope="col" class:list={[th, "hidden text-right sm:table-cell"]}>
+                <abbr title="Výhry–remízy–prohry">V–R–P</abbr>
+              </th>
+              <th scope="col" class:list={[th, "text-right"]}>Skóre</th>
+            </>
+          )
+        }
+        <th scope="col" class:list={[th, "pr-3 text-right"]}>Body</th>
       </tr>
     </thead>
     <tbody>
       {
-        rows.map((r) =>
-          r.gap ? (
-            <tr>
-              <td colspan="6" aria-hidden="true">⋯</td>
-            </tr>
-          ) : (
-            <tr aria-current={r.row.teamId === OUR ? "true" : undefined}>
-              <td>{r.row.rank}.</td>
-              <td>
+        rows.map((r) => {
+          if (r.gap)
+            return (
+              <tr class="border-b border-border">
+                <td colspan={cols} class="py-1 text-center text-muted-foreground" aria-hidden="true">
+                  ⋯
+                </td>
+              </tr>
+            );
+          const us = r.row.teamId === OUR;
+          const op = highlight.includes(r.row.teamId);
+          const name = (
+            <span class="flex items-center gap-2.5">
+              <Logo id={r.row.teamId} class="size-7" />
+              <span class:list={["leading-tight", (us || op) && "font-semibold"]}>{team(r.row.teamId).name}</span>
+              {op && <span class="label rounded-sm bg-accent px-1.5 py-0.5 text-[0.7rem] leading-none text-white">Soupeř</span>}
+            </span>
+          );
+          return (
+            <tr
+              aria-current={us ? "true" : undefined}
+              class:list={[
+                "border-b border-border",
+                us && "bg-primary text-primary-foreground",
+                op && "bg-card",
+              ]}
+            >
+              <td class="label py-2.5 pl-3 pr-2 text-lg">{r.row.rank}.</td>
+              <td class="px-2 py-2.5">
                 {r.href ? (
-                  <a href={r.href}>
-                    <Logo id={r.row.teamId} /> {team(r.row.teamId).name}
+                  <a href={r.href} class="hover:underline">
+                    {name}
                   </a>
                 ) : (
-                  <>
-                    <Logo id={r.row.teamId} /> {team(r.row.teamId).name}
-                  </>
+                  name
                 )}
-                {r.row.teamId === OUR ? <small> (my)</small> : highlight.includes(r.row.teamId) ? <small> (soupeř)</small> : null}
               </td>
-              <td class="num">{r.row.played}</td>
-              <td class="num">
-                {r.row.wins}–{r.row.draws}–{r.row.losses}
-              </td>
-              <td class="num">
-                {r.row.goalsFor}:{r.row.goalsAgainst}
-              </td>
-              <td class="num">{r.row.points}</td>
+              <td class="px-2 py-2.5 text-right tabular-nums">{r.row.played}</td>
+              {!compact && (
+                <>
+                  <td class="hidden px-2 py-2.5 text-right tabular-nums sm:table-cell">
+                    {r.row.wins}–{r.row.draws}–{r.row.losses}
+                  </td>
+                  <td class="px-2 py-2.5 text-right tabular-nums">
+                    {r.row.goalsFor}:{r.row.goalsAgainst}
+                  </td>
+                </>
+              )}
+              <td class="label py-2.5 pl-2 pr-3 text-right text-lg">{r.row.points}</td>
             </tr>
-          ),
-        )
+          );
+        })
       }
     </tbody>
   </table>

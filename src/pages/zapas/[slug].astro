@@ -1,8 +1,11 @@
 ---
 import type { GetStaticPaths } from "astro";
+import { ChevronLeft, ChevronRight, Sparkles } from "@lucide/astro";
 import Base from "../../layouts/Base.astro";
 import GameRow from "../../components/GameRow.astro";
 import Logo from "../../components/Logo.astro";
+import GameCard from "../../components/GameCard.astro";
+import ResultChip from "../../components/ResultChip.astro";
 import MatchCard from "../../components/MatchCard.astro";
 import Standings from "../../components/Standings.astro";
 import {
@@ -19,7 +22,7 @@ import {
   team,
   type Game,
 } from "../../lib/data";
-import { longDate, num, resultName, shortDate } from "../../lib/format";
+import { longDate, num, shortDate } from "../../lib/format";
 import { opponentSummary } from "../../lib/summary";
 import { url } from "../../lib/url";
 
@@ -61,151 +64,213 @@ const description = final
   : `${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}. Rozbor soupeře ${them.name}.`;
 ---
 
-<Base title={title} description={description}>
-  <p><a href={final ? url("odehrane") : url()}>← {final ? "Výsledky" : "Rozpis"}</a></p>
+<Base title={title} description={description} back={final ? { href: url("odehrane"), label: "Výsledky" } : { href: url(), label: "Rozpis" }}>
+  <h1 class="text-[clamp(2.25rem,7vw,3.75rem)]">
+    {home} <span class="text-primary">vs</span> {away}
+  </h1>
 
-  <div class="cols">
-    <div>
-      <MatchCard game={g} heading={`${home} vs ${away}`} headingLevel={1} stars />
+  <div class="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+    <div class="min-w-0 space-y-10">
+      <div>
+        <MatchCard game={g} stars />
+        <nav class="mt-3 flex justify-between gap-4" aria-label="Předchozí a další zápas">
+          {
+            prev ? (
+              <a href={url(`zapas/${gameSlug(prev)}`)} class="label flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+                <ChevronLeft size={16} strokeWidth={3} aria-hidden="true" />
+                {shortDate(prev.date)} {team(opp(prev)).shortName ?? team(opp(prev)).name}
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a href={url(`zapas/${gameSlug(next)}`)} class="label flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+                {shortDate(next.date)} {team(opp(next)).shortName ?? team(opp(next)).name}
+                <ChevronRight size={16} strokeWidth={3} aria-hidden="true" />
+              </a>
+            )
+          }
+        </nav>
+      </div>
 
-      <nav class="pn" aria-label="Předchozí a další zápas">
-        {prev ? <a href={url(`zapas/${gameSlug(prev)}`)}>← {shortDate(prev.date)} {team(opp(prev)).name}</a> : <span />}
-        {next && <a href={url(`zapas/${gameSlug(next)}`)}>{shortDate(next.date)} {team(opp(next)).name} →</a>}
-      </nav>
+      <section aria-labelledby="souper" class="space-y-8">
+        <div class="flex items-center gap-3">
+          <Logo id={o} class="size-12" />
+          <h2 id="souper">
+            <span class="block text-base text-muted-foreground">Soupeř</span>
+            {them.name}
+          </h2>
+        </div>
 
-      <section aria-labelledby="souper">
-        <h2 id="souper">Soupeř: {them.name}</h2>
+        <div class="rounded-2xl border-l-[6px] border-primary bg-card p-5">
+          <p class="label flex items-center gap-1.5 text-sm text-primary">
+            <Sparkles size={15} aria-hidden="true" /> Shrnutí
+          </p>
+          <p class="mt-2 text-lg leading-relaxed">{opponentSummary(o)}</p>
+        </div>
 
-        <h3>Shrnutí</h3>
-        <p>{opponentSummary(o)}</p>
+        <div>
+          <h3>Forma</h3>
+          {
+            form.length ? (
+              <div class="mt-3 flex items-center gap-2">
+                <span class="text-sm text-muted-foreground">nejstarší</span>
+                {form.map((r) => (
+                  <ResultChip result={r} />
+                ))}
+                <span class="text-sm text-muted-foreground">nejnovější</span>
+              </div>
+            ) : (
+              <p class="mt-2 text-muted-foreground">Zatím bez odehraného zápasu.</p>
+            )
+          }
+        </div>
 
-        <h3>Forma</h3>
-        {
-          form.length ? (
-            <p>
-              <small>nejstarší</small> {form.map((r) => <abbr title={resultName[r]}>{r}</abbr>)} <small>nejnovější</small>
-            </p>
-          ) : (
-            <p>Zatím bez odehraného zápasu.</p>
-          )
-        }
-
-        <h3>Srovnání</h3>
-        <div class="table-wrap">
-          <table class="compare">
+        <div>
+          <h3>Srovnání</h3>
+          <table class="mt-3 w-full">
             <thead>
-              <tr>
-                <th scope="col">PHT Dragons</th>
-                <th scope="col"><span class="visually-hidden">Ukazatel</span></th>
-                <th scope="col">{themShort}</th>
+              <tr class="border-b-2 border-foreground">
+                <th scope="col" class="label w-1/4 py-2 text-left">
+                  <span class="flex items-center gap-2"><Logo id={OUR} class="size-6" /> PDG</span>
+                </th>
+                <th scope="col"><span class="sr-only">Ukazatel</span></th>
+                <th scope="col" class="label w-1/4 py-2 text-right">
+                  <span class="flex items-center justify-end gap-2">{themShort} <Logo id={o} class="size-6" /></span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {
                 rows.map((r) => (
-                  <tr>
-                    <td>{r.better === "us" ? <strong>{r.us}</strong> : r.us}</td>
-                    <th scope="row">{r.label}</th>
-                    <td>{r.better === "them" ? <strong>{r.them}</strong> : r.them}</td>
+                  <tr class="border-b border-border">
+                    <td class:list={["label py-3 text-left text-2xl", r.better === "us" ? "text-primary" : "text-muted-foreground/70"]}>
+                      {r.us}
+                    </td>
+                    <th scope="row" class="px-2 py-3 text-center text-sm font-normal text-muted-foreground">
+                      {r.label}
+                    </th>
+                    <td class:list={["label py-3 text-right text-2xl", r.better === "them" ? "text-accent" : "text-muted-foreground/70"]}>
+                      {r.them}
+                    </td>
                   </tr>
                 ))
               }
             </tbody>
           </table>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Barevně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů.
+          </p>
         </div>
-        <p>
-          <small>Tučně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů.</small>
-        </p>
 
-        <h3>Jejich poslední zápasy</h3>
-        {
-          theirs.length ? (
-            <>
-              <ul class="games">
-                {theirs.slice(0, 5).map((x) => (
-                  <GameRow game={x} perspective={o} link={false} />
-                ))}
-              </ul>
-              {theirs.length > 5 && (
-                <details>
-                  <summary>Všechny jejich zápasy ({theirs.length})</summary>
-                  <ul class="games">
-                    {theirs.slice(5).map((x) => (
-                      <GameRow game={x} perspective={o} link={false} />
-                    ))}
-                  </ul>
-                </details>
-              )}
-            </>
-          ) : (
-            <p>Zatím bez odehraného zápasu.</p>
-          )
-        }
+        <div>
+          <h3>Jejich poslední zápasy</h3>
+          {
+            theirs.length ? (
+              <>
+                <ul class="mt-2">
+                  {theirs.slice(0, 5).map((x) => (
+                    <GameRow game={x} perspective={o} />
+                  ))}
+                </ul>
+                {theirs.length > 5 && (
+                  <details class="group mt-1">
+                    <summary class="label cursor-pointer py-2 text-primary">
+                      <span class="group-open:hidden">Všechny jejich zápasy ({theirs.length})</span>
+                      <span class="hidden group-open:inline">Skrýt starší zápasy</span>
+                    </summary>
+                    <ul>
+                      {theirs.slice(5).map((x) => (
+                        <GameRow game={x} perspective={o} />
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </>
+            ) : (
+              <p class="mt-2 text-muted-foreground">Zatím bez odehraného zápasu.</p>
+            )
+          }
+        </div>
 
         {
           common.length > 0 && (
-            <>
+            <div>
               <h3>Společní soupeři</h3>
-              <p>Jak jsme proti stejným týmům hráli my a jak oni.</p>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th scope="col">Soupeř</th>
-                      <th scope="col">Dragons</th>
-                      <th scope="col">{themShort}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {common.map((c) => (
-                      <tr>
-                        <th scope="row">
-                          <Logo id={c.x} /> {team(c.x).name} <small>({rankOf(c.x) ?? "–"}.)</small>
-                        </th>
-                        {[
-                          { list: c.us, t: OUR },
-                          { list: c.them, t: o },
-                        ].map(({ list, t }) => (
-                          <td>
-                            {list.map((z, k) => {
+              <p class="mt-1 text-muted-foreground">Jak jsme proti stejným týmům hráli my a jak oni.</p>
+              <table class="mt-3 w-full">
+                <thead>
+                  <tr class="border-b-2 border-foreground">
+                    <th scope="col" class="label py-2 text-left text-sm text-muted-foreground">Soupeř</th>
+                    <th scope="col" class="label py-2 text-right text-sm">PDG</th>
+                    <th scope="col" class="label py-2 pl-4 text-right text-sm">{themShort}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {common.map((c) => (
+                    <tr class="border-b border-border">
+                      <th scope="row" class="py-2.5 text-left font-normal">
+                        <span class="flex items-center gap-2.5">
+                          <Logo id={c.x} class="size-7" />
+                          <span class="leading-tight">
+                            <span class="font-semibold">{team(c.x).name}</span>{" "}
+                            <span class="text-sm text-muted-foreground">({rankOf(c.x) ?? "–"}.)</span>
+                          </span>
+                        </span>
+                      </th>
+                      {[
+                        { list: c.us, t: OUR },
+                        { list: c.them, t: o },
+                      ].map(({ list, t }, k) => (
+                        <td class:list={["py-2.5 text-right align-middle", k === 1 && "pl-4"]}>
+                          <span class="inline-flex flex-col items-end gap-1">
+                            {list.map((z) => {
                               const r = forT(z, t);
                               return (
-                                <>
-                                  {k > 0 && <br />}
-                                  {r.f}:{r.a} <abbr title={resultName[r.r]}>{r.r}</abbr>
-                                </>
+                                <span class="flex items-center gap-1.5">
+                                  <span class="label text-lg tabular-nums">
+                                    {r.f}:{r.a}
+                                  </span>
+                                  <ResultChip result={r.r} size="sm" />
+                                </span>
                               );
                             })}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
+                          </span>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )
         }
 
         {
           meet.length > 0 && (
-            <>
-              <h3>Další vzájemný zápas v sezóně</h3>
-              <ul class="games">
+            <div>
+              <h3 class="mb-3">Další vzájemný zápas v sezóně</h3>
+              <ul class="space-y-3">
                 {meet.map((x) => (
-                  <GameRow game={x} />
+                  <GameCard game={x} />
                 ))}
               </ul>
-            </>
+            </div>
           )
         }
       </section>
     </div>
 
     <aside aria-labelledby="tabulka-h">
-      <h2 id="tabulka-h">Tabulka</h2>
-      <Standings mode="around" highlight={[o]} />
-      <p><a href={url("tabulka")}>Celá tabulka</a></p>
+      <div class="flex items-baseline justify-between">
+        <h2 id="tabulka-h">Tabulka</h2>
+        <a href={url("tabulka")} class="label text-sm text-primary hover:underline">Celá tabulka</a>
+      </div>
+      <div class="mt-3">
+        <Standings mode="around" compact highlight={[o]} />
+      </div>
     </aside>
   </div>
 </Base>

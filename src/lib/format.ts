@@ -39,3 +39,11 @@ export const resultName = { V: "Výhra", R: "Remíza", P: "Prohra" } as const;
 export const mapUrl = (venue: string) =>
   "https://www.google.com/maps/search/?api=1&query=" +
   encodeURIComponent(venue.replace(/\s*\(.*?\)/, "") + ", Praha");
+
+/** "Ne" */
+export const weekdayShort = (date: string) => WDS[parts(date).wd];
+/** "11/10" (Sparta-style day/month) */
+export const dayMonth = (date: string) => {
+  const p = parts(date);
+  return `${String(p.d).padStart(2, "0")}/${String(p.m).padStart(2, "0")}`;
+};

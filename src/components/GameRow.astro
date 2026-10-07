@@ -1,38 +1,37 @@
 ---
-// One game from the perspective of team `perspective` (default: us).
-import { OUR, forT, gameSlug, isFinal, opp, rankOf, team, type Game } from "../lib/data";
-import { resultName, shortDate } from "../lib/format";
-import { url } from "../lib/url";
+// Compact row for another team's finished game (opponent analysis).
+import { forT, isFinal, opp, rankOf, team, type Game } from "../lib/data";
+import { shortDate } from "../lib/format";
 import Logo from "./Logo.astro";
-import When from "./When.astro";
+import ResultChip from "./ResultChip.astro";
 
 interface Props {
   game: Game;
-  perspective?: string;
-  link?: boolean;
+  perspective: string;
 }
-const { game, perspective = OUR, link = true } = Astro.props;
+const { game, perspective } = Astro.props;
 const o = opp(game, perspective);
 const r = isFinal(game) ? forT(game, perspective) : null;
 const rank = rankOf(o);
-const Tag = link ? "a" : "div";
 ---
 
-<li>
-  <Tag href={link ? url(`zapas/${gameSlug(game)}`) : undefined}>
-    <time datetime={game.start}><b>{shortDate(game.date)}</b></time>
-    <When game={game} />
-    <Logo id={o} />
-    <span>{team(o).name}</span>
-    <small>{rank ? `${rank}. v tabulce` : ""}{perspective === OUR && game.venue ? `, ${game.venue}` : ""}</small>
-    {
-      r ? (
-        <span>
-          {r.f}:{r.a} <abbr title={resultName[r.r]}>{r.r}</abbr>
+<li class="flex items-center gap-3 border-b border-border py-2.5 last:border-b-0">
+  <time datetime={game.start} class="label w-16 shrink-0 text-sm text-muted-foreground">{shortDate(game.date)}</time>
+  <Logo id={o} class="size-7" />
+  <span class="min-w-0 flex-1 leading-tight">
+    <span class="block truncate font-semibold">{team(o).name}</span>
+    {rank && <span class="text-sm text-muted-foreground">{rank}. v tabulce</span>}
+  </span>
+  {
+    r ? (
+      <span class="flex shrink-0 items-center gap-2">
+        <span class="label text-xl tabular-nums">
+          {r.f}:{r.a}
         </span>
-      ) : (
-        <span>{game.time}</span>
-      )
-    }
-  </Tag>
+        <ResultChip result={r.r} />
+      </span>
+    ) : (
+      <span class="label text-xl">{game.time}</span>
+    )
+  }
 </li>

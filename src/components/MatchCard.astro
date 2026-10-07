@@ -1,5 +1,7 @@
 ---
-// The emphasized match: date, faceoff, venue with map link, calendar + share.
+// The emphasized match (reference shot 1): date + state, faceoff with big time/score,
+// venue with map link, calendar + share actions.
+import { ArrowRight, CalendarPlus, MapPin, Share2, Star } from "@lucide/astro";
 import { SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, type Game } from "../lib/data";
 import { longDate, mapUrl, minusMinutes } from "../lib/format";
 import { url } from "../lib/url";
@@ -8,87 +10,123 @@ import When from "./When.astro";
 
 interface Props {
   game: Game;
-  heading: string;
-  headingLevel?: 1 | 2;
   detailLink?: boolean;
   stars?: boolean;
 }
-const { game: g, heading, headingLevel = 2, detailLink = false, stars = false } = Astro.props;
-const H = `h${headingLevel}`;
+const { game: g, detailLink = false, stars = false } = Astro.props;
 const final = isFinal(g);
 const s = state(g);
 const slug = gameSlug(g);
 const home = team(g.homeTeamId);
 const away = team(g.awayTeamId);
 const shareText = `${home.name} vs ${away.name}, ${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}`;
-const rankText = (id: string) => (rankOf(id) ? `${rankOf(id)}. místo` : "");
+const sides = [g.homeTeamId, g.awayTeamId];
 ---
 
-<section aria-labelledby={`m-${slug}`}>
-  <H id={`m-${slug}`}>{heading}</H>
-  <p>
-    <When game={g} />
-    <time datetime={g.start}>{longDate(g.date)}</time>
-  </p>
-  <div class="faceoff">
-    <div>
-      <Logo id={g.homeTeamId} />
-      <div><b>{home.name}</b></div>
-      <small>{rankText(g.homeTeamId)}</small>
-    </div>
-    <div>
+<div class="rounded-2xl bg-card p-4 sm:p-6">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <time datetime={g.start} class="label text-base sm:text-lg">{longDate(g.date)}</time>
+    <When game={g} class="rounded-full bg-white px-3 py-1 text-sm" />
+  </div>
+
+  <div class="mt-5 grid grid-cols-[1fr_auto_1fr] items-start gap-2 sm:mt-6 sm:gap-6">
+    {
+      sides.map((id, i) => (
+        <div class:list={["flex flex-col items-center text-center", i === 1 && "order-3"]}>
+          <Logo id={id} class="size-14 sm:size-20" />
+          <span class="label mt-2 text-base leading-tight sm:text-xl">{team(id).name}</span>
+          {rankOf(id) && <span class="text-sm text-muted-foreground">{rankOf(id)}. místo</span>}
+        </div>
+      ))
+    }
+    <div class="order-2 flex flex-col items-center pt-2 text-center sm:pt-3">
       {
         final ? (
           <>
-            <div><b>{g.homeGoals}:{g.awayGoals}</b></div>
-            <small>Konečný výsledek</small>
+            <span class="label text-xs text-muted-foreground sm:text-sm">Konečný výsledek</span>
+            <span class="label text-5xl leading-none tabular-nums sm:text-7xl">
+              {g.homeGoals}:{g.awayGoals}
+            </span>
           </>
         ) : (
           <>
-            <div><b>{g.time}</b></div>
-            <small>Sraz {minusMinutes(g.time, SRAZ_MIN)}</small>
+            <span class="label text-xs text-muted-foreground sm:text-sm">Začátek</span>
+            <span class="label text-5xl leading-none tabular-nums sm:text-7xl">{g.time}</span>
+            <span class="label mt-1 text-sm text-primary sm:text-base">Sraz {minusMinutes(g.time, SRAZ_MIN)}</span>
           </>
         )
       }
     </div>
-    <div>
-      <Logo id={g.awayTeamId} />
-      <div><b>{away.name}</b></div>
-      <small>{rankText(g.awayTeamId)}</small>
-    </div>
   </div>
+
   {
     g.venue && (
-      <p>
-        Místo: <a href={mapUrl(g.venue)} target="_blank" rel="noopener">{g.venue}</a> (mapa)
-      </p>
+      <a
+        href={mapUrl(g.venue)}
+        target="_blank"
+        rel="noopener"
+        class="mt-5 flex items-center justify-center gap-1.5 font-semibold underline decoration-border decoration-2 underline-offset-4 hover:decoration-primary"
+      >
+        <MapPin size={18} class="shrink-0 text-primary" aria-hidden="true" />
+        {g.venue}
+        <span class="sr-only">(otevře mapu)</span>
+      </a>
     )
   }
-  {
-    (s === "upcoming" || s === "live") && (
-      <p>
-        <a href={url(`zapas/${slug}.ics`)} download={`dragons-${slug}.ics`}>
-          Přidat do kalendáře
-        </a>{" "}
-        <button type="button" data-share data-url={url(`zapas/${slug}`)} data-text={shareText} hidden>
-          Sdílet
-        </button>
-        <span role="status" />
-      </p>
-    )
-  }
+
   {
     stars && final && g.stars.length > 0 && (
-      <p>
-        Hvězdy zápasu:{" "}
-        {g.stars.map((st, i) => (
-          <>
-            {i > 0 && ", "}★ {st.firstName} {st.lastName}
-            {st.number !== null && ` (${st.number})`}, {team(st.teamId).shortName ?? team(st.teamId).name}
-          </>
+      <ul class="mt-5 flex flex-wrap justify-center gap-2">
+        {g.stars.map((st) => (
+          <li class="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-sm">
+            <Star size={14} class="fill-primary text-primary" aria-label="Hvězda zápasu" />
+            <span class="font-semibold">
+              {st.firstName} {st.lastName}
+            </span>
+            {st.number !== null && <span class="text-muted-foreground">#{st.number}</span>}
+            <span class="label text-muted-foreground">{team(st.teamId).shortName}</span>
+          </li>
         ))}
-      </p>
+      </ul>
     )
   }
-  {detailLink && <p><a href={url(`zapas/${slug}`)}>Detail zápasu a rozbor soupeře</a></p>}
-</section>
+
+  {
+    (s === "upcoming" || s === "live") && (
+      <div class="mt-5 flex flex-col gap-2 sm:flex-row">
+        <a
+          href={url(`zapas/${slug}.ics`)}
+          download={`dragons-${slug}.ics`}
+          class="label flex flex-1 items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3.5 text-lg leading-none text-secondary-foreground transition-colors hover:bg-black"
+        >
+          <CalendarPlus size={20} aria-hidden="true" />
+          Přidat do kalendáře
+        </a>
+        <button
+          type="button"
+          data-share
+          data-url={url(`zapas/${slug}`)}
+          data-text={shareText}
+          hidden
+          class="label flex items-center justify-center gap-2 rounded-lg border-2 border-secondary px-5 py-3 text-lg leading-none transition-colors hover:bg-white"
+        >
+          <Share2 size={20} aria-hidden="true" />
+          Sdílet
+        </button>
+        <span role="status" class="self-center text-sm text-muted-foreground empty:hidden"></span>
+      </div>
+    )
+  }
+
+  {
+    detailLink && (
+      <a
+        href={url(`zapas/${slug}`)}
+        class="label mt-4 flex items-center justify-center gap-1.5 text-base text-primary hover:underline"
+      >
+        Detail zápasu a rozbor soupeře
+        <ArrowRight size={18} strokeWidth={2.5} aria-hidden="true" />
+      </a>
+    )
+  }
+</div>
