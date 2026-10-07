@@ -1210,13 +1210,19 @@
     "date": "2026-10-07",
     "time": "18:30",
     "start": "2026-10-07T18:30:00+02:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
     "awayTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
-    "homeGoals": 10,
+    "homeGoals": 16,
     "awayGoals": 1,
     "venue": "ICEARENA Letňany",
     "stars": [
+      {
+        "teamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
+        "number": 23,
+        "firstName": "Jiří",
+        "lastName": "Psota"
+      },
       {
         "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
         "number": 77,
@@ -1232,11 +1238,11 @@
     "date": "2026-10-07",
     "time": "19:45",
     "start": "2026-10-07T19:45:00+02:00",
-    "status": "scheduled",
+    "status": "running",
     "homeTeamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
     "awayTeamId": "BC83FFA0-115E-11EF-ABB5-E111FF753123",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 0,
+    "awayGoals": 0,
     "venue": "ICEARENA Kateřinky",
     "stars": []
   },
