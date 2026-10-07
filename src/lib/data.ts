@@ -48,7 +48,7 @@ export interface StandingRow {
 }
 
 export const GAME_MIN = 90; // how long after the start a game counts as in progress
-export const SRAZ_MIN = 45; // meeting time before the game; adjust to team habits
+export const SRAZ_MIN = 30; // team meets 30 min before the start
 export const FRESH_H = 20; // how long after a game its result stays on top of the schedule
 
 export const meta = metaJson;
