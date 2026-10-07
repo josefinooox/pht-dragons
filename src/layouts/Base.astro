@@ -3,6 +3,7 @@ import { OUR, finals, forT, rankOf, standingOf, team } from "../lib/data";
 import { plural, resultName } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "../components/Logo.astro";
+import "../styles/global.css";
 
 interface Props {
   title: string;
@@ -31,35 +32,6 @@ const form = finals.slice(-5).map((g) => forT(g, OUR).r);
     <meta property="og:url" content={canonical} />
     {me.logo && <meta property="og:image" content={new URL(url(me.logo), Astro.site).href} />}
     <link rel="alternate" type="text/calendar" title="Zápasy PHT Dragons" href={url("dragons.ics")} />
-    <style is:global>
-      /* Layout only. Visual design comes later. */
-      body { margin: 0 auto; padding: 0 16px; max-width: 72rem; font-family: system-ui, sans-serif; }
-      img { max-width: 100%; }
-      .logo { width: 2rem; height: 2rem; object-fit: contain; vertical-align: middle; }
-      .site-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; padding: 0.75rem 0; }
-      .site-header .brand { margin-right: auto; }
-      .form { display: inline-flex; gap: 0.25rem; }
-      .cols { display: grid; gap: 1rem; }
-      .faceoff { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; text-align: center; }
-      .games { list-style: none; padding: 0; }
-      .games li > * { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.5rem; padding: 0.25rem 0; }
-      [data-when] { margin-right: 0.5em; }
-      .table-wrap { overflow-x: auto; }
-      table { border-collapse: collapse; }
-      th, td { padding: 0.25rem 0.5rem; text-align: left; }
-      .num { text-align: right; }
-      .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-      .compare td:first-child, .compare th:first-child { text-align: right; }
-      .compare td:last-child, .compare th:last-child { text-align: left; }
-      .pn { display: flex; justify-content: space-between; gap: 1rem; }
-      @media (min-width: 900px) {
-        .cols { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; }
-        .pos-chip { display: none; }
-      }
-      @media (max-width: 899px) {
-        .side-table { display: none; }
-      }
-    </style>
   </head>
   <body>
     <header class="site-header">

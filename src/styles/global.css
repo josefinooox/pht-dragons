@@ -1,0 +1,111 @@
+/*
+ * Tailwind v4 + shadcn/ui-style design tokens (neutral base).
+ * Visual design is not decided yet (see CLAUDE.md): tokens are defined but not applied,
+ * and Tailwind's Preflight reset is left out so the pages keep their current plain look.
+ * When styling starts, replace the two imports below with `@import "tailwindcss";`.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* Dark-mode strategy is a design decision; `.dark` on <html> is the shadcn convention. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+/* Expose the tokens as Tailwind utilities: bg-background, text-muted-foreground, rounded-lg, ... */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Layout only (moved from Base.astro). Layered, so Tailwind utilities can override it. */
+@layer components {
+  body { margin: 0 auto; padding: 0 16px; max-width: 72rem; font-family: system-ui, sans-serif; }
+  img { max-width: 100%; }
+  .logo { width: 2rem; height: 2rem; object-fit: contain; vertical-align: middle; }
+  .site-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; padding: 0.75rem 0; }
+  .site-header .brand { margin-right: auto; }
+  .form { display: inline-flex; gap: 0.25rem; }
+  .cols { display: grid; gap: 1rem; }
+  .faceoff { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.5rem; align-items: center; text-align: center; }
+  .games { list-style: none; padding: 0; }
+  .games li > * { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.5rem; padding: 0.25rem 0; }
+  [data-when] { margin-right: 0.5em; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; }
+  th, td { padding: 0.25rem 0.5rem; text-align: left; }
+  .num { text-align: right; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .compare td:first-child, .compare th:first-child { text-align: right; }
+  .compare td:last-child, .compare th:last-child { text-align: left; }
+  .pn { display: flex; justify-content: space-between; gap: 1rem; }
+  @media (min-width: 900px) {
+    .cols { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; }
+    .pos-chip { display: none; }
+  }
+  @media (max-width: 899px) {
+    .side-table { display: none; }
+  }
+}
