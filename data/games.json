@@ -1154,13 +1154,26 @@
     "date": "2026-10-06",
     "time": "20:30",
     "start": "2026-10-06T20:30:00+02:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
     "awayTeamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
-    "homeGoals": 2,
-    "awayGoals": 0,
+    "homeGoals": 3,
+    "awayGoals": 1,
     "venue": "Sportovní hala Fortuna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "number": 10,
+        "firstName": "Marek",
+        "lastName": "Vysoký"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "number": 8,
+        "firstName": "Pavel",
+        "lastName": "Zámečník"
+      }
+    ]
   },
   {
     "gameId": "F62EE44A-98CA-11F1-8BDF-EF2495D048F3",
@@ -1169,13 +1182,26 @@
     "date": "2026-10-06",
     "time": "22:00",
     "start": "2026-10-06T22:00:00+02:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
     "awayTeamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 0,
+    "awayGoals": 6,
     "venue": "Sportovní hala Fortuna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "number": 3,
+        "firstName": "Jan",
+        "lastName": "Anýž"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "number": 61,
+        "firstName": "Tomáš",
+        "lastName": "Pražan"
+      }
+    ]
   },
   {
     "gameId": "F62CE872-98CA-11F1-8BDF-EF2495D048F3",
