@@ -17,14 +17,14 @@ const sign = (d: number) => (d > 0 ? `+${d}` : `${d}`);
           <span class="block truncate text-base text-grey-950">{r.label}</span>
           <span class="block font-display text-xs font-bold text-grey-500 uppercase">{r.note}</span>
         </span>
-        <span class="relative h-3">
+        <span class="relative h-2">
           <span class="absolute inset-y-[-4px] left-1/2 w-px bg-grey-400" aria-hidden="true" />
           {r.diff === 0 ? (
-            <span class="absolute top-0 left-1/2 h-3 w-1 -translate-x-1/2 rounded-sm bg-grey-500" />
+            <span class="absolute top-0 left-1/2 size-2 -translate-x-1/2 rounded-full bg-grey-500" />
           ) : r.diff > 0 ? (
-            <span class="absolute top-0 left-1/2 h-3 rounded-r-[4px] bg-blue-600" style={`width:${(50 * r.diff) / max}%`} />
+            <span class="absolute top-0 left-1/2 h-2 min-w-2 rounded-full bg-blue-600" style={`width:${(50 * r.diff) / max}%`} />
           ) : (
-            <span class="absolute top-0 right-1/2 h-3 rounded-l-[4px] bg-red-600" style={`width:${(50 * -r.diff) / max}%`} />
+            <span class="absolute top-0 right-1/2 h-2 min-w-2 rounded-full bg-red-600" style={`width:${(50 * -r.diff) / max}%`} />
           )}
         </span>
         <span class="text-right font-display text-lg leading-none font-extrabold text-grey-950">{sign(r.diff)}</span>

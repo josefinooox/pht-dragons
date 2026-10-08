@@ -9,6 +9,7 @@ import BarList from "../components/brain/BarList.astro";
 import PointsChart from "../components/brain/PointsChart.astro";
 import DuoBars from "../components/brain/DuoBars.astro";
 import Diverging from "../components/brain/Diverging.astro";
+import SectionHead from "../components/brain/SectionHead.astro";
 import sparkles from "../assets/sparkles.svg";
 import {
   allTime,
@@ -24,6 +25,7 @@ import {
   season,
   specialTeams,
 } from "../lib/brain";
+import { standings } from "../lib/data";
 import { num, plural } from "../lib/format";
 
 const pct = (v: number | null) => (v == null ? "–" : `${Math.round(v)} %`);
@@ -31,6 +33,7 @@ const top = (list: { name: string; value: number; number: number | null }[], n =
   list.slice(0, n).map((p) => ({ label: p.name, value: p.value, display: fmt ? fmt(p.value) : String(p.value), note: p.number != null ? `#${p.number}` : undefined }));
 const pim = (m: number) => `${Math.floor(m)}:${String(Math.round((m % 1) * 60)).padStart(2, "0")}`;
 const wdl = (t: { V: number; R: number; P: number }) => `${t.V}–${t.R}–${t.P}`;
+const tile = "rounded-lg bg-white p-5";
 const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
 ---
 
@@ -40,12 +43,13 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
   nav="mozek"
   bare
 >
+  <div class="bg-grey-100">
   <div class="mr-4 ml-(--gutter) max-w-7xl md:mr-20">
     <SubBar />
   </div>
 
-  <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
-    <div class="flex flex-col gap-3">
+  <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-4 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+    <div class="flex flex-col gap-3 pb-4">
       <h1 class="flex items-center gap-4 font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">
         <img src={sparkles.src} alt="" width="48" height="48" class="size-10 md:size-12" />
         Dračí mozek
@@ -53,46 +57,87 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
       <p class="font-sans text-xl font-semibold text-grey-500">Sezóna {season.name} v číslech</p>
     </div>
 
-    <!-- 1. headline -->
-    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-      <section aria-label="Pozice v tabulce" class="flex flex-col justify-between gap-6 rounded-lg bg-blue-600 p-6 text-white">
+    <!-- row 1: position + results -->
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-[minmax(0,1.6fr)_repeat(4,minmax(0,1fr))]">
+      <section aria-label="Pozice v tabulce" class="col-span-2 flex flex-col justify-between gap-4 rounded-lg bg-blue-600 p-6 text-white md:col-span-4 lg:col-span-1">
         <span class="font-display text-sm font-bold text-blue-100 uppercase">Pozice v tabulce</span>
-        <div class="flex items-end gap-4">
-          <span class="font-display text-[7rem] leading-[0.8] font-extrabold">{season.rank ?? "–"}.</span>
-          <span class="pb-1 font-display text-2xl leading-tight font-bold uppercase">
-            {season.points} {plural(season.points, "bod", "body", "bodů")}
-            <span class="block text-base text-blue-100">po {season.games} {plural(season.games, "zápase", "zápasech", "zápasech")}</span>
-          </span>
+        <div>
+          <p class="flex items-baseline gap-3 font-display leading-[0.8] font-extrabold">
+            <span class="text-[8rem] md:text-[10rem]">{season.rank ?? "–"}.</span>
+            {standings.length > 0 && <span class="text-3xl font-bold text-blue-200">z {standings.length}</span>}
+          </p>
+          <p class="pt-3 font-display text-lg font-bold text-blue-100 uppercase">
+            {season.points} {plural(season.points, "bod", "body", "bodů")} po {season.games} {plural(season.games, "zápase", "zápasech", "zápasech")}
+          </p>
         </div>
       </section>
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Výhry" value={String(season.wins)} tone="green" /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Remízy" value={String(season.draws)} /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Prohry" value={String(season.losses)} tone="red" /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Skóre" value={`${season.gf}:${season.ga}`} /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Góly na zápas" value={num(season.gfPerGame)} tone="blue" /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Inkaso na zápas" value={num(season.gaPerGame)} tone="red" /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Hráčů v sestavách" value={String(rosterSize)} /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Trestné min. na zápas" value={pim(specialTeams.pimPerGame)} /></div>
-      </div>
+      <div class={tile}><Stat label="Výhry" value={String(season.wins)} tone="green" /></div>
+      <div class={tile}><Stat label="Remízy" value={String(season.draws)} /></div>
+      <div class={tile}><Stat label="Prohry" value={String(season.losses)} tone="red" /></div>
+      <div class={tile}><Stat label="Skóre" value={`${season.gf}:${season.ga}`} /></div>
     </div>
 
-    <!-- 2. season progress -->
+    <!-- row 2: per-game numbers -->
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div class={tile}><Stat label="Góly na zápas" value={num(season.gfPerGame)} tone="blue" /></div>
+      <div class={tile}><Stat label="Inkaso na zápas" value={num(season.gaPerGame)} tone="red" /></div>
+      <div class={tile}><Stat label="Hráčů v sestavách" value={String(rosterSize)} /></div>
+      <div class={tile}><Stat label="Trestné min. na zápas" value={pim(specialTeams.pimPerGame)} /></div>
+    </div>
+
+    <!-- how we play -->
+    <SectionHead title="Jak hrajeme" sub="Průběh sezóny a kdy padají góly" />
     <Card title="Průběh sezóny" subtitle="Body po každém zápase. Najeď na tečku pro detail zápasu.">
       <PointsChart points={pointsTimeline} />
     </Card>
+    <div class="grid gap-4 lg:grid-cols-2">
+      <Card title="Góly po třetinách" subtitle="Kdy skórujeme a kdy dostáváme">
+        <DuoBars rows={periods.map((p) => ({ label: p.label, a: p.for, b: p.against }))} aLabel="Vstřelené" bLabel="Obdržené" />
+      </Card>
+      <Card title="Kdo dá první gól" subtitle="Výsledky (V–R–P) podle toho, kdo skóroval první">
+        <div class="grid grid-cols-2 gap-6">
+          <Stat label="My" value={wdl(firstGoal.us)} tone="blue" sub={`${firstGoal.us.games} ${plural(firstGoal.us.games, "zápas", "zápasy", "zápasů")}`} />
+          <Stat label="Soupeř" value={wdl(firstGoal.them)} tone="red" sub={`${firstGoal.them.games} ${plural(firstGoal.them.games, "zápas", "zápasy", "zápasů")}`} />
+        </div>
+      </Card>
+    </div>
 
-    <!-- 3. leaderboards -->
+    <!-- players -->
+    <SectionHead title="Kdo táhne tým" sub="Body, góly, asistence a docházka hráčů" />
     <div class="grid gap-4 md:grid-cols-3">
       <Card title="Kanadské body" subtitle="Góly + asistence"><BarList items={top(leaders.points)} /></Card>
       <Card title="Kanonýři" subtitle="Vstřelené góly"><BarList items={top(leaders.goals)} /></Card>
       <Card title="Nahrávači" subtitle="Asistence"><BarList items={top(leaders.assists)} /></Card>
+      <Card title="Hvězdy zápasu" subtitle="Kolikrát byl hráč vyhlášen hvězdou">
+        <BarList items={top(leaders.stars)} />
+      </Card>
+      <Card title="Nahrávací dvojice" subtitle="Kdo komu nejčastěji přihrál na gól">
+        <BarList items={assistPairs.slice(0, 5).map((p) => ({ label: `${p.from} → ${p.to}`, value: p.count }))} />
+      </Card>
+      <Card title="Účast" subtitle={`Odehrané zápasy (z ${reportCount})`}>
+        <BarList items={top(leaders.gamesPlayed)} max={reportCount} color="grey" />
+      </Card>
     </div>
 
-    <!-- 4. periods + special teams -->
-    <div class="grid gap-4 lg:grid-cols-2">
-      <Card title="Góly po třetinách" subtitle="Kdy skórujeme a kdy dostáváme">
-        <DuoBars rows={periods.map((p) => ({ label: p.label, a: p.for, b: p.against }))} aLabel="Vstřelené" bLabel="Obdržené" />
+    <!-- goalies & special situations -->
+    <SectionHead title="Brankáři a speciální situace" sub="Zákroky, přesilovky, oslabení a trestná lavice" />
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Card title="Brankáři" subtitle="Úspěšnost zákroků">
+        {
+          goalies.length ? (
+            <div class="flex flex-col gap-5">
+              {goalies.map((gk) => (
+                <Stat
+                  label={`${gk.name}${gk.number != null ? ` #${gk.number}` : ""}`}
+                  value={gk.svPct == null ? "–" : `${num(gk.svPct)} %`}
+                  sub={`${gk.games} ${plural(gk.games, "zápas", "zápasy", "zápasů")} · ${num(gk.gaa)} inkasovaných na zápas${gk.shutouts ? ` · ${gk.shutouts}× čisté konto` : ""}`}
+                />
+              ))}
+            </div>
+          ) : (
+            <p class="text-grey-600">Zatím žádná data.</p>
+          )
+        }
       </Card>
       <Card title="Speciální formace">
         <div class="grid grid-cols-2 gap-x-6 gap-y-8">
@@ -119,60 +164,21 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
           />
         </div>
       </Card>
-    </div>
-
-    <!-- 5. first goal, goalies, penalties, pairs, appearances -->
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Card title="Kdo dá první gól" subtitle="Výsledky (V–R–P) podle toho, kdo skóroval první">
-        <div class="grid grid-cols-2 gap-6">
-          <Stat label="My" value={wdl(firstGoal.us)} tone="blue" sub={`${firstGoal.us.games} ${plural(firstGoal.us.games, "zápas", "zápasy", "zápasů")}`} />
-          <Stat label="Soupeř" value={wdl(firstGoal.them)} tone="red" sub={`${firstGoal.them.games} ${plural(firstGoal.them.games, "zápas", "zápasy", "zápasů")}`} />
-        </div>
-      </Card>
-      <Card title="Brankáři" subtitle="Úspěšnost zákroků">
-        {
-          goalies.length ? (
-            <div class="flex flex-col gap-5">
-              {goalies.map((gk) => (
-                <Stat
-                  label={`${gk.name}${gk.number != null ? ` #${gk.number}` : ""}`}
-                  value={gk.svPct == null ? "–" : `${num(gk.svPct)} %`}
-                  sub={`${gk.games} ${plural(gk.games, "zápas", "zápasy", "zápasů")} · ${num(gk.gaa)} inkasovaných na zápas${gk.shutouts ? ` · ${gk.shutouts}× čisté konto` : ""}`}
-                />
-              ))}
-            </div>
-          ) : (
-            <p class="text-grey-600">Zatím žádná data.</p>
-          )
-        }
-      </Card>
-      <Card title="Hvězdy zápasu" subtitle="Kolikrát byl hráč vyhlášen hvězdou">
-        <BarList items={top(leaders.stars)} />
-      </Card>
       <Card title="Trestná lavice" subtitle="Trestné minuty">
         <BarList items={top(leaders.penaltyMinutes, 5, pim)} color="grey" />
       </Card>
-      <Card title="Nahrávací dvojice" subtitle="Kdo komu nejčastěji přihrál na gól">
-        <BarList items={assistPairs.slice(0, 5).map((p) => ({ label: `${p.from} → ${p.to}`, value: p.count }))} />
-      </Card>
-      <Card title="Účast" subtitle={`Odehrané zápasy (z ${reportCount})`}>
-        <BarList items={top(leaders.gamesPlayed)} max={reportCount} color="grey" />
-      </Card>
     </div>
 
-    <!-- 6. all seasons -->
-    <div class="flex flex-col gap-3 pt-6">
-      <h2 class="font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Dračí kronika</h2>
-      <p class="text-grey-500">Všechny sezóny v PHM Cupu od {allTime.bySeason[0]?.name ?? season.name}</p>
-    </div>
+    <!-- all seasons -->
+    <SectionHead title="Dračí kronika" sub={`Všechny sezóny v PHM Cupu od ${allTime.bySeason[0]?.name ?? season.name}`} />
     <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Sezóny" value={String(allTime.seasons)} /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Zápasy" value={String(allTime.games)} /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Úspěšnost" value={`${Math.round(ourWinPct)} %`} tone="green" sub={`${allTime.wins}–${allTime.draws}–${allTime.losses}`} /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Vstřelené góly" value={String(allTime.gf)} tone="blue" /></div>
-        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Obdržené góly" value={String(allTime.ga)} tone="red" /></div>
-        <div class="rounded-lg bg-grey-100 p-5">
+        <div class={tile}><Stat label="Sezóny" value={String(allTime.seasons)} /></div>
+        <div class={tile}><Stat label="Zápasy" value={String(allTime.games)} /></div>
+        <div class={tile}><Stat label="Úspěšnost" value={`${Math.round(ourWinPct)} %`} tone="green" sub={`${allTime.wins}–${allTime.draws}–${allTime.losses}`} /></div>
+        <div class={tile}><Stat label="Vstřelené góly" value={String(allTime.gf)} tone="blue" /></div>
+        <div class={tile}><Stat label="Obdržené góly" value={String(allTime.ga)} tone="red" /></div>
+        <div class={tile}>
           <Stat label="Nejvyšší výhra" value={allTime.biggestWin?.score ?? "–"} sub={allTime.biggestWin ? `s ${allTime.biggestWin.opponent}` : undefined} />
         </div>
       </div>
@@ -193,5 +199,6 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
         <Diverging rows={headToHead.map((h) => ({ label: h.name, diff: h.diff, note: `${h.V}–${h.R}–${h.P} · ${h.gf}:${h.ga}` }))} />
       </div>
     </Card>
+  </div>
   </div>
 </Base>

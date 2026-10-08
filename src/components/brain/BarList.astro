@@ -1,6 +1,6 @@
 ---
-// Horizontal leaderboard: one series, one color (blue-600), bars <= 12px with a 4px rounded
-// data end, value at the tip in text color. Native title tooltips; values are always visible.
+// Horizontal leaderboard: one series, one color (blue-600), thin fully rounded bars
+// value at the tip in text color. Native title tooltips; values are always visible.
 interface Props {
   items: { label: string; value: number; display?: string; note?: string }[];
   max?: number;
@@ -23,8 +23,8 @@ const fill = { blue: "bg-blue-600", red: "bg-red-600", grey: "bg-grey-600" }[col
             {it.note && <span class="text-grey-500"> {it.note}</span>}
           </span>
           <span class="font-display text-xl leading-none font-extrabold text-grey-950">{it.display ?? it.value}</span>
-          <span class="col-span-2 col-start-2 h-3 rounded-r-[4px] bg-white">
-            <span class:list={["block h-full rounded-r-[4px]", fill]} style={`width:${Math.max(2, (100 * it.value) / top)}%`} />
+          <span class="col-span-2 col-start-2 h-2 rounded-full bg-grey-100">
+            <span class:list={["block h-full min-w-2 rounded-full", fill]} style={`width:${Math.max(2, (100 * it.value) / top)}%`} />
           </span>
         </li>
       ))}
