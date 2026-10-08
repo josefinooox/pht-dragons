@@ -24,11 +24,12 @@ const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 
 
 <div class="flex items-stretch">
   <div class="min-w-0 flex-1">
-    <div class="px-4 md:px-20">
+    <!-- content width capped at 1280px (Tailwind max-w-7xl), centered in the main column -->
+    <div class="mx-auto max-w-7xl px-4 md:px-20 md:box-content">
       <SubBar />
     </div>
 
-    <div class="flex flex-col gap-10 px-4 pt-8 pb-20 md:px-20 md:pt-10 md:pb-32">
+    <div class="mx-auto flex max-w-7xl flex-col gap-10 px-4 pt-8 pb-20 md:box-content md:px-20 md:pt-10 md:pb-32">
       <div class="flex flex-wrap items-start justify-between gap-6">
         <div class="flex flex-col gap-6 md:gap-8">
           <h1 class="font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">Zápasy</h1>
