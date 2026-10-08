@@ -1297,8 +1297,8 @@
     "status": "running",
     "homeTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
     "awayTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
-    "homeGoals": 0,
-    "awayGoals": 0,
+    "homeGoals": 3,
+    "awayGoals": 1,
     "venue": "Sportovní hala Fortuna",
     "stars": []
   },
