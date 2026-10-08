@@ -8,7 +8,7 @@ interface Props {
   tone?: "default" | "blue" | "red" | "green";
 }
 const { label, value, sub, size = "md", tone = "default" } = Astro.props;
-const color = { default: "text-grey-950", blue: "text-blue-600", red: "text-red-600", green: "text-success" }[tone];
+const color = { default: "text-blue-600", blue: "text-blue-600", red: "text-red-600", green: "text-success" }[tone];
 ---
 
 <div class="flex min-w-0 flex-col gap-1">

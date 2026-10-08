@@ -1,22 +1,22 @@
 ---
-// "Dračí mozek": the team's stats dashboard. Mostly big numbers and charts, little reading.
+// "Dračí radar": the team's stats dashboard. Mostly big numbers and charts, little reading.
 // All numbers come from src/lib/brain.ts at build time.
 import Base from "../layouts/Base.astro";
-import SubBar from "../components/SubBar.astro";
 import Card from "../components/brain/Card.astro";
 import Stat from "../components/brain/Stat.astro";
 import BarList from "../components/brain/BarList.astro";
 import PointsChart from "../components/brain/PointsChart.astro";
 import DuoBars from "../components/brain/DuoBars.astro";
-import Diverging from "../components/brain/Diverging.astro";
+import ResultBars from "../components/brain/ResultBars.astro";
+import Insight from "../components/brain/Insight.astro";
 import SectionHead from "../components/brain/SectionHead.astro";
-import sparkles from "../assets/sparkles.svg";
 import {
   allTime,
   assistPairs,
   firstGoal,
   goalies,
   headToHead,
+  insights,
   leaders,
   periods,
   pointsTimeline,
@@ -38,22 +38,15 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
 ---
 
 <Base
-  title="Dračí mozek – PHT Dragons"
+  title="Dračí radar – PHT Dragons"
   description={`Statistiky PHT Dragons: ${season.points} bodů, ${season.wins} výher, ${season.gf}:${season.ga} skóre v sezóně ${season.name}.`}
-  nav="mozek"
+  nav="radar"
   bare
 >
   <div class="bg-grey-100">
-  <div class="mr-4 ml-(--gutter) max-w-7xl md:mr-20">
-    <SubBar />
-  </div>
-
   <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-4 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
-    <div class="flex flex-col gap-3 pb-4">
-      <h1 class="flex items-center gap-4 font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">
-        <img src={sparkles.src} alt="" width="48" height="48" class="size-10 md:size-12" />
-        Dračí mozek
-      </h1>
+    <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 pb-4">
+      <h1 class="font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">Dračí radar</h1>
       <p class="font-sans text-xl font-semibold text-grey-500">Sezóna {season.name} v číslech</p>
     </div>
 
@@ -87,6 +80,9 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
 
     <!-- how we play -->
     <SectionHead title="Jak hrajeme" sub="Průběh sezóny a kdy padají góly" />
+    {insights.play.length > 0 && (
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{insights.play.map((t) => <Insight text={t} />)}</div>
+    )}
     <Card title="Průběh sezóny" subtitle="Body po každém zápase. Najeď na tečku pro detail zápasu.">
       <PointsChart points={pointsTimeline} />
     </Card>
@@ -103,7 +99,10 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
     </div>
 
     <!-- players -->
-    <SectionHead title="Kdo táhne tým" sub="Body, góly, asistence a docházka hráčů" />
+    <SectionHead title="Týmová práce" sub="Kdo dává góly, kdo nahrává a kdo nechybí" />
+    {insights.team.length > 0 && (
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{insights.team.map((t) => <Insight text={t} />)}</div>
+    )}
     <div class="grid gap-4 md:grid-cols-3">
       <Card title="Kanadské body" subtitle="Góly + asistence"><BarList items={top(leaders.points)} /></Card>
       <Card title="Kanonýři" subtitle="Vstřelené góly"><BarList items={top(leaders.goals)} /></Card>
@@ -121,6 +120,9 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
 
     <!-- goalies & special situations -->
     <SectionHead title="Brankáři a speciální situace" sub="Zákroky, přesilovky, oslabení a trestná lavice" />
+    {insights.special.length > 0 && (
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{insights.special.map((t) => <Insight text={t} />)}</div>
+    )}
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Card title="Brankáři" subtitle="Úspěšnost zákroků">
         {
@@ -171,6 +173,9 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
 
     <!-- all seasons -->
     <SectionHead title="Dračí kronika" sub={`Všechny sezóny v PHM Cupu od ${allTime.bySeason[0]?.name ?? season.name}`} />
+    {insights.history.length > 0 && (
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{insights.history.map((t) => <Insight text={t} />)}</div>
+    )}
     <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
         <div class={tile}><Stat label="Sezóny" value={String(allTime.seasons)} /></div>
@@ -190,13 +195,14 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
       </Card>
     </div>
 
-    <Card title="Proti komu nám to jde" subtitle="Rozdíl skóre proti každému soupeři za všechny sezóny, V–R–P pod jménem">
+    <Card title="Proti komu nám to jde" subtitle="Bilance zápasů proti každému soupeři za všechny sezóny">
       <div slot="legend" class="flex flex-wrap gap-x-5 gap-y-1 text-sm text-grey-600">
-        <span class="flex items-center gap-2"><span class="h-3 w-4 rounded-r-[4px] bg-blue-600" />Lepší skóre</span>
-        <span class="flex items-center gap-2"><span class="h-3 w-4 rounded-l-[4px] bg-red-600" />Horší skóre</span>
+        <span class="flex items-center gap-2"><span class="h-2 w-4 rounded-full bg-success" />Výhry</span>
+        <span class="flex items-center gap-2"><span class="h-2 w-4 rounded-full bg-grey-400" />Remízy</span>
+        <span class="flex items-center gap-2"><span class="h-2 w-4 rounded-full bg-red-600" />Prohry</span>
       </div>
       <div class="columns-1 gap-10 lg:columns-2 [&>ul]:contents">
-        <Diverging rows={headToHead.map((h) => ({ label: h.name, diff: h.diff, note: `${h.V}–${h.R}–${h.P} · ${h.gf}:${h.ga}` }))} />
+        <ResultBars rows={headToHead.map((h) => ({ label: h.name, V: h.V, R: h.R, P: h.P, gf: h.gf, ga: h.ga }))} />
       </div>
     </Card>
   </div>

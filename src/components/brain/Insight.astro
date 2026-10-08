@@ -1,0 +1,12 @@
+---
+// A fun one-sentence fact on a blue cell (white text). Text comes from insights in src/lib/brain.ts.
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+---
+
+<p class="flex min-w-0 flex-col gap-3 rounded-lg bg-blue-600 p-5 text-white md:p-6">
+  <span class="font-display text-sm font-bold text-blue-200 uppercase">Postřeh</span>
+  <span class="font-sans text-xl leading-snug font-semibold text-balance md:text-2xl">{text}</span>
+</p>
