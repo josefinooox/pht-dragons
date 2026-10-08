@@ -6,8 +6,10 @@ import type { Game } from "../lib/data";
 interface Props {
   game: Game;
   class?: string;
+  /** Only show game states (live / waiting for result), not day labels like "Za 3 dny". */
+  stateOnly?: boolean;
 }
-const { game, class: cls } = Astro.props;
+const { game, class: cls, stateOnly = false } = Astro.props;
 ---
 
-<span class={cls} data-when data-date={game.date} data-start={game.start} data-status={game.status} hidden></span>
+<span class={cls} data-when data-date={game.date} data-start={game.start} data-status={game.status} data-state-only={stateOnly ? "" : undefined} hidden></span>

@@ -1,10 +1,10 @@
 ---
 import { ChevronLeft } from "@lucide/astro";
-import { OUR, finals, forT, meta, rankOf, standingOf, team } from "../lib/data";
+import { OUR, meta, rankOf, standingOf, team } from "../lib/data";
 import { plural } from "../lib/format";
 import { url } from "../lib/url";
-import Logo from "../components/Logo.astro";
-import ResultChip from "../components/ResultChip.astro";
+import CalendarMenu from "../components/CalendarMenu.astro";
+import wordmark from "../assets/dragons-wordmark.webp";
 import "../styles/global.css";
 
 interface Props {
@@ -12,27 +12,37 @@ interface Props {
   description: string;
   /** Which header nav item is current. */
   nav?: "rozpis" | "odehrane" | "tabulka";
-  /** Back link in the grey sub-bar. */
+  /** Back link in a grey bar under the header (detail pages). */
   back?: { href: string; label: string };
+  /** Full-bleed main area: the page lays out its own columns (homepage with the table panel). */
+  bare?: boolean;
 }
-const { title, description, nav, back } = Astro.props;
+const { title, description, nav, back, bare = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const me = team(OUR);
 const myRank = rankOf(OUR);
 const myPoints = standingOf(OUR)?.points ?? 0;
-const form = finals.slice(-5).map((g) => forT(g, OUR).r);
 const links = [
   { key: "rozpis", href: url(), label: "Rozpis" },
   { key: "odehrane", href: url("odehrane"), label: "Výsledky" },
   { key: "tabulka", href: url("tabulka"), label: "Tabulka" },
 ] as const;
+const updated = new Intl.DateTimeFormat("cs-CZ", {
+  timeZone: "Europe/Prague",
+  day: "numeric",
+  month: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+}).formatToParts(new Date(meta.fetchedAt));
+const part = (t: string) => updated.find((p) => p.type === t)?.value ?? "";
+const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part("minute")}`;
 ---
 
 <html lang="cs">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#121212" />
+    <meta name="theme-color" content="#181818" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -45,23 +55,28 @@ const links = [
     {me.logo && <meta property="og:image" content={new URL(url(me.logo), Astro.site).href} />}
     {me.logo && <link rel="icon" href={url(me.logo)} type="image/webp" />}
     <link rel="alternate" type="text/calendar" title="Zápasy PHT Dragons" href={url("dragons.ics")} />
+    <script is:inline>
+      // Standings panel state before first paint (collapsed by default), see TablePanel.astro.
+      try {
+        if (localStorage.getItem("pht-table") === "open") document.documentElement.dataset.table = "open";
+      } catch (e) {}
+    </script>
   </head>
-  <body class="antialiased">
-    <header class="bg-secondary text-secondary-foreground">
-      <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
-        <a href={url()} class="flex items-center gap-2.5">
-          <Logo id={OUR} class="size-9" />
-          <span class="label text-xl leading-none">{me.name}</span>
+  <body class="bg-white text-grey-950 antialiased">
+    <header class="bg-grey-900">
+      <div class="flex h-[72px] items-center justify-between gap-4 px-4 md:px-14">
+        <a href={url()} class="shrink-0 rounded-sm" aria-label="PHT Dragons – rozpis">
+          <img src={wordmark.src} alt="PHT Dragons" width="126" height="40" class="h-8 w-auto md:h-10" />
         </a>
-        <nav aria-label="Hlavní" class="ml-auto hidden md:block">
-          <ul class="flex gap-6">
+        <nav aria-label="Hlavní" class="hidden md:block">
+          <ul class="flex gap-10">
             {
               links.map((l) => (
                 <li>
                   <a
                     href={l.href}
                     aria-current={nav === l.key ? "page" : undefined}
-                    class="label text-lg text-white/75 hover:text-white aria-[current=page]:text-white aria-[current=page]:underline aria-[current=page]:decoration-primary aria-[current=page]:decoration-[3px] aria-[current=page]:underline-offset-8"
+                    class="font-sans text-base font-semibold text-grey-500 transition-colors hover:text-white aria-[current=page]:text-white"
                   >
                     {l.label}
                   </a>
@@ -74,10 +89,10 @@ const links = [
           myRank && (
             <a
               href={url("tabulka")}
-              class="label ml-auto flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-sm leading-none md:hidden"
+              class="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 font-display text-sm leading-none font-bold text-white uppercase transition-colors hover:bg-white/20 md:hidden"
             >
-              <span class="text-white">{myRank}. místo</span>
-              <span class="text-white/60">
+              {myRank}. místo
+              <span class="text-grey-400">
                 {myPoints} {plural(myPoints, "bod", "body", "bodů")}
               </span>
             </a>
@@ -86,40 +101,65 @@ const links = [
       </div>
     </header>
 
-    <div class="bg-card">
-      <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5">
-        {
-          back ? (
-            <a href={back.href} class="label flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+    {
+      back && (
+        <div class="bg-grey-100">
+          <div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-2.5">
+            <a
+              href={back.href}
+              class="label flex items-center gap-1 text-sm text-grey-600 transition-colors hover:text-grey-950"
+            >
               <ChevronLeft size={16} strokeWidth={3} aria-hidden="true" />
               {back.label}
             </a>
-          ) : (
-            form.length > 0 && (
-              <span class="flex items-center gap-2">
-                <span class="label text-sm text-muted-foreground">Forma</span>
-                <span class="flex gap-1" aria-label={`Forma, posledních ${form.length} zápasů`}>
-                  {form.map((r) => (
-                    <ResultChip result={r} size="sm" />
-                  ))}
-                </span>
-              </span>
-            )
-          )
-        }
-        <span class="label ml-auto text-sm">
-          {meta.group.name} <span class="text-muted-foreground">{meta.season.name.replace(/-20/, "/")}</span>
-        </span>
+            <span class="label ml-auto text-sm">
+              {meta.group.name} <span class="text-grey-600">{meta.season.name.replace(/-20/, "/")}</span>
+            </span>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      bare ? (
+        <main class="flex-1">
+          <slot />
+        </main>
+      ) : (
+        <main class="mx-auto w-full max-w-6xl px-4 pt-8 pb-16 md:pt-12">
+          <slot />
+        </main>
+      )
+    }
+
+    <footer class="bg-blue-600 text-white">
+      <div class="flex flex-col gap-10 px-4 py-16 md:min-h-[410px] md:flex-row md:items-end md:justify-between md:px-20 md:py-24">
+        <p class="font-display text-[2.75rem] leading-[1.1] font-black tracking-[-0.02em] uppercase md:text-[4.5rem]">
+          <span class="block">PHT Dragons.</span>
+          <span class="block text-blue-400">Máme sílu dračí.</span>
+        </p>
+        <div class="flex flex-col items-start gap-7">
+          <p class="w-[259px] font-display text-[1.875rem] leading-[1.1] font-black tracking-[-0.02em] uppercase">
+            Přidej si všechny zápasy do kalendáře
+          </p>
+          <CalendarMenu variant="solid" up align="left" />
+        </div>
       </div>
-    </div>
-
-    <main class="mx-auto w-full max-w-6xl px-4 pt-8 pb-16 md:pt-12">
-      <slot />
-    </main>
-
-    <footer class="border-t border-border">
-      <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-muted-foreground">
-        PHM Cup, skupina {meta.group.name}. Data z HMS, aktualizace každých 30 minut.
+      <div class="flex flex-col gap-4 px-4 py-6 font-sans text-base leading-[1.4] text-grey-50 md:h-[72px] md:flex-row md:items-center md:justify-between md:px-20 md:py-2">
+        <p>Data aktualizována {updatedText}</p>
+        <nav aria-label="Patička">
+          <ul class="flex gap-10">
+            {
+              links.map((l) => (
+                <li>
+                  <a href={l.href} class="transition-colors hover:text-blue-100 hover:underline hover:underline-offset-4">
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
     </footer>
     <script>

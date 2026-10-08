@@ -1,171 +1,99 @@
 ---
-// Schedule page body for "/" (Nadcházející) and "/odehrane" (Odehrané).
-import { CalendarPlus, ChevronDown, Download, RefreshCw } from "@lucide/astro";
-import {
-  FRESH_H,
-  GAME_MIN,
-  NOW,
-  OUR,
-  ahead,
-  finals,
-  forT,
-  gameSlug,
-  heroGame,
-  isFinal,
-  lastFinal,
-  mine,
-  opp,
-  pending,
-  team,
-} from "../lib/data";
-import { resultName, shortDate } from "../lib/format";
+// Homepage body for "/" (Nadcházející) and "/odehrane" (Minulé), Figma "Homepage/Desktop".
+import { ahead, finals, heroGame, opp, pending, type Game } from "../lib/data";
 import { url } from "../lib/url";
+import CalendarMenu from "./CalendarMenu.astro";
+import GameCard from "./GameCard.astro";
 import GameList from "./GameList.astro";
-import Logo from "./Logo.astro";
-import MatchCard from "./MatchCard.astro";
-import Standings from "./Standings.astro";
+import SubBar from "./SubBar.astro";
+import TablePanel from "./TablePanel.astro";
 import When from "./When.astro";
 
 interface Props {
   tab: "upcoming" | "played";
 }
 const { tab } = Astro.props;
-const upcomingCount = mine.filter((g) => !isFinal(g)).length;
-
-// Result of the last game stays on top for a while after it was played.
-const freshUntil = lastFinal ? Date.parse(lastFinal.start) + (FRESH_H * 60 + GAME_MIN) * 60_000 : 0;
-const fresh = lastFinal && NOW.getTime() < freshUntil ? lastFinal : undefined;
-const freshResult = fresh ? forT(fresh, OUR) : null;
-
-const feedHttp = new URL(url("dragons.ics"), Astro.site);
-const feedWebcal = feedHttp.href.replace(/^https?:/, "webcal:");
 const tabs = [
-  { key: "upcoming", href: url(), label: "Nadcházející", count: upcomingCount },
-  { key: "played", href: url("odehrane"), label: "Odehrané", count: finals.length },
+  { key: "upcoming", href: url(), label: "Nadcházející" },
+  { key: "played", href: url("odehrane"), label: "Minulé" },
 ];
+// Games that should be over but have no result yet stay on top until the result arrives.
+const top: Game[] = [...pending, ...(heroGame ? [heroGame] : [])];
+const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase";
 ---
 
-<h1>Zápasy</h1>
-
-<div class="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 md:mt-8">
-  <nav aria-label="Filtr zápasů">
-    <ul class="flex gap-5">
-      {
-        tabs.map((t) => (
-          <li>
-            <a
-              href={t.href}
-              aria-current={tab === t.key ? "page" : undefined}
-              class="label text-xl text-muted-foreground/70 hover:text-foreground aria-[current=page]:text-primary md:text-2xl"
-            >
-              {t.label} <span class="text-base md:text-lg">({t.count})</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
-
-  <details class="group relative">
-    <summary
-      class="label flex cursor-pointer list-none items-center gap-2 rounded-md border border-border px-4 py-2.5 text-base text-primary hover:border-primary [&::-webkit-details-marker]:hidden"
-    >
-      <CalendarPlus size={18} aria-hidden="true" />
-      Přidat do kalendáře
-      <ChevronDown size={16} class="transition-transform group-open:rotate-180" aria-hidden="true" />
-    </summary>
-    <div
-      class="absolute right-0 z-10 mt-2 w-72 rounded-lg border border-border bg-background p-2 shadow-lg max-sm:left-0 max-sm:right-auto"
-    >
-      <a href={feedWebcal} class="flex gap-3 rounded-md p-3 hover:bg-card">
-        <RefreshCw size={18} class="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
-        <span>
-          <span class="block font-semibold">Odebírat celou sezónu</span>
-          <span class="text-sm text-muted-foreground">Kalendář se sám aktualizuje při změnách.</span>
-        </span>
-      </a>
-      <a href={feedHttp.href} download="dragons.ics" class="flex gap-3 rounded-md p-3 hover:bg-card">
-        <Download size={18} class="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
-        <span>
-          <span class="block font-semibold">Stáhnout soubor .ics</span>
-          <span class="text-sm text-muted-foreground">Jednorázový import všech zápasů.</span>
-        </span>
-      </a>
+<div class="flex items-stretch">
+  <div class="min-w-0 flex-1">
+    <div class="px-4 md:px-20">
+      <SubBar />
     </div>
-  </details>
-</div>
 
-<div class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-  <div class="space-y-8">
-    {
-      tab === "upcoming" ? (
-        <>
-          {pending.map((g) => (
-            <a
-              href={url(`zapas/${gameSlug(g)}`)}
-              class="flex items-center gap-3 rounded-xl border-2 border-accent p-4 hover:bg-card"
-            >
-              <Logo id={opp(g)} class="size-10" />
-              <span class="min-w-0 flex-1">
-                <span class="label block text-lg leading-tight">Zápas s {team(opp(g)).name}</span>
-                <span class="text-sm text-muted-foreground">
-                  {shortDate(g.date)} {g.time}
-                </span>
-              </span>
-              <When game={g} class="text-sm" />
-            </a>
-          ))}
-          {fresh && freshResult && (
-            <a
-              href={url(`zapas/${gameSlug(fresh)}`)}
-              data-expires={new Date(freshUntil).toISOString()}
-              class="flex items-center gap-4 overflow-hidden rounded-2xl bg-primary p-5 text-primary-foreground sm:p-6"
-            >
-              <span class="min-w-0 flex-1">
-                <span class="label block text-sm text-white/70">
-                  Poslední zápas <When game={fresh} class="!text-white" />
-                </span>
-                <span class="label block text-5xl leading-[0.9] italic sm:text-6xl">
-                  {resultName[freshResult.r]} {freshResult.f}:{freshResult.a}
-                </span>
-                <span class="label mt-1 block text-lg text-white/90">s {team(opp(fresh)).name}</span>
-              </span>
-              <Logo id={opp(fresh)} class="size-16 rounded-full bg-white p-1.5 sm:size-20" />
-            </a>
-          )}
-          {heroGame && (
-            <section aria-labelledby="nejblizsi">
-              <h2 id="nejblizsi" class="mb-3">
-                Nejbližší zápas
+    <div class="flex flex-col gap-10 px-4 pt-8 pb-20 md:px-20 md:pt-10 md:pb-32">
+      <div class="flex flex-wrap items-start justify-between gap-6">
+        <div class="flex flex-col gap-6 md:gap-8">
+          <h1 class="font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">Zápasy</h1>
+          <nav aria-label="Filtr zápasů">
+            <ul class="flex gap-6">
+              {
+                tabs.map((t) => (
+                  <li>
+                    <a
+                      href={t.href}
+                      aria-current={tab === t.key ? "page" : undefined}
+                      class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600"
+                    >
+                      {t.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+        <CalendarMenu />
+      </div>
+
+      {
+        tab === "upcoming" ? (
+          <div class="flex flex-col gap-16">
+            {top.length > 0 && (
+              <section aria-labelledby="nejblizsi" class="flex flex-col gap-4">
+                <div class="flex items-center gap-4">
+                  <h2 id="nejblizsi" class={h2}>
+                    Nejbližší zápas
+                  </h2>
+                  {heroGame && (
+                    <When
+                      game={heroGame}
+                      class="rounded-full bg-grey-100 px-3 py-2 font-display text-base leading-[1.4] font-bold text-grey-950 uppercase"
+                    />
+                  )}
+                </div>
+                <ul class="flex flex-col gap-4">
+                  {top.map((g) => (
+                    <GameCard game={g} />
+                  ))}
+                </ul>
+              </section>
+            )}
+            <section aria-labelledby="dalsi" class="flex flex-col gap-4">
+              <h2 id="dalsi" class={h2}>
+                Další zápasy
               </h2>
-              <MatchCard game={heroGame} detailLink />
+              <GameList games={ahead.slice(1)} empty="Žádné další zápasy." />
             </section>
-          )}
-          <section aria-labelledby="dalsi">
-            <h2 id="dalsi" class="mb-4">
-              Další zápasy
+          </div>
+        ) : (
+          <section aria-labelledby="minule">
+            <h2 id="minule" class="sr-only">
+              Minulé zápasy
             </h2>
-            <GameList games={ahead.slice(1)} empty="Žádné další zápasy." />
+            <GameList games={finals.slice().reverse()} empty="Zatím žádné odehrané zápasy." />
           </section>
-        </>
-      ) : (
-        <section aria-labelledby="odehrane">
-          <h2 id="odehrane" class="sr-only">
-            Odehrané zápasy
-          </h2>
-          <GameList games={finals.slice().reverse()} empty="Zatím žádné odehrané zápasy." />
-        </section>
-      )
-    }
+        )
+      }
+    </div>
   </div>
 
-  <aside class="hidden lg:block" aria-labelledby="tabulka-h">
-    <div class="flex items-baseline justify-between">
-      <h2 id="tabulka-h">Tabulka</h2>
-      <a href={url("tabulka")} class="label text-sm text-primary hover:underline">Celá tabulka</a>
-    </div>
-    <div class="mt-3">
-      <Standings mode="around" compact highlight={heroGame ? [opp(heroGame)] : []} />
-    </div>
-  </aside>
+  <TablePanel highlight={heroGame ? [opp(heroGame)] : []} />
 </div>

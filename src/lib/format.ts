@@ -47,3 +47,8 @@ export const dayMonth = (date: string) => {
   const p = parts(date);
   return `${String(p.d).padStart(2, "0")}/${String(p.m).padStart(2, "0")}`;
 };
+/** "13.10." (design date format) */
+export const dayMonthDot = (date: string) => {
+  const p = parts(date);
+  return `${p.d}.${p.m}.`;
+};

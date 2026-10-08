@@ -1,5 +1,5 @@
 ---
-// Our games grouped by month, as Sparta-style rows.
+// Our games grouped by month (Figma: month label + rows).
 import type { Game } from "../lib/data";
 import { monthLabel } from "../lib/format";
 import GameCard from "./GameCard.astro";
@@ -19,11 +19,11 @@ for (const g of games) {
 
 {
   groups.length ? (
-    <div class="space-y-8">
+    <div class="flex flex-col gap-8">
       {groups.map((m) => (
-        <section>
-          <h3 class="mb-3 text-muted-foreground">{m.label}</h3>
-          <ul class="space-y-3">
+        <section class="flex flex-col gap-4">
+          <h3 class="font-display text-2xl leading-[1.4] font-semibold text-grey-500 uppercase">{m.label}</h3>
+          <ul class="flex flex-col gap-4">
             {m.games.map((g) => (
               <GameCard game={g} />
             ))}
@@ -32,6 +32,6 @@ for (const g of games) {
       ))}
     </div>
   ) : (
-    <p class="text-muted-foreground">{empty}</p>
+    <p class="text-grey-600">{empty}</p>
   )
 }

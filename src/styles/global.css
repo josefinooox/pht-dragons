@@ -1,10 +1,44 @@
 /*
- * Design system: Tailwind v4 + shadcn/ui-style tokens.
- * Palette: #121212 ink, #104EED blue, #FFFFFF, #E4000B red; subtle grey cards.
- * Type: Barlow Condensed Black (+ Black Italic) for all-caps headlines, Barlow 400/600 for text.
+ * Design system: Tailwind v4 + shadcn/ui-style semantic tokens on top of the PHT Dragons palette.
+ * Palette (Figma "Homepage/Desktop"): brand blue #104FED = blue-600, brand red #E3000A = red-600,
+ * achromatic grey 50–950, success = emerald-500 (#10B981, wins).
+ * Scales are OKLCH ladders like Tailwind v4's; the brand colors sit exactly on step 600.
+ * Type: Barlow Condensed (headlines, labels, numbers; all caps) and Barlow (text).
+ *
+ * Interaction convention (Tailwind-style): an interactive surface moves one step darker on hover
+ * and another on active (white -> grey-50 -> grey-100, grey-100 -> grey-200, blue-600 -> 700 -> 800);
+ * on dark or blue surfaces it moves lighter. Focus ring: 2px blue-600.
  */
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("../fonts/BarlowCondensed-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("../fonts/BarlowCondensed-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("../fonts/BarlowCondensed-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  src: url("../fonts/BarlowCondensed-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: "Barlow Condensed";
   src: url("../fonts/BarlowCondensed-Black.woff2") format("woff2");
@@ -33,35 +67,83 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Barlow";
+  src: url("../fonts/Barlow-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
 
-/* Light only for now; the reference UI is white. */
+@theme {
+  --color-blue-50: #f1f6fe;
+  --color-blue-100: #e0eafe;
+  --color-blue-200: #c6daff;
+  --color-blue-300: #98baff;
+  --color-blue-400: #5b8fff;
+  --color-blue-500: #306dfe;
+  --color-blue-600: #104fed;
+  --color-blue-700: #0841cf;
+  --color-blue-800: #0c3bae;
+  --color-blue-900: #143990;
+  --color-blue-950: #0d245b;
+
+  --color-red-50: #fff2f0;
+  --color-red-100: #fee3de;
+  --color-red-200: #fecbc3;
+  --color-red-300: #ffa598;
+  --color-red-400: #fd695a;
+  --color-red-500: #f53a30;
+  --color-red-600: #e3000a;
+  --color-red-700: #be0006;
+  --color-red-800: #a00004;
+  --color-red-900: #831410;
+  --color-red-950: #500c09;
+
+  --color-grey-50: #fafafa;
+  --color-grey-100: #f2f2f2;
+  --color-grey-200: #ededed;
+  --color-grey-300: #dfdfdf;
+  --color-grey-400: #c7c7c7;
+  --color-grey-500: #9d9d9d;
+  --color-grey-600: #6d6d6d;
+  --color-grey-700: #505050;
+  --color-grey-800: #303030;
+  --color-grey-900: #181818;
+  --color-grey-950: #0b0b0b;
+
+  --color-success: #10b981;
+
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+}
+
+/* Semantic roles (shadcn-style), all mapped onto the palette above. Light only. */
 :root {
-  --radius: 0.75rem;
-  --background: #ffffff;
-  --foreground: #121212;
-  --card: #f2f3f6;
-  --card-foreground: #121212;
-  --primary: #104eed;
+  --radius: 0.5rem;
+  --background: var(--color-white, #fff);
+  --foreground: var(--color-grey-950);
+  --card: var(--color-grey-100);
+  --card-foreground: var(--color-grey-950);
+  --primary: var(--color-blue-600);
   --primary-foreground: #ffffff;
-  --secondary: #121212;
+  --secondary: var(--color-grey-900);
   --secondary-foreground: #ffffff;
-  --muted: #f2f3f6;
-  --muted-foreground: #6b6f78;
-  --accent: #e4000b;
+  --muted: var(--color-grey-100);
+  --muted-foreground: var(--color-grey-600);
+  --accent: var(--color-red-600);
   --accent-foreground: #ffffff;
-  --destructive: #e4000b;
-  --border: #e2e4e9;
-  --input: #d5d8de;
-  --ring: #104eed;
+  --destructive: var(--color-red-600);
+  --border: var(--color-grey-300);
+  --input: var(--color-grey-300);
+  --ring: var(--color-blue-600);
   /* match results */
-  --win: #104eed;
-  --draw: #8a8f99;
-  --loss: #e4000b;
+  --win: var(--color-success);
+  --draw: var(--color-grey-400);
+  --loss: var(--color-red-600);
 }
 
 @theme inline {
-  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -81,8 +163,8 @@
   --color-win: var(--win);
   --color-draw: var(--draw);
   --color-loss: var(--loss);
-  --radius-sm: calc(var(--radius) - 6px);
-  --radius-md: calc(var(--radius) - 3px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
@@ -121,6 +203,10 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
   table { font-variant-numeric: tabular-nums; }
 }
 
@@ -149,7 +235,6 @@
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    color: var(--primary);
   }
   [data-when][data-kind="live"],
   [data-when][data-kind="pending"] {

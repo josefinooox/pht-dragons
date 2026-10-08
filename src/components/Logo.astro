@@ -1,18 +1,33 @@
 ---
 // Team logo, or the short name when there is none. Size via class (e.g. "size-10").
-import { team } from "../lib/data";
+// `round`: logo in a circle (design "Logo" component). Our team uses the red DRAGONS badge.
+import { OUR, team } from "../lib/data";
 import { url } from "../lib/url";
+import badge from "../assets/dragons-badge.webp";
 
 interface Props {
   id: string;
   class?: string;
+  round?: boolean;
 }
-const { id, class: cls = "size-8" } = Astro.props;
+const { id, class: cls = "size-8", round = false } = Astro.props;
 const t = team(id);
 ---
 
 {
-  t.logo ? (
+  round && id === OUR ? (
+    <img class:list={["logo shrink-0 rounded-full", cls]} src={badge.src} alt="" width="64" height="64" loading="lazy" decoding="async" />
+  ) : round ? (
+    <span class:list={["logo grid shrink-0 place-items-center overflow-hidden rounded-full border-[0.8px] border-grey-300 bg-white", cls]}>
+      {t.logo ? (
+        <img class="size-full object-cover" src={url(t.logo)} alt="" width="64" height="64" loading="lazy" decoding="async" />
+      ) : (
+        <abbr class="label text-[0.65rem] text-grey-600" title={t.name}>
+          {t.shortName ?? "?"}
+        </abbr>
+      )}
+    </span>
+  ) : t.logo ? (
     <img class:list={["logo", cls]} src={url(t.logo)} alt="" width="64" height="64" loading="lazy" decoding="async" />
   ) : (
     <abbr

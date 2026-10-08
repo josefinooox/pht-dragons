@@ -38,7 +38,7 @@ for (const el of document.querySelectorAll<HTMLElement>("[data-when]")) {
   const [kind, label] = stateLabel(start, status) ?? ["day", relDay(date)];
   el.textContent = label;
   el.dataset.kind = kind;
-  el.hidden = !label;
+  el.hidden = !label || (kind === "day" && "stateOnly" in el.dataset);
 }
 
 // Elements that should disappear after a moment (e.g. fresh result banner).
@@ -68,4 +68,24 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-share]")) 
       if (status) status.textContent = "Kopírování se nepovedlo.";
     }
   });
+}
+
+// "Do dalšího zápasu zbývá: 3 dny" (sub-bar). The server renders the date as a fallback.
+for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
+  const { date = "", start = "", status = "" } = el.dataset;
+  const state = stateLabel(start, status);
+  const label = el.querySelector<HTMLElement>("[data-countdown-label]");
+  const value = el.querySelector<HTMLElement>("[data-countdown-value]");
+  if (!label || !value) continue;
+  const n = dayNumber(date) - today;
+  if (state) {
+    label.textContent = "Další zápas:";
+    value.textContent = state[1];
+  } else if (n === 0) {
+    label.textContent = "Další zápas:";
+    value.textContent = "dnes";
+  } else if (n > 0) {
+    label.textContent = "Do dalšího zápasu zbývá:";
+    value.textContent = `${n} ${plural(n, "den", "dny", "dní")}`;
+  }
 }

@@ -1,8 +1,10 @@
 ---
-// One of our games as a Sparta-style row: colored bar, both logos, big date/time, venue, CTA or score.
-import { Camera, ChevronRight } from "@lucide/astro";
-import { OUR, forT, gameSlug, isFinal, mediaFor, opp, rankOf, team, type Game } from "../lib/data";
-import { dayMonth, weekdayShort } from "../lib/format";
+// One of our games as a row (Figma "Frame 1948760502"): both logos, opponent, big date + time
+// (or score), venue with map link, add-to-calendar link and "Detail zápasu".
+// The detail link is stretched over the whole card; the inner links sit above it.
+import { CalendarPlus, Camera, MapPin } from "@lucide/astro";
+import { OUR, forT, gameSlug, isFinal, mediaFor, opp, team, type Game } from "../lib/data";
+import { dayMonthDot, mapUrl, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 import ResultChip from "./ResultChip.astro";
@@ -14,64 +16,90 @@ interface Props {
 const { game: g } = Astro.props;
 const o = opp(g);
 const r = isFinal(g) ? forT(g, OUR) : null;
-const bar = r ? { V: "bg-win", R: "bg-draw", P: "bg-loss" }[r.r] : "bg-primary";
-const rank = rankOf(o);
+const slug = gameSlug(g);
 const photos = r ? (mediaFor(g)?.photos.length ?? 0) : 0;
+const inner = "relative z-10"; // links that must stay clickable above the stretched detail link
 ---
 
-<li>
-  <a
-    href={url(`zapas/${gameSlug(g)}`)}
-    class="group flex items-stretch overflow-hidden rounded-r-lg bg-card transition-colors hover:bg-[#e8eaef]"
-  >
-    <span class:list={["w-1.5 shrink-0 sm:w-2", bar]} aria-hidden="true"></span>
-    <div class="flex min-w-0 flex-1 items-center gap-3 px-3 py-3.5 sm:gap-6 sm:px-6 sm:py-5">
-      <div class="flex shrink-0 items-center gap-2 sm:gap-4" aria-hidden="true">
-        <Logo id={g.homeTeamId} class="size-8 sm:size-12" />
-        <span class="h-8 w-0.5 bg-primary sm:h-12"></span>
-        <Logo id={g.awayTeamId} class="size-8 sm:size-12" />
-      </div>
-      <div class="min-w-0 flex-1">
-        <p class="label flex flex-wrap items-center gap-x-2 text-sm leading-tight sm:text-base">
-          <span class="truncate">{team(o).name}</span>
-          {rank && <span class="text-muted-foreground">{rank}. místo</span>}
-          <When game={g} />
-          {
-            photos > 0 && (
-              <span class="flex items-center gap-1 text-primary" title={`${photos} fotek`}>
-                <Camera size={15} strokeWidth={2.5} aria-hidden="true" />
-                <span class="sr-only">Fotky:</span>
-                {photos}
-              </span>
-            )
-          }
-        </p>
-        <p class="label mt-0.5 text-2xl leading-none tabular-nums sm:text-[2.25rem]">
-          <time datetime={g.start} class="flex flex-wrap gap-x-[0.25em]">
-            <span class="text-muted-foreground/60">{weekdayShort(g.date)}</span>
-            {dayMonth(g.date)}
-            {!r && <span>{g.time}</span>}
-          </time>
-        </p>
-        {g.venue && <p class="label mt-1 truncate text-xs text-muted-foreground sm:text-sm">{g.venue}</p>}
-      </div>
-      {
-        r ? (
-          <div class="flex shrink-0 items-center gap-2">
-            <span class="label text-2xl leading-none tabular-nums sm:text-[2.25rem]">
+<li
+  class="group relative flex flex-col gap-4 rounded-lg bg-grey-100 px-4 py-4 transition-colors hover:bg-grey-200 sm:px-6 md:flex-row md:items-center md:justify-between"
+>
+  <div class="flex min-w-0 items-center gap-4 md:gap-10">
+    <div class="flex shrink-0 items-center gap-2" aria-hidden="true">
+      <Logo id={g.homeTeamId} round class="size-12 md:size-16" />
+      <Logo id={g.awayTeamId} round class="size-12 md:size-16" />
+    </div>
+    <div class="flex min-w-0 flex-col">
+      <p class="flex items-center gap-2 font-display text-base leading-[1.4] font-bold uppercase text-grey-950">
+        <span class="truncate">{team(o).name}</span>
+        <When game={g} stateOnly class="text-sm" />
+        {
+          photos > 0 && (
+            <span class="flex items-center gap-1 text-blue-600" title={`${photos} fotek`}>
+              <Camera size={14} strokeWidth={2.5} aria-hidden="true" />
+              <span class="sr-only">Fotky:</span>
+              {photos}
+            </span>
+          )
+        }
+      </p>
+      <p class="flex items-center gap-3 font-display text-[1.75rem] font-extrabold md:gap-4 md:text-[2.375rem]">
+        <time datetime={g.start} class="contents">
+          <span class="text-grey-500 opacity-80">{weekdayShort(g.date).toUpperCase()}</span>
+          <span class="text-grey-950">{dayMonthDot(g.date)}</span>
+          {!r && <span class="text-grey-950">{g.time}</span>}
+        </time>
+        {
+          r && (
+            <span class="flex items-center gap-2 text-grey-950">
               {g.homeGoals}:{g.awayGoals}
+              <ResultChip result={r.r} />
             </span>
-            <ResultChip result={r.r} />
-          </div>
-        ) : (
-          <>
-            <span class="label cut-corner hidden shrink-0 bg-primary px-6 py-3.5 text-lg leading-none text-primary-foreground transition-colors group-hover:bg-[#0b3fc4] xl:block">
-              Detail zápasu
-            </span>
-            <ChevronRight class="shrink-0 text-muted-foreground xl:hidden" size={22} strokeWidth={2.5} aria-hidden="true" />
-          </>
+          )
+        }
+      </p>
+      {
+        g.venue && (
+          <a
+            href={mapUrl(g.venue)}
+            target="_blank"
+            rel="noopener"
+            class:list={[
+              inner,
+              "flex w-fit items-center gap-1 border-b border-grey-300 pb-1 text-base leading-[1.4] text-grey-950 transition-colors hover:border-blue-600",
+            ]}
+          >
+            <MapPin size={12} aria-hidden="true" />
+            {g.venue}
+            <span class="sr-only">(otevře mapu)</span>
+          </a>
         )
       }
     </div>
-  </a>
+  </div>
+
+  <div class="flex items-center justify-between gap-4 md:justify-end md:gap-8">
+    {
+      !r && (
+        <a
+          href={url(`zapas/${slug}.ics`)}
+          download={`dragons-${slug}.ics`}
+          class:list={[
+            inner,
+            "flex shrink-0 items-center gap-1 border-b border-grey-300 pb-1 font-display text-lg whitespace-nowrap leading-6 font-bold uppercase text-grey-600 transition-colors hover:border-grey-950 hover:text-grey-950",
+          ]}
+        >
+          <CalendarPlus size={16} aria-hidden="true" />
+          Přidat do kalendáře
+        </a>
+      )
+    }
+    <a
+      href={url(`zapas/${slug}`)}
+      class="ml-auto flex min-w-20 shrink-0 items-center whitespace-nowrap justify-center rounded-md bg-white p-3 transition-colors after:absolute after:inset-0 after:rounded-lg after:content-[''] hover:bg-grey-50 hover:text-blue-600 active:bg-grey-100 md:ml-0"
+    >
+      <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Detail zápasu</span>
+      <span class="sr-only">: {team(g.homeTeamId).name} – {team(g.awayTeamId).name}</span>
+    </a>
+  </div>
 </li>

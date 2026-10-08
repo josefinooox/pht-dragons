@@ -1,0 +1,120 @@
+---
+// Standings side panel (Figma "Tabulka expanded" / "collapsed"), desktop only.
+// Collapsed by default; the choice is remembered (localStorage, see src/scripts/table-panel.ts).
+// State lives on <html data-table="open">, set before first paint by the inline script in Base.
+import { TableProperties, X } from "@lucide/astro";
+import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
+import { url } from "../lib/url";
+import Logo from "./Logo.astro";
+
+interface Props {
+  highlight?: string[];
+}
+const { highlight = [] } = Astro.props;
+
+// Rows around us and the highlighted opponent (two above, two below us), like the design excerpt.
+const ourIndex = standings.findIndex((r) => r.teamId === OUR);
+const from = Math.max(0, Math.min(ourIndex - 1, standings.length - 5));
+const rows = standings.slice(from, from + 5).map((row) => {
+  const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
+  return { row, href: target ? url(`zapas/${gameSlug(target)}`) : null };
+});
+const cell = "flex h-14 items-center px-2";
+---
+
+<aside class="table-panel hidden shrink-0 border-l border-grey-200 bg-white lg:block" aria-label="Tabulka">
+  <!-- collapsed: the whole rail (full height) is the button; its content stays in view -->
+  <button
+    type="button"
+    data-table-toggle="open"
+    class="table-rail flex h-full w-[73px] flex-col justify-start text-grey-500 transition-colors hover:bg-grey-100 hover:text-grey-700"
+    aria-expanded="false"
+    aria-controls="table-panel"
+  >
+    <span class="sticky top-0 flex flex-col items-center px-4 py-4">
+      <span class="grid size-10 place-items-center rounded-lg">
+        <TableProperties size={20} aria-hidden="true" />
+      </span>
+      <span class="mt-2 rotate-180 font-display text-2xl leading-[1.4] font-black uppercase [writing-mode:vertical-rl]">Tabulka</span>
+    </span>
+  </button>
+
+  <!-- expanded -->
+  <div id="table-panel" class="table-open sticky top-0 w-[420px] flex-col gap-6 px-6 py-6">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Tabulka</h2>
+      <button
+        type="button"
+        data-table-toggle="close"
+        class="grid size-10 place-items-center rounded-full border border-grey-300 bg-white text-grey-950 transition-colors hover:bg-grey-100 active:bg-grey-200"
+        aria-label="Zavřít tabulku"
+        aria-controls="table-panel"
+      >
+        <X size={20} aria-hidden="true" />
+      </button>
+    </div>
+
+    <table class="w-full font-display text-base leading-[1.4] text-grey-950">
+      <thead>
+        <tr class="border-b border-grey-300 font-bold text-grey-500 uppercase">
+          <th scope="col" class="w-14 pr-2 pl-4 text-left font-bold">#</th>
+          <th scope="col" class="w-14"><span class="sr-only">Logo</span></th>
+          <th scope="col" class="px-2 text-left font-bold">Tým</th>
+          <th scope="col" class="w-14 px-2 text-left font-bold"><abbr title="Odehrané zápasy">Z</abbr></th>
+          <th scope="col" class="w-14 px-2 text-left font-bold">Body</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map(({ row, href }) => {
+            const us = row.teamId === OUR;
+            return (
+              <tr
+                aria-current={us ? "true" : undefined}
+                class:list={[
+                  "relative border-b border-grey-300",
+                  us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50",
+                  !us && highlight.includes(row.teamId) && "bg-grey-50",
+                ]}
+              >
+                <td class="h-14 pr-2 pl-4 font-bold uppercase">{row.rank}</td>
+                <td class="px-2">
+                  <Logo id={row.teamId} round class="size-10" />
+                </td>
+                <td class="px-2">
+                  {href ? (
+                    <a href={href} class="after:absolute after:inset-0 after:content-['']">
+                      {team(row.teamId).name}
+                    </a>
+                  ) : (
+                    team(row.teamId).name
+                  )}
+                </td>
+                <td class="px-2">{row.played}</td>
+                <td class="px-2 font-bold">{row.points}</td>
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    </table>
+
+    <a
+      href={url("tabulka")}
+      class="self-end border-b border-blue-600 pb-1 font-display text-lg leading-6 font-bold text-blue-600 uppercase transition-colors hover:border-blue-700 hover:text-blue-700 active:text-blue-800"
+    >
+      Celá tabulka
+    </a>
+  </div>
+</aside>
+
+<style>
+  /* collapsed by default; <html data-table="open"> shows the expanded panel */
+  .table-open { display: none; }
+  :global(html[data-table="open"]) .table-open { display: flex; }
+  :global(html[data-table="open"]) .table-rail { display: none; }
+</style>
+
+<script>
+  import "../scripts/table-panel.ts";
+</script>
