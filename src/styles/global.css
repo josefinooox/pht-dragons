@@ -118,6 +118,18 @@
   --font-display: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
 }
 
+/* Page grid: one left edge for header, main column and footer. Content is 1280px wide (80rem,
+   max-w-7xl) and centered in the window; on narrower screens the side gutter is 80px (16px on
+   mobile). The table panel never moves the content: it only narrows it from the right. */
+:root {
+  --gutter: 1rem;
+}
+@media (min-width: 48rem) {
+  :root {
+    --gutter: max(5rem, calc((100vw - 80rem) / 2));
+  }
+}
+
 /* Semantic roles (shadcn-style), all mapped onto the palette above. Light only. */
 :root {
   --radius: 0.5rem;
