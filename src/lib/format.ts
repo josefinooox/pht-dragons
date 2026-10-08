@@ -52,3 +52,8 @@ export const dayMonthDot = (date: string) => {
   const p = parts(date);
   return `${p.d}.${p.m}.`;
 };
+/** "Neděle" (capitalized weekday) */
+export const weekdayName = (date: string) => {
+  const w = WD[parts(date).wd];
+  return w.charAt(0).toUpperCase() + w.slice(1);
+};

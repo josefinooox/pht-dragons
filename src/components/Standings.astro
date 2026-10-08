@@ -1,112 +1,101 @@
 ---
-// Standings: "full", or "around" = rows next to us and the highlighted teams, with gaps.
-// `compact` hides V–R–P and score (narrow side column).
-import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
+// Full standings for /tabulka, derived from the side panel (src/components/TablePanel.astro):
+// 56px rows, round logos, our row blue-600/10, next opponent tagged. Each row links to our
+// nearest game against that team. Rows are grid links (not <tr>), so the whole row is one link.
+// Narrow screens drop V–R–P and Forma.
+import { OUR, finals, forT, gameSlug, played, standings, team, teamTarget } from "../lib/data";
+import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
+import ResultChip from "./ResultChip.astro";
 
 interface Props {
   highlight?: string[];
-  mode?: "full" | "around";
-  compact?: boolean;
 }
-const { highlight = [], mode = "full", compact = false } = Astro.props;
+const { highlight = [] } = Astro.props;
 
-const keep = new Set<number>();
-if (mode === "full") standings.forEach((_, i) => keep.add(i));
-else
-  for (const id of [OUR, ...highlight]) {
-    const i = standings.findIndex((r) => r.teamId === id);
-    if (i >= 0) for (let j = i - 1; j <= i + 1; j++) if (j >= 0 && j < standings.length) keep.add(j);
-  }
-const rows: ({ gap: true } | { gap: false; row: (typeof standings)[number]; href: string | null })[] = [];
-let prev = -1;
-standings.forEach((row, i) => {
-  if (!keep.has(i)) return;
-  if (prev !== -1 && i - prev > 1) rows.push({ gap: true });
+const rows = standings.map((row) => {
   const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
-  rows.push({ gap: false, row, href: target ? url(`zapas/${gameSlug(target)}`) : null });
-  prev = i;
+  const games = row.teamId === OUR ? finals : played(row.teamId);
+  return {
+    row,
+    href: target ? url(`zapas/${gameSlug(target)}`) : null,
+    form: games.slice(-5).map((g) => forT(g, row.teamId).r),
+  };
 });
-const cols = compact ? 4 : 6;
-const th = "label px-2 py-2.5 text-sm text-muted-foreground";
+const grid =
+  "grid grid-cols-[40px_48px_minmax(0,1fr)_40px_64px_48px] items-center md:grid-cols-[56px_56px_minmax(0,1fr)_56px_96px_88px_148px_64px]";
+const wide = "hidden md:block";
 ---
 
-<div class="overflow-x-auto">
-  <table class="w-full text-left">
-    <thead>
-      <tr class="border-b-2 border-foreground">
-        <th scope="col" class:list={[th, "w-8 pl-3"]}>#</th>
-        <th scope="col" class={th}>Tým</th>
-        <th scope="col" class:list={[th, "text-right"]}><abbr title="Odehrané zápasy">Z</abbr></th>
-        {
-          !compact && (
-            <>
-              <th scope="col" class:list={[th, "hidden text-right sm:table-cell"]}>
-                <abbr title="Výhry–remízy–prohry">V–R–P</abbr>
-              </th>
-              <th scope="col" class:list={[th, "text-right"]}>Skóre</th>
-            </>
-          )
-        }
-        <th scope="col" class:list={[th, "pr-3 text-right"]}>Body</th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        rows.map((r) => {
-          if (r.gap)
-            return (
-              <tr class="border-b border-border">
-                <td colspan={cols} class="py-1 text-center text-muted-foreground" aria-hidden="true">
-                  ⋯
-                </td>
-              </tr>
-            );
-          const us = r.row.teamId === OUR;
-          const op = highlight.includes(r.row.teamId);
-          const name = (
-            <span class="flex items-center gap-2.5">
-              <Logo id={r.row.teamId} class="size-7" />
-              <span class:list={["leading-tight", (us || op) && "font-semibold"]}>{team(r.row.teamId).name}</span>
-              {op && <span class="label rounded-sm bg-accent px-1.5 py-0.5 text-[0.7rem] leading-none text-white">Soupeř</span>}
-            </span>
-          );
-          return (
-            <tr
+<div class="font-display text-base leading-[1.4] text-grey-950">
+  <div class:list={[grid, "h-14 border-b border-grey-300 font-bold text-grey-500 uppercase"]} aria-hidden="true">
+    <span class="pl-2 md:pl-4">#</span>
+    <span></span>
+    <span class="px-2">Tým</span>
+    <span class="px-2 text-right" title="Odehrané zápasy">Z</span>
+    <span class:list={[wide, "px-2 text-right"]} title="Výhry–remízy–prohry">V–R–P</span>
+    <span class="px-2 text-right">Skóre</span>
+    <span class:list={[wide, "px-2"]}>Forma</span>
+    <span class="pr-2 text-right md:pr-4">Body</span>
+  </div>
+  <ol>
+    {
+      rows.map(({ row, href, form }) => {
+        const us = row.teamId === OUR;
+        const op = !us && highlight.includes(row.teamId);
+        const Tag = href ? "a" : "div";
+        return (
+          <li>
+            <Tag
+              href={href ?? undefined}
               aria-current={us ? "true" : undefined}
               class:list={[
-                "border-b border-border",
-                us && "bg-primary text-primary-foreground",
-                op && "bg-card",
+                grid,
+                "min-h-14 border-b border-grey-300 py-2",
+                us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50 active:bg-grey-100",
               ]}
             >
-              <td class="label py-2.5 pl-3 pr-2 text-lg">{r.row.rank}.</td>
-              <td class="px-2 py-2.5">
-                {r.href ? (
-                  <a href={r.href} class="hover:underline">
-                    {name}
-                  </a>
-                ) : (
-                  name
+              <span class="pl-2 font-bold md:pl-4">
+                {row.rank}
+                <span class="sr-only">. místo</span>
+              </span>
+              <span>
+                <Logo id={row.teamId} round class="size-10" />
+              </span>
+              <span class="flex min-w-0 items-center gap-2 px-2">
+                <span class:list={["truncate", (us || op) && "font-bold"]}>{team(row.teamId).name}</span>
+                {op && (
+                  <span class="shrink-0 rounded-full bg-red-600 px-2 py-0.5 text-xs leading-4 font-bold text-white uppercase">Soupeř</span>
                 )}
-              </td>
-              <td class="px-2 py-2.5 text-right tabular-nums">{r.row.played}</td>
-              {!compact && (
-                <>
-                  <td class="hidden px-2 py-2.5 text-right tabular-nums sm:table-cell">
-                    {r.row.wins}–{r.row.draws}–{r.row.losses}
-                  </td>
-                  <td class="px-2 py-2.5 text-right tabular-nums">
-                    {r.row.goalsFor}:{r.row.goalsAgainst}
-                  </td>
-                </>
-              )}
-              <td class="label py-2.5 pl-2 pr-3 text-right text-lg">{r.row.points}</td>
-            </tr>
-          );
-        })
-      }
-    </tbody>
-  </table>
+              </span>
+              <span class="px-2 text-right">
+                {row.played}
+                <span class="sr-only"> {plural(row.played, "zápas", "zápasy", "zápasů")}</span>
+              </span>
+              <span class:list={[wide, "px-2 text-right"]}>
+                {row.wins}–{row.draws}–{row.losses}
+                <span class="sr-only"> (výhry, remízy, prohry)</span>
+              </span>
+              <span class="px-2 text-right">
+                {row.goalsFor}:{row.goalsAgainst}
+                <span class="sr-only"> skóre</span>
+              </span>
+              <span class:list={[wide, "px-2"]}>
+                <span class="flex gap-1" aria-label={`Forma, posledních ${form.length} zápasů, od nejstaršího`}>
+                  {form.map((r) => (
+                    <ResultChip result={r} size="sm" />
+                  ))}
+                </span>
+              </span>
+              <span class="pr-2 text-right text-lg font-bold md:pr-4">
+                {row.points}
+                <span class="sr-only"> {plural(row.points, "bod", "body", "bodů")}</span>
+              </span>
+            </Tag>
+          </li>
+        );
+      })
+    }
+  </ol>
 </div>

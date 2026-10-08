@@ -4,9 +4,9 @@
 // The whole card is clickable through an extra overlay link (hidden from assistive tech, the
 // "Detail zápasu" button is the real one), so hovering the card doesn't put the button in its
 // hover state. Buttons and links inside sit above the overlay.
-import { CalendarPlus, Camera, MapPin } from "@lucide/astro";
-import { OUR, forT, gameSlug, isFinal, mediaFor, opp, team, type Game } from "../lib/data";
-import { dayMonthDot, mapUrl, weekdayShort } from "../lib/format";
+import { CalendarPlus, MapPin } from "@lucide/astro";
+import { OUR, forT, gameSlug, isFinal, opp, team, type Game } from "../lib/data";
+import { dayMonthDot, mapUrl, weekdayName, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 import ResultChip from "./ResultChip.astro";
@@ -19,8 +19,9 @@ const { game: g } = Astro.props;
 const o = opp(g);
 const r = isFinal(g) ? forT(g, OUR) : null;
 const slug = gameSlug(g);
-const photos = r ? (mediaFor(g)?.photos.length ?? 0) : 0;
 const inner = "relative z-10"; // links that must stay clickable above the stretched detail link
+// Same look as the venue link (text and resting rule), without the hover underline.
+const label = "border-b border-grey-300 pb-1 text-base leading-[1.4] text-grey-950";
 ---
 
 <li
@@ -36,48 +37,48 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
       <p class="flex items-center gap-2 font-display text-base leading-[1.4] font-bold uppercase text-grey-950">
         <span class="truncate">{team(o).name}</span>
         <When game={g} stateOnly class="text-sm" />
-        {
-          photos > 0 && (
-            <span class="flex items-center gap-1 text-blue-600" title={`${photos} fotek`}>
-              <Camera size={14} strokeWidth={2.5} aria-hidden="true" />
-              <span class="sr-only">Fotky:</span>
-              {photos}
-            </span>
-          )
-        }
       </p>
       <p class="flex items-center gap-3 font-display text-[1.75rem] font-extrabold md:gap-4 md:text-[2.375rem]">
-        <time datetime={g.start} class="contents">
-          <span class="text-grey-500 opacity-80">{weekdayShort(g.date).toUpperCase()}</span>
-          <span class="text-grey-950">{dayMonthDot(g.date)}</span>
-          {!r && <span class="text-grey-950">{g.time}</span>}
-        </time>
         {
-          r && (
+          r ? (
             <span class="flex items-center gap-2 text-grey-950">
               {g.homeGoals}:{g.awayGoals}
               <ResultChip result={r.r} />
             </span>
+          ) : (
+            <time datetime={g.start} class="contents">
+              <span class="text-grey-500 opacity-80">{weekdayShort(g.date).toUpperCase()}</span>
+              <span class="text-grey-950">{dayMonthDot(g.date)}</span>
+              <span class="text-grey-950">{g.time}</span>
+            </time>
           )
         }
       </p>
-      {
-        g.venue && (
-          <a
-            href={mapUrl(g.venue)}
-            target="_blank"
-            rel="noopener"
-            class:list={[
-              inner,
-              "link-underline flex w-fit items-center gap-1 text-base leading-[1.4] text-grey-950",
-            ]}
-          >
-            <MapPin size={12} aria-hidden="true" />
-            {g.venue}
-            <span class="sr-only">(otevře mapu)</span>
-          </a>
-        )
-      }
+      <!-- played games: day and date as labels after the venue, same look, 24px apart -->
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        {
+          g.venue && (
+            <a
+              href={mapUrl(g.venue)}
+              target="_blank"
+              rel="noopener"
+              class:list={[inner, "link-underline flex w-fit items-center gap-1 text-base leading-[1.4] text-grey-950"]}
+            >
+              <MapPin size={12} aria-hidden="true" />
+              {g.venue}
+              <span class="sr-only">(otevře mapu)</span>
+            </a>
+          )
+        }
+        {
+          r && (
+            <time datetime={g.start} class="contents">
+              <span class={label}>{weekdayName(g.date)}</span>
+              <span class={label}>{dayMonthDot(g.date)}</span>
+            </time>
+          )
+        }
+      </div>
     </div>
   </div>
 

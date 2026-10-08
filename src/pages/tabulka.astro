@@ -1,6 +1,9 @@
 ---
+// Standings page, derived from the homepage design: same page grid, sub-bar and big title;
+// the table follows the side panel's style with more columns.
 import Base from "../layouts/Base.astro";
 import Standings from "../components/Standings.astro";
+import SubBar from "../components/SubBar.astro";
 import { OUR, heroGame, meta, opp, rankOf } from "../lib/data";
 ---
 
@@ -8,13 +11,27 @@ import { OUR, heroGame, meta, opp, rankOf } from "../lib/data";
   title="Tabulka – PHT Dragons"
   description={`Tabulka skupiny KLASIK, ${meta.phase.name}. PHT Dragons na ${rankOf(OUR) ?? "–"}. místě.`}
   nav="tabulka"
+  bare
 >
-  <h1>Tabulka</h1>
-  <p class="mt-4 max-w-prose text-muted-foreground">
-    Skupina {meta.group.name}, {meta.phase.name.toLowerCase()}, sezóna {meta.season.name}. Z = odehrané zápasy.
-    Klikni na tým a uvidíš náš nejbližší zápas s ním.
-  </p>
-  <div class="mt-8">
-    <Standings mode="full" highlight={heroGame ? [opp(heroGame)] : []} />
+  <div class="mr-4 ml-(--gutter) max-w-7xl md:mr-20">
+    <SubBar />
+  </div>
+
+  <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-10 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+    <div class="flex flex-col gap-4">
+      <h1 class="font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">Tabulka</h1>
+      <p class="font-sans text-xl font-semibold text-grey-500">
+        Skupina {meta.group.name}, {meta.phase.name.toLowerCase()}, sezóna {meta.season.name.replace("-", "/")}
+      </p>
+    </div>
+
+    <section aria-label="Tabulka skupiny" class="rounded-lg bg-white">
+      <Standings highlight={heroGame ? [opp(heroGame)] : []} />
+    </section>
+
+    <p class="max-w-3xl text-sm text-grey-500">
+      Z = odehrané zápasy, V–R–P = výhry, remízy a prohry, forma = posledních 5 zápasů od nejstaršího. Klikni na tým a
+      uvidíš náš nejbližší zápas s ním.
+    </p>
   </div>
 </Base>
