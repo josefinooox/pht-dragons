@@ -1,6 +1,6 @@
 {
   "F62D5DA8-98CA-11F1-8BDF-EF2495D048F3": {
-    "version": 1,
+    "version": 2,
     "homeNick": "Dragons",
     "awayNick": "Pigeons B",
     "complete": true,
@@ -164,7 +164,7 @@
     ]
   },
   "F62D84B5-98CA-11F1-8BDF-EF2495D048F3": {
-    "version": 1,
+    "version": 2,
     "homeNick": "Gladiators",
     "awayNick": "Dragons",
     "complete": true,
@@ -387,12 +387,12 @@
             "number": 76
           }
         ],
-        "strength": "sh"
+        "strength": "even"
       }
     ]
   },
   "F62EBD30-98CA-11F1-8BDF-EF2495D048F3": {
-    "version": 1,
+    "version": 2,
     "homeNick": "Gastoni",
     "awayNick": "Dragons",
     "complete": true,
@@ -559,7 +559,7 @@
     ]
   },
   "F62EE44A-98CA-11F1-8BDF-EF2495D048F3": {
-    "version": 1,
+    "version": 2,
     "homeNick": "Dragons",
     "awayNick": "Raptors",
     "complete": true,
@@ -791,7 +791,7 @@
     ]
   },
   "F631A36E-98CA-11F1-8BDF-EF2495D048F3": {
-    "version": 1,
+    "version": 2,
     "homeNick": "Taste",
     "awayNick": "Dragons",
     "complete": true,
@@ -925,7 +925,7 @@
     ]
   },
   "F63266BF-98CA-11F1-8BDF-EF2495D048F3": {
-    "version": 1,
+    "version": 2,
     "homeNick": "Dragons",
     "awayNick": "Foxes",
     "complete": true,
@@ -1099,7 +1099,7 @@
             "number": 69
           }
         ],
-        "strength": "pp"
+        "strength": "even"
       },
       {
         "type": "goal",

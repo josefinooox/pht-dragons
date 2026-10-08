@@ -218,14 +218,25 @@ export function normalizeReport(raw) {
   }
   events.sort((a, b) => a.sec - b.sec || (a.type === b.type ? 0 : a.type === "penalty" ? -1 : 1));
 
-  // Power play / short-handed: count penalties running at the moment of the goal.
+  // Power play / short-handed: count penalties running at the moment of the goal. A minor
+  // penalty (up to 2 min; 1:45 in this league) ends early when the other team scores on it.
+  const MINOR_MAX_SEC = 120;
+  const penaltyEnd = new Map(
+    events.filter((e) => e.type === "penalty" && e.duration).map((p) => [p, p.sec + toSec(p.duration)]),
+  );
   const running = (teamId, sec) =>
-    events.filter((p) => p.type === "penalty" && p.teamId === teamId && p.duration && p.sec < sec && sec <= p.sec + toSec(p.duration)).length;
+    [...penaltyEnd].filter(([p, end]) => p.teamId === teamId && p.sec < sec && sec <= end).map(([p]) => p);
   for (const g of events) {
     if (g.type !== "goal") continue;
     const other = g.teamId === home ? away : home;
-    const diff = running(other, g.sec) - running(g.teamId, g.sec);
+    const theirs = running(other, g.sec);
+    const diff = theirs.length - running(g.teamId, g.sec).length;
     g.strength = diff > 0 ? "pp" : diff < 0 ? "sh" : "even";
+    if (g.strength === "pp") {
+      // The power-play goal releases the minor penalty that started first.
+      const minor = theirs.filter((p) => toSec(p.duration) <= MINOR_MAX_SEC).sort((a, b) => a.sec - b.sec)[0];
+      if (minor) penaltyEnd.set(minor, g.sec);
+    }
   }
 
   const goals = (t) => events.filter((e) => e.type === "goal" && e.teamId === t).length;

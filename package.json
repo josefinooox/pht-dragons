@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --test \"scripts/**/*.test.mjs\" \"src/**/*.test.ts\""
+    "test": "node --test \"scripts/**/*.test.mjs\" \"src/**/*.test.ts\"",
+    "narratives:pending": "node scripts/narratives.mjs pending",
+    "narratives:save": "node scripts/narratives.mjs save"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.132.1",

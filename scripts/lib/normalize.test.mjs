@@ -157,3 +157,19 @@ test("normalizeReport orders events, detects power play and checks completeness"
   assert.equal(r.events[2].strength, "even");
   assert.equal(normalizeReport({ ...raw, HomeTeamGoals: 2 }).complete, false);
 });
+
+test("a power-play goal ends the minor penalty", async () => {
+  const { GameDetailSchema } = await import("./schemas.mjs");
+  const { normalizeReport } = await import("./normalize.mjs");
+  const pl = (id) => ({ playerId: id, firstName: id, lastName: "X" });
+  const raw = GameDetailSchema.parse({
+    status: "FINISHED", HomeTeamGoals: 0, AwayTeamGoals: 2,
+    HomeTeam: { teamId: DRAGONS }, AwayTeam: { teamId: RAPTORS },
+    GameEvents: [
+      { entity: "GameEventPenalty", period: "2. Třetina", gameTime: "20:30", duration: "1:45", penalizedTeamId: DRAGONS, PenalizedPlayer: pl("a") },
+      { entity: "GameEventGoal", period: "2. Třetina", gameTime: "20:58", scoredByTeamId: RAPTORS, ScoredByPlayer: pl("b") },
+      { entity: "GameEventGoal", period: "2. Třetina", gameTime: "21:20", scoredByTeamId: RAPTORS, ScoredByPlayer: pl("c") },
+    ],
+  });
+  assert.deepEqual(normalizeReport(raw).events.filter((e) => e.type === "goal").map((g) => g.strength), ["pp", "even"]);
+});

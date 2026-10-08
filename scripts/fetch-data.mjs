@@ -231,7 +231,7 @@ async function main() {
     endpoint: "game",
     schema: GameDetailSchema,
     normalize: normalizeReport,
-    version: 1,
+    version: 2,
   });
   const narratives = await syncNarratives(result.games, teams, reports.entries, ctx);
   const withPhotos = Object.values(media.entries).filter((m) => m.photos.length).length;
@@ -256,7 +256,9 @@ async function main() {
       `  texts:     ${narratives.have}/${narratives.total} AI narratives` +
         (narratives.enabled
           ? ` (${narratives.written} written now, ${narratives.usage.input}+${narratives.usage.output} tokens${narratives.pending ? `, ${narratives.pending} pending` : ""})`
-          : ` (no ANTHROPIC_API_KEY, ${narratives.pending} waiting; site uses template recaps)`),
+          : narratives.pending
+            ? ` (${narratives.pending} waiting: write them with npm run narratives:pending / narratives:save)`
+            : " (all written)"),
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),
   );

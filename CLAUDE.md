@@ -84,8 +84,12 @@ Only re-download logos that are not already present.
 
 ## Opponent summary and match recap
 - Upcoming games: opponent summary, template-based from computed facts (src/lib/summary.ts).
-- Played games: commentator-style narrative written by Claude at build time
-  (scripts/lib/narrate.mjs, model claude-opus-5-5). Facts are computed in code
+- Played games: commentator-style narrative written by Claude. Default path (no cost
+  beyond the Claude subscription): a scheduled Claude Code routine runs every morning,
+  `npm run narratives:pending` lists games without a current text plus the writing rules,
+  Claude writes them, `npm run narratives:save -- file.json` validates and stores them.
+  Optional paid path: the build writes them via the API (scripts/lib/narrate.mjs,
+  claude-opus-5-5) when the ANTHROPIC_API_KEY secret exists. Facts are computed in code
   (matchFacts in src/lib/recap.ts) and passed to the model; it only phrases them and must
   not invent details. Regenerated only when the facts, model or PROMPT_VERSION change.
   Fallback without a narrative: template recap from the same facts.

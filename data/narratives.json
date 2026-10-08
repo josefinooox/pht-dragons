@@ -1,1 +1,72 @@
-{}
+{
+  "F62D5DA8-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "54375bc4a75546e9",
+    "model": "claude-code",
+    "generatedAt": "2026-10-08T13:13:40.445Z",
+    "summary": "Proti Prague Pigeons B jsme vyhráli 2:1. Do vedení nás už ve druhé minutě poslal David Štros, ve druhé třetině přidal druhý gól Přemysl Brabec a soupeř pak stihl jen snížit z přesilovky.",
+    "narrative": [
+      "Začátek nám vyšel náramně. Ani ne minutu a půl po úvodním buly otevřel skóre David Štros po přihrávce Vojtěcha Chloupka. Pigeons si pak v první třetině dvakrát sedli na trestnou lavici, pokaždé za podrážení, ale další gól už nepadl a do přestávky jsme šli s vedením 1:0.",
+      "Ve druhé třetině jsme náskok zdvojnásobili. V 19. minutě se trefil Přemysl Brabec, na gólu se podíleli Michal Lázňovský a Jakub Vožeh. Soupeř to ale nezabalil: když jsme ve 29. minutě hráli v oslabení po vyloučení Přemysla Brabce, snížil Martin Taimr na 2:1.",
+      "Třetí třetina zůstala bez gólů a těsné vedení jsme udrželi až do konce. Na střely jsme soupeře přestříleli 25:17 a nejlepším hráčem zápasu za nás byl vyhlášen Michal Kružlík."
+    ]
+  },
+  "F62D84B5-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "9d8f288665e85ebb",
+    "model": "claude-code",
+    "generatedAt": "2026-10-08T13:13:40.446Z",
+    "summary": "S HC Gladiators jsme prohráli 2:5. Po bezbrankové první třetině jsme ještě dokázali vyrovnat v přesilovce, jenže pak soupeř odskočil. Třemi góly nás potrápil Tomáš Adamec.",
+    "narrative": [
+      "První třetina s Gladiators skončila bez branek. Jediné vyloučení v ní dostal náš Přemysl Brabec, za hákování.",
+      "Ve druhé třetině se teprve začalo střílet. V 17. minutě otevřel skóre Vojtěch Šika, ale hned jsme odpověděli: Gladiators hráli v oslabení po trestu Martina Švančárka a Michal Lázňovský o minutu a půl později vyrovnal na 1:1 po přihrávkách Josefa Zimanzla a Vojtěcha Chloupka. Radost ale netrvala dlouho. Ve 21. minutě poslal soupeř do vedení Tomáš Adamec a ve 28. minutě zvýšil Martin Švančárek na 1:3.",
+      "Ve třetí třetině přidal Tomáš Adamec ve 38. minutě svůj druhý gól. My jsme ještě dokázali snížit, když ve 43. minutě v přesilovce skóroval Jakub Vožeh po přihrávkách Martina Vrbky a Richarda Siudy. O minutu později ale Adamec zkompletoval hattrick a nastavil konečných 2:5.",
+      "Na střely přitom byl zápas vyrovnaný a dokonce jsme vystřelili o jednu víc (17:16). Oba naše góly padly v přesilovce. Nejlepším hráčem za nás byl vyhlášen Michal Lázňovský."
+    ]
+  },
+  "F62EBD30-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "b39b537395085a29",
+    "model": "claude-code",
+    "generatedAt": "2026-10-08T13:13:40.446Z",
+    "summary": "S Gaston Seals jsme otočili nepovedený začátek a vyhráli 3:1. Soupeř skóroval už po 22 sekundách, jenže pak převzal hru Jakub Vožeh: vyrovnal v oslabení a přihrál na vedoucí gól.",
+    "narrative": [
+      "Začátek nemohl být horší. Po pouhých 22 sekundách hry otevřel skóre Matyáš Hájek. Kluci se ale nenechali rozhodit. V 11. minutě jsme sice šli do oslabení po vyloučení Roberta Komarovského, ale právě v něm vyrovnal Jakub Vožeh na 1:1.",
+      "Ve druhé třetině jsme zápas otočili. V 18. minutě poslal tým do vedení Tomáš Pražan po přihrávkách Jakuba Vožeha a Jakuba Jaroška a ve 23. minutě přidal po přihrávce Martina Vrbky třetí gól Přemysl Brabec.",
+      "Pak už se skóre neměnilo. Soupeř si ve zbytku zápasu dvakrát sedl na trestnou lavici, my jednou, ale gól už nepadl a vedení 3:1 vydrželo až do konce.",
+      "Na střely jsme Gaston Seals jasně přestříleli 36:17. Nejlepším hráčem za nás byl vyhlášen Jakub Vožeh, který si připsal gól a asistenci."
+    ]
+  },
+  "F62EE44A-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "28314abad4b03ac2",
+    "model": "claude-code",
+    "generatedAt": "2026-10-08T13:13:40.446Z",
+    "summary": "Raptors nás porazili 6:0. Každou třetinu vyhráli 2:0 a o výsledku rozhodli už v první, kdy během 29 sekund dvakrát skórovali. Nejvíc nás potrápili Petr Pudil a Jan Anýž, každý se čtyřmi body.",
+    "narrative": [
+      "Raptors nám od začátku nedali vydechnout. V osmé minutě otevřel skóre Jiří Veverka a o 29 sekund později přidal druhý gól Jan Anýž po přihrávce Petra Pudila. Do přestávky se už skóre neměnilo.",
+      "Ve druhé třetině jsme se snažili zabrat, jenže soupeř udeřil znovu dvakrát krátce po sobě: ve 26. minutě skóroval Petr Pudil a o minutu později Petr Volek. Bylo 0:4.",
+      "Ve třetí třetině dlouho gól nepadl, ale v poslední minutě zápasu přidali Raptors ještě dva, Petr Pudil a podruhé Jiří Veverka, a nastavili konečných 0:6.",
+      "Na střely jsme prohráli 17:26 a branku soupeře se nám tentokrát překonat nepodařilo. Nejlepším hráčem za nás byl vyhlášen Tomáš Pražan."
+    ]
+  },
+  "F631A36E-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "220e24c9d5eb638c",
+    "model": "claude-code",
+    "generatedAt": "2026-10-08T13:13:40.446Z",
+    "summary": "Proti HC Taste jsme vyhráli 2:0 a neinkasovali jsme ani jednou. Góly dali Martin Vrbka a Michal Lázňovský, Vrbka navíc přihrál i na ten druhý.",
+    "narrative": [
+      "Zápas s HC Taste nebyl žádná přestřelka. Hned ve třetí minutě šel soupeř na trestnou lavici za příliš mnoho hráčů na ledě. V osmé minutě jsme otevřeli skóre: po přihrávce Martina Znamenáčka se trefil Martin Vrbka. Do konce třetiny si Taste vysloužili ještě jeden trest, tentokrát za napadení.",
+      "Ve 26. minutě jsme vedení zdvojnásobili. Tentokrát Martin Vrbka gól připravil a Michal Lázňovský ho proměnil na 2:0.",
+      "Třetí třetina se obešla bez gólů a dvougólový náskok jsme udrželi až do konce. Soupeř za celý zápas vystřelil na naši branku jen osmkrát, my třináctkrát. Na vhazování byli úspěšnější oni (14:4), na výsledku to ale nic nezměnilo. Nejlepším hráčem za nás byl vyhlášen Martin Znamenáček."
+    ]
+  },
+  "F63266BF-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "74f817b31476b026",
+    "model": "claude-code",
+    "generatedAt": "2026-10-08T13:13:40.446Z",
+    "summary": "Winter Foxes nás porazili 6:1. O zápase rozhodli rychlými góly: dvěma v první třetině během 19 sekund a třemi hned na začátku druhé. Hattrickem se blýskl Ondřej Chmela, za nás snižoval Martin Vrbka.",
+    "narrative": [
+      "Tohle utkání se nám od začátku nevyvíjelo dobře. V páté minutě otevřel skóre Patrik Čejka a jen o devatenáct sekund později přidal druhý gól Ondřej Chmela. Zbytek první třetiny už branky nepřinesl a do přestávky jsme šli za stavu 0:2.",
+      "Druhá třetina začala ještě hůř. Ve 21. minutě jsme hráli v oslabení po vyloučení Zdeňka Soukupa a Martin Novák toho využil. O 22 sekund později přidal další gól Jan Rychtář a ve 24. minutě se podruhé trefil Ondřej Chmela. Bylo 0:5.",
+      "Ve třetí třetině jsme se přece jen dočkali. Ve 32. minutě snížil po přihrávce Pavla Dorničáka Martin Vrbka. Ve 35. minutě putovali na trestnou lavici najednou tři hráči, Ondřej Chmela a Radek Duda od soupeře a Martin Vrbka od nás. Konečnou podobu výsledku dal ve 41. minutě Ondřej Chmela, který tím zkompletoval hattrick.",
+      "Na střely byl přitom zápas vyrovnaný, 32:34. Nejlepším hráčem za nás byl vyhlášen Martin Vrbka."
+    ]
+  }
+}
