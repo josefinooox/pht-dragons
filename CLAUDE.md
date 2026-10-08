@@ -7,6 +7,9 @@ Mobile-first.
 ## Hard constraints
 - Zero monthly cost. Static Astro site, deployed to GitHub Pages by
   `.github/workflows/deploy.yml` (already working; runs every 30 min + on push).
+  The one approved exception: match narratives written by Claude (Anthropic API, paid per
+  call, ~30 games per season). Only when the ANTHROPIC_API_KEY secret exists, cached in
+  data/narratives.json, at most 8 calls per run; without the key the site uses templates.
 - Data is fetched at BUILD TIME only, by `npm run fetch` (scripts/fetch-data.mjs).
   The API blocks browser CORS, so the site must never call it from the client.
 - The workflow commits /data after each fetch. If the API fails or returns data that
@@ -79,10 +82,15 @@ Only re-download logos that are not already present.
 - Open Graph tags on every page for link previews (WhatsApp).
 - A 404 page.
 
-## Opponent summary
-For now: template-based, generated from computed facts (see prototype).
-Later possibly AI-generated at build time – the facts must still be computed in code
-and passed to the model; the model only phrases them.
+## Opponent summary and match recap
+- Upcoming games: opponent summary, template-based from computed facts (src/lib/summary.ts).
+- Played games: commentator-style narrative written by Claude at build time
+  (scripts/lib/narrate.mjs, model claude-opus-5-5). Facts are computed in code
+  (matchFacts in src/lib/recap.ts) and passed to the model; it only phrases them and must
+  not invent details. Regenerated only when the facts, model or PROMPT_VERSION change.
+  Fallback without a narrative: template recap from the same facts.
+- "Řekni víc" shows a ~1.2 s skeleton before the text. The text is pre-generated, never
+  generated in the browser (no API key in the client).
 
 ## Reference
 `docs/prototype-reference.html` is a working single-file prototype with snapshot data.

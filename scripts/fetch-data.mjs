@@ -8,6 +8,9 @@ import path from "node:path";
 import sharp from "sharp";
 import { CompetitionInfoSchema, GameDetailSchema, GameMultimediaSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
 import { checkConsistency, discoverSeason, normalize, normalizeMedia, normalizeReport, pragueDate } from "./lib/normalize.mjs";
+import { MODEL, createClient, narrativeKey, writeNarrative } from "./lib/narrate.mjs";
+import { matchFacts } from "../src/lib/recap.ts";
+import { longDate } from "../src/lib/format.ts";
 
 const API = process.env.HMS_API ?? "https://api.prod.hms.wootera.net/public"; // override for testing
 const COMPETITION_ID = "C7C0BB15-5D29-415D-851E-5D777C6CC621"; // PHM Cup
@@ -118,6 +121,55 @@ async function syncPerGame(games, { file, endpoint, schema, normalize: norm, ver
   return { entries: next, fetched, total: ours.length, changed };
 }
 
+// Upper bound on model calls per run, so a bug can't run up a bill.
+const MAX_NARRATIVES_PER_RUN = 8;
+
+/**
+ * AI-written match narratives (data/narratives.json). A game's text is (re)written only when its
+ * facts, the model or the prompt change. Without ANTHROPIC_API_KEY nothing is generated and the
+ * site falls back to the template recap.
+ */
+async function syncNarratives(games, teams, reports, ctx) {
+  const file = path.join(DATA_DIR, "narratives.json");
+  const prevText = await readFile(file, "utf8").catch(() => null);
+  const cache = prevText ? JSON.parse(prevText) : {};
+  const client = createClient();
+  const nameOf = (id) => teams.find((t) => t.teamId === id)?.name ?? "soupeř";
+  const todo = [];
+  const keep = new Set();
+  for (const g of games) {
+    const report = reports[g.gameId];
+    if (g.status !== "finished" || !report) continue;
+    keep.add(g.gameId);
+    const facts = matchFacts(g, report, OUR_TEAM_ID, {
+      ourName: nameOf(OUR_TEAM_ID),
+      opponentName: nameOf(g.homeTeamId === OUR_TEAM_ID ? g.awayTeamId : g.homeTeamId),
+      dateText: longDate(g.date),
+      competition: `${ctx.competition.name}, skupina ${ctx.group.name}, ${ctx.phase.name.toLowerCase()}`,
+    });
+    const key = narrativeKey(facts);
+    if (cache[g.gameId]?.key !== key) todo.push({ g, facts, key });
+  }
+  let written = 0;
+  const usage = { input: 0, output: 0 };
+  if (client) {
+    for (const { g, facts, key } of todo.slice(0, MAX_NARRATIVES_PER_RUN)) {
+      try {
+        const { usage: u, ...text } = await writeNarrative(client, facts);
+        cache[g.gameId] = { key, model: MODEL, generatedAt: new Date().toISOString(), ...text };
+        usage.input += u.input;
+        usage.output += u.output;
+        written++;
+      } catch (err) {
+        warn(`narrative ${g.date} ${g.gameId}: ${err.message}`);
+      }
+    }
+  }
+  const next = Object.fromEntries(Object.keys(cache).filter((id) => keep.has(id)).sort().map((id) => [id, cache[id]]));
+  if (prevText !== toJson(next)) await writeFile(file, toJson(next));
+  return { written, pending: todo.length - written, total: keep.size, have: Object.keys(next).length, usage, enabled: !!client };
+}
+
 async function main() {
   const today = pragueDate();
 
@@ -181,6 +233,7 @@ async function main() {
     normalize: normalizeReport,
     version: 1,
   });
+  const narratives = await syncNarratives(result.games, teams, reports.entries, ctx);
   const withPhotos = Object.values(media.entries).filter((m) => m.photos.length).length;
   const complete = Object.values(reports.entries).filter((r) => r.complete).length;
 
@@ -200,6 +253,10 @@ async function main() {
         (nextOurs ? `; next ${nextOurs.date} ${nextOurs.time} ${nameOf(nextOurs.homeTeamId)} vs ${nameOf(nextOurs.awayTeamId)} @ ${nextOurs.venue}` : ""),
       `  media:     ${withPhotos}/${media.total} played games with photos (${media.fetched} checked now${media.changed ? ", updated" : ""})`,
       `  reports:   ${complete}/${reports.total} played games with full events (${reports.fetched} checked now${reports.changed ? ", updated" : ""})`,
+      `  texts:     ${narratives.have}/${narratives.total} AI narratives` +
+        (narratives.enabled
+          ? ` (${narratives.written} written now, ${narratives.usage.input}+${narratives.usage.output} tokens${narratives.pending ? `, ${narratives.pending} pending` : ""})`
+          : ` (no ANTHROPIC_API_KEY, ${narratives.pending} waiting; site uses template recaps)`),
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),
   );

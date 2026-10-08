@@ -299,3 +299,69 @@ function scorerList(goals: GoalEvent[]) {
   for (const g of goals) if (g.scorer) count.set(g.scorer.name, (count.get(g.scorer.name) ?? 0) + 1);
   return [...count].sort((x, y) => y[1] - x[1]).map(([n, c]) => (c > 1 ? `${n} (${c})` : n));
 }
+
+/**
+ * Facts handed to the language model for the commentator-style narrative.
+ * Everything the model may mention must be here; it only phrases them.
+ * Deliberately excludes things that change after the game (current standings),
+ * so the cached text is only regenerated when the game data itself changes.
+ */
+export function matchFacts(
+  game: Game,
+  report: Report,
+  ourId: string,
+  ctx: { ourName: string; opponentName: string; dateText: string; competition: string },
+) {
+  const home = game.homeTeamId === ourId;
+  const f = (home ? game.homeGoals : game.awayGoals) ?? 0;
+  const a = (home ? game.awayGoals : game.homeGoals) ?? 0;
+  const ours = (e: { teamId: string }) => e.teamId === ourId;
+  const side = (e: { teamId: string }) => (ours(e) ? "my" : "soupeř");
+  const recap = buildRecap(game, report, ourId, ctx.opponentName);
+  const goals = report.events.filter((e): e is GoalEvent => e.type === "goal");
+
+  let us = 0;
+  let them = 0;
+  const goalFacts = goals.map((g) => {
+    const before = { us, them };
+    if (ours(g)) us++;
+    else them++;
+    return {
+      minute: minuteOf(g.sec),
+      gameClock: g.time,
+      period: periodTitle(g.period),
+      team: side(g),
+      scorer: g.scorer?.name ?? null,
+      assists: g.assists.map((p) => p.name),
+      scoreAfter: `${us}:${them}`,
+      meaning: goalVerb(before, ours(g)),
+      situation: g.strength === "pp" ? "přesilovka" : g.strength === "sh" ? "oslabení" : null,
+    };
+  });
+  const lastPeriod = goals.at(-1)?.period;
+
+  return {
+    competition: ctx.competition,
+    date: ctx.dateText,
+    venue: game.venue,
+    ourTeam: ctx.ourName,
+    opponent: ctx.opponentName,
+    weWereHomeTeam: home,
+    result: f > a ? "výhra" : f < a ? "prohra" : "remíza",
+    score: `${f}:${a}`,
+    gameFormat: "3 třetiny po 15 minutách hrubého času; minuty a gameClock se počítají od začátku zápasu",
+    decidedIn: lastPeriod === "OT" ? "prodloužení" : lastPeriod === "SN" ? "samostatné nájezdy" : "základní hrací doba",
+    eventsComplete: report.complete,
+    periods: recap.periods.map((p) => ({ period: p.title, score: p.score })),
+    goals: report.complete ? goalFacts : [],
+    penalties: report.events
+      .filter((e): e is PenaltyEvent => e.type === "penalty")
+      .map((p) => ({ minute: minuteOf(p.sec), team: side(p), player: p.player?.name ?? null, reason: p.reason?.toLowerCase() ?? null })),
+    stats: Object.fromEntries(recap.stats.map((s) => [s.label, { my: s.ours, soupeř: s.theirs }])),
+    starsOfTheMatch: report.stars.map((s) => ({ team: side(s), player: s.name, goals: s.goals, assists: s.assists })),
+    pointsUs: recap.points.ours,
+    pointsOpponent: recap.points.theirs,
+    // The template summary already picks the storyline (comeback, late winner, early decision...).
+    keyFacts: recap.summary,
+  };
+}

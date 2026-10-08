@@ -17,6 +17,7 @@ import {
   gameSlug,
   isFinal,
   mediaFor,
+  narrativeFor,
   reportFor,
   mine,
   opp,
@@ -53,6 +54,7 @@ const final = isFinal(g);
 const media = final ? mediaFor(g) : undefined;
 const report = final ? reportFor(g) : undefined;
 const recap = report ? buildRecap(g, report, OUR, them.name) : undefined;
+const narrative = final ? narrativeFor(g) : undefined;
 
 // Per-game comparison; "better" marks the better value (higher or lower is better).
 const better = (x: number, y: number, higher = true) => (x === y ? null : (higher ? x > y : x < y) ? "us" : "them");
@@ -67,7 +69,9 @@ const rows = [
 const home = team(g.homeTeamId).name;
 const away = team(g.awayTeamId).name;
 const title = `${home} vs ${away}, ${shortDate(g.date)}`;
-const description = recap
+const description = narrative
+  ? narrative.summary
+  : recap
   ? recap.summary
   : final
   ? `${home} ${g.homeGoals}:${g.awayGoals} ${away}, ${longDate(g.date)}. Rozbor soupeře ${them.name}.`
@@ -105,7 +109,7 @@ const description = recap
         </nav>
       </div>
 
-      {recap && <MatchRecap recap={recap} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
+      {recap && <MatchRecap recap={recap} narrative={narrative} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
 
       {media && <Gallery media={media} />}
 

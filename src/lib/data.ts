@@ -5,6 +5,7 @@ import standingsJson from "../../data/standings.json";
 import metaJson from "../../data/meta.json";
 import mediaJson from "../../data/media.json";
 import reportsJson from "../../data/reports.json";
+import narrativesJson from "../../data/narratives.json";
 import type { Report } from "./recap";
 
 export type Status = "scheduled" | "running" | "finished";
@@ -78,6 +79,16 @@ export const mediaFor = (g: Game): Media | undefined => {
 const reportById = reportsJson as unknown as Record<string, Report>;
 /** Goals, penalties and stats of one of our finished games, if fetched. */
 export const reportFor = (g: Game): Report | undefined => reportById[g.gameId];
+
+export interface Narrative {
+  summary: string;
+  narrative: string[];
+  model: string;
+  generatedAt: string;
+}
+const narrativeById = narrativesJson as unknown as Record<string, Narrative>;
+/** AI-written commentator text for a played game (scripts/lib/narrate.mjs), if generated. */
+export const narrativeFor = (g: Game): Narrative | undefined => narrativeById[g.gameId];
 
 const teamById = new Map(teams.map((t) => [t.teamId, t]));
 export const team = (id: string): Team =>

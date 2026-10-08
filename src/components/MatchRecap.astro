@@ -1,15 +1,18 @@
 ---
-// Recap of a played game: short summary, "Řekni víc" with the period-by-period story,
-// match stats and player points. <details> keeps it working without JS.
+// Recap of a played game: short summary, "Řekni víc" with the commentator narrative
+// (AI-written at build time; template period breakdown as fallback), match stats and points.
+// <details> keeps it working without JS; src/scripts/recap-reveal.ts adds the brief skeleton.
 import { ChevronDown, Sparkles } from "@lucide/astro";
+import type { Narrative } from "../lib/data";
 import type { Recap } from "../lib/recap";
 
 interface Props {
   recap: Recap;
+  narrative?: Narrative;
   ourShort: string;
   theirShort: string;
 }
-const { recap, ourShort, theirShort } = Astro.props;
+const { recap, narrative, ourShort, theirShort } = Astro.props;
 const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`;
 ---
 
@@ -17,9 +20,9 @@ const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`
   <h2 id="shrnuti-zapasu" class="label flex items-center gap-1.5 text-sm text-primary">
     <Sparkles size={15} aria-hidden="true" /> Shrnutí zápasu
   </h2>
-  <p class="mt-2 text-lg leading-relaxed">{recap.summary}</p>
+  <p class="mt-2 text-lg leading-relaxed">{narrative?.summary ?? recap.summary}</p>
 
-  <details class="group mt-4">
+  <details class="group mt-4" data-reveal>
     <summary
       class="label inline-flex cursor-pointer list-none items-center gap-1.5 rounded-md bg-secondary px-4 py-2.5 text-base leading-none text-secondary-foreground hover:bg-black [&::-webkit-details-marker]:hidden"
     >
@@ -28,9 +31,25 @@ const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`
       <ChevronDown size={16} strokeWidth={3} class="transition-transform group-open:rotate-180" aria-hidden="true" />
     </summary>
 
-    <div class="mt-6 space-y-8">
+    <div data-skeleton hidden class="mt-6 animate-pulse space-y-3 motion-reduce:animate-none" aria-hidden="true">
+      {["w-full", "w-11/12", "w-full", "w-4/5", "w-0", "w-full", "w-10/12", "w-3/5"].map((w) =>
+        w === "w-0" ? <div class="h-3" /> : <div class:list={["h-4 rounded bg-foreground/10", w]} />,
+      )}
+    </div>
+
+    <div data-content class="mt-6 space-y-8">
       {
-        recap.periods.length > 0 && (
+        narrative && (
+          <div class="space-y-4 text-lg leading-relaxed">
+            {narrative.narrative.map((para) => (
+              <p>{para}</p>
+            ))}
+            <p class="text-sm text-muted-foreground">Text napsala AI podle dat ze zápasu.</p>
+          </div>
+        )
+      }
+      {
+        !narrative && recap.periods.length > 0 && (
           <div class="space-y-6">
             {recap.periods.map((p) => (
               <div>
@@ -131,3 +150,7 @@ const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`
     </div>
   </details>
 </section>
+
+<script>
+  import "../scripts/recap-reveal.ts";
+</script>

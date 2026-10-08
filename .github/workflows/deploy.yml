@@ -34,6 +34,8 @@ jobs:
         run: npm run fetch
         env:
           TZ: Europe/Prague
+          # Optional: match narratives are written by Claude only when this secret exists.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Commit data snapshot if changed
         run: |
