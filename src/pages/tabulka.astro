@@ -4,7 +4,7 @@
 import Base from "../layouts/Base.astro";
 import Standings from "../components/Standings.astro";
 import SubBar from "../components/SubBar.astro";
-import { OUR, heroGame, meta, opp, rankOf } from "../lib/data";
+import { OUR, meta, rankOf } from "../lib/data";
 ---
 
 <Base
@@ -26,12 +26,11 @@ import { OUR, heroGame, meta, opp, rankOf } from "../lib/data";
     </div>
 
     <section aria-label="Tabulka skupiny" class="rounded-lg bg-white">
-      <Standings highlight={heroGame ? [opp(heroGame)] : []} />
+      <Standings />
     </section>
 
     <p class="max-w-3xl text-sm text-grey-500">
-      Z = odehrané zápasy, V–R–P = výhry, remízy a prohry, forma = posledních 5 zápasů od nejstaršího. Klikni na tým a
-      uvidíš náš nejbližší zápas s ním.
+      Z = odehrané zápasy, V–R–P = výhry, remízy a prohry. Klikni na tým a uvidíš náš nejbližší zápas s ním.
     </p>
   </div>
 </Base>

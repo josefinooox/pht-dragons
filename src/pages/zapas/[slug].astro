@@ -90,7 +90,7 @@ const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 
 const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 uppercase";
 ---
 
-<Base title={title} description={description} nav={final ? "odehrane" : "rozpis"} bare>
+<Base title={title} description={description} nav="rozpis" bare>
   <div class="flex items-stretch">
     <div class="min-w-0 flex-1">
       <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
@@ -99,7 +99,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
             <li>
               <a href={final ? url("odehrane") : url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
                 <ChevronLeft size={18} aria-hidden="true" />
-                {final ? "Výsledky" : "Rozpis"}
+                {final ? "Minulé zápasy" : "Rozpis"}
               </a>
             </li>
             <li aria-hidden="true" class="text-grey-400">/</li>
@@ -261,7 +261,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
       </div>
     </div>
 
-    <TablePanel highlight={[o]} />
+    <TablePanel />
   </div>
 </Base>
 

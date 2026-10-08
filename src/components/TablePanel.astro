@@ -9,11 +9,6 @@ import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 
-interface Props {
-  highlight?: string[];
-}
-const { highlight = [] } = Astro.props;
-
 // Five rows around us (one above, three below), like the design excerpt.
 const ourIndex = standings.findIndex((r) => r.teamId === OUR);
 const from = Math.max(0, Math.min(ourIndex - 1, standings.length - 5));
@@ -80,7 +75,6 @@ const grid = "grid grid-cols-[56px_56px_minmax(0,1fr)_56px_56px] items-center";
                     grid,
                     "h-14 border-b border-grey-300",
                     us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50 active:bg-grey-100",
-                    !us && highlight.includes(row.teamId) && "bg-grey-50",
                   ]}
                 >
                   <span class="pl-4 font-bold">

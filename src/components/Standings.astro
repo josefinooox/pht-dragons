@@ -1,49 +1,36 @@
 ---
 // Full standings for /tabulka, derived from the side panel (src/components/TablePanel.astro):
-// 56px rows, round logos, our row blue-600/10, next opponent tagged. Each row links to our
-// nearest game against that team. Rows are grid links (not <tr>), so the whole row is one link.
-// Narrow screens drop V–R–P and Forma.
-import { OUR, finals, forT, gameSlug, played, standings, team, teamTarget } from "../lib/data";
+// round logos, our row blue-600/10, each row links to our nearest game against that team.
+// The numbers sit close to the team names with generous spacing between them (the free space
+// is left at the end of the row). Rows are grid links (not <tr>), so the whole row is one link.
+// Narrow screens drop V–R–P.
+import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
 import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
-import ResultChip from "./ResultChip.astro";
-
-interface Props {
-  highlight?: string[];
-}
-const { highlight = [] } = Astro.props;
 
 const rows = standings.map((row) => {
   const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
-  const games = row.teamId === OUR ? finals : played(row.teamId);
-  return {
-    row,
-    href: target ? url(`zapas/${gameSlug(target)}`) : null,
-    form: games.slice(-5).map((g) => forT(g, row.teamId).r),
-  };
+  return { row, href: target ? url(`zapas/${gameSlug(target)}`) : null };
 });
 const grid =
-  "grid grid-cols-[40px_48px_minmax(0,1fr)_40px_64px_48px] items-center md:grid-cols-[56px_56px_minmax(0,1fr)_56px_96px_88px_148px_64px]";
+  "grid grid-cols-[36px_48px_minmax(0,1fr)_36px_64px_44px] items-center md:grid-cols-[64px_56px_minmax(0,280px)_96px_120px_120px_96px]";
 const wide = "hidden md:block";
 ---
 
-<div class="font-display text-base leading-[1.4] text-grey-950">
+<div class="font-display text-lg leading-[1.4] text-grey-950">
   <div class:list={[grid, "h-14 border-b border-grey-300 font-bold text-grey-500 uppercase"]} aria-hidden="true">
     <span class="pl-2 md:pl-4">#</span>
-    <span></span>
-    <span class="px-2">Tým</span>
-    <span class="px-2 text-right" title="Odehrané zápasy">Z</span>
-    <span class:list={[wide, "px-2 text-right"]} title="Výhry–remízy–prohry">V–R–P</span>
-    <span class="px-2 text-right">Skóre</span>
-    <span class:list={[wide, "px-2"]}>Forma</span>
-    <span class="pr-2 text-right md:pr-4">Body</span>
+    <span class="col-span-2">Tým</span>
+    <span class="px-2" title="Odehrané zápasy">Z</span>
+    <span class:list={[wide, "px-2"]} title="Výhry–remízy–prohry">V–R–P</span>
+    <span class="px-2">Skóre</span>
+    <span class="px-2">Body</span>
   </div>
   <ol>
     {
-      rows.map(({ row, href, form }) => {
+      rows.map(({ row, href }) => {
         const us = row.teamId === OUR;
-        const op = !us && highlight.includes(row.teamId);
         const Tag = href ? "a" : "div";
         return (
           <li>
@@ -63,32 +50,20 @@ const wide = "hidden md:block";
               <span>
                 <Logo id={row.teamId} round class="size-10" />
               </span>
-              <span class="flex min-w-0 items-center gap-2 px-2">
-                <span class:list={["truncate", (us || op) && "font-bold"]}>{team(row.teamId).name}</span>
-                {op && (
-                  <span class="shrink-0 rounded-full bg-red-600 px-2 py-0.5 text-xs leading-4 font-bold text-white uppercase">Soupeř</span>
-                )}
-              </span>
-              <span class="px-2 text-right">
+              <span class:list={["truncate pr-2", us && "font-bold"]}>{team(row.teamId).name}</span>
+              <span class="px-2">
                 {row.played}
                 <span class="sr-only"> {plural(row.played, "zápas", "zápasy", "zápasů")}</span>
               </span>
-              <span class:list={[wide, "px-2 text-right"]}>
+              <span class:list={[wide, "px-2"]}>
                 {row.wins}–{row.draws}–{row.losses}
                 <span class="sr-only"> (výhry, remízy, prohry)</span>
               </span>
-              <span class="px-2 text-right">
+              <span class="px-2">
                 {row.goalsFor}:{row.goalsAgainst}
                 <span class="sr-only"> skóre</span>
               </span>
-              <span class:list={[wide, "px-2"]}>
-                <span class="flex gap-1" aria-label={`Forma, posledních ${form.length} zápasů, od nejstaršího`}>
-                  {form.map((r) => (
-                    <ResultChip result={r} size="sm" />
-                  ))}
-                </span>
-              </span>
-              <span class="pr-2 text-right text-lg font-bold md:pr-4">
+              <span class="px-2 text-xl font-bold">
                 {row.points}
                 <span class="sr-only"> {plural(row.points, "bod", "body", "bodů")}</span>
               </span>

@@ -5,13 +5,14 @@ import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import CalendarMenu from "../components/CalendarMenu.astro";
 import logo from "../assets/dragons-logo.svg";
+import logoWhite from "../assets/dragons-logo-white.svg";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description: string;
   /** Which header nav item is current. */
-  nav?: "rozpis" | "odehrane" | "tabulka";
+  nav?: "rozpis" | "tabulka";
   /** Back link in a grey bar under the header (detail pages). */
   back?: { href: string; label: string };
   /** Full-bleed main area: the page lays out its own columns (homepage with the table panel). */
@@ -24,7 +25,6 @@ const myRank = rankOf(OUR);
 const myPoints = standingOf(OUR)?.points ?? 0;
 const links = [
   { key: "rozpis", href: url(), label: "Rozpis" },
-  { key: "odehrane", href: url("odehrane"), label: "Výsledky" },
   { key: "tabulka", href: url("tabulka"), label: "Tabulka" },
 ] as const;
 const updated = new Intl.DateTimeFormat("cs-CZ", {
@@ -146,21 +146,26 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
           <CalendarMenu variant="solid" up align="left" />
         </div>
       </div>
-      <div class="flex flex-col gap-4 px-(--gutter) py-6 font-sans text-base leading-[1.4] text-grey-50 md:h-[72px] md:flex-row md:items-center md:justify-between md:py-2">
-        <p>Data aktualizována {updatedText}</p>
-        <nav aria-label="Patička">
-          <ul class="flex gap-10">
-            {
-              links.map((l) => (
-                <li>
-                  <a href={l.href} class="transition-colors hover:text-blue-100 hover:underline hover:underline-offset-4">
-                    {l.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
+      <div class="flex flex-col gap-6 px-(--gutter) pt-4 pb-8 font-sans text-base leading-[1.4] text-grey-50 md:gap-0 md:pb-0">
+        <div class="flex flex-wrap items-center justify-between gap-6 md:h-[72px]">
+          <a href={url()} class="shrink-0" aria-label="PHT Dragons – rozpis">
+            <img src={logoWhite.src} alt="PHT Dragons" width="138" height="34" class="h-[34px] w-auto" />
+          </a>
+          <nav aria-label="Patička">
+            <ul class="flex gap-10">
+              {
+                links.map((l) => (
+                  <li>
+                    <a href={l.href} class="transition-colors hover:text-blue-100 hover:underline hover:underline-offset-4">
+                      {l.label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+        <p class="opacity-50 md:flex md:h-[72px] md:items-center md:justify-end">Data aktualizována {updatedText}</p>
       </div>
     </footer>
     <script>
