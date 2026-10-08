@@ -1,15 +1,16 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { ChevronLeft, ChevronRight, Sparkles } from "@lucide/astro";
+import { ChevronLeft } from "@lucide/astro";
 import Base from "../../layouts/Base.astro";
-import GameRow from "../../components/GameRow.astro";
-import Logo from "../../components/Logo.astro";
+import CompareTable from "../../components/CompareTable.astro";
 import GameCard from "../../components/GameCard.astro";
+import GameRow from "../../components/GameRow.astro";
 import Gallery from "../../components/Gallery.astro";
+import Logo from "../../components/Logo.astro";
+import MatchHero from "../../components/MatchHero.astro";
 import MatchRecap from "../../components/MatchRecap.astro";
 import ResultChip from "../../components/ResultChip.astro";
-import MatchCard from "../../components/MatchCard.astro";
-import Standings from "../../components/Standings.astro";
+import TablePanel from "../../components/TablePanel.astro";
 import {
   OUR,
   commonOpponents,
@@ -39,16 +40,14 @@ const g = Astro.props.game as Game;
 const o = opp(g);
 const them = team(o);
 const themShort = them.shortName ?? them.name;
-const i = mine.indexOf(g);
-const prev = mine[i - 1];
-const next = mine[i + 1];
 const a = stats(OUR);
 const b = stats(o);
 const theirs = played(o).slice().reverse();
 const form = played(o)
   .slice(-5)
   .map((x) => forT(x, o).r);
-const meet = mine.filter((x) => opp(x) === o && x !== g);
+// Earlier meetings with this opponent this season that are already played.
+const earlier = mine.filter((x) => opp(x) === o && x !== g && isFinal(x) && x.start < g.start).reverse();
 const common = commonOpponents(o);
 const final = isFinal(g);
 const media = final ? mediaFor(g) : undefined;
@@ -57,13 +56,14 @@ const recap = report ? buildRecap(g, report, OUR, them.name) : undefined;
 const narrative = final ? narrativeFor(g) : undefined;
 
 // Per-game comparison; "better" marks the better value (higher or lower is better).
-const better = (x: number, y: number, higher = true) => (x === y ? null : (higher ? x > y : x < y) ? "us" : "them");
+const better = (x: number, y: number, higher = true) =>
+  x === y ? null : (higher ? x > y : x < y) ? ("ours" as const) : ("theirs" as const);
 const rows = [
-  { label: "Body na zápas", us: num(a.ppg), them: num(b.ppg), better: better(a.ppg, b.ppg) },
-  { label: "Vstřelené góly na zápas", us: num(a.gfpg), them: num(b.gfpg), better: better(a.gfpg, b.gfpg) },
-  { label: "Obdržené góly na zápas", us: num(a.gapg), them: num(b.gapg), better: better(a.gapg, b.gapg, false) },
-  { label: "Trestné minuty na zápas", us: num(a.pimpg), them: num(b.pimpg), better: better(a.pimpg, b.pimpg, false) },
-  { label: "Odehrané zápasy", us: String(a.gp), them: String(b.gp), better: null },
+  { label: "Body na zápas", ours: num(a.ppg), theirs: num(b.ppg), better: better(a.ppg, b.ppg) },
+  { label: "Vstřelené góly na zápas", ours: num(a.gfpg), theirs: num(b.gfpg), better: better(a.gfpg, b.gfpg) },
+  { label: "Obdržené góly na zápas", ours: num(a.gapg), theirs: num(b.gapg), better: better(a.gapg, b.gapg, false) },
+  { label: "Trestné minuty na zápas", ours: num(a.pimpg), theirs: num(b.pimpg), better: better(a.pimpg, b.pimpg, false) },
+  { label: "Odehrané zápasy", ours: String(a.gp), theirs: String(b.gp), better: null },
 ];
 
 const home = team(g.homeTeamId).name;
@@ -76,219 +76,234 @@ const description = narrative
   : final
   ? `${home} ${g.homeGoals}:${g.awayGoals} ${away}, ${longDate(g.date)}. Rozbor soupeře ${them.name}.`
   : `${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}. Rozbor soupeře ${them.name}.`;
+
+// Tabs under the recap (panel ids double as URL hashes).
+const tabs = [
+  { id: "shrnuti", label: "Shrnutí" },
+  { id: "srovnani", label: "Srovnání" },
+  { id: "posledni-zapasy", label: "Jejich poslední zápasy" },
+  { id: "spolecni-souperi", label: "Společní soupeři" },
+  ...(media ? [{ id: "fotky", label: "Fotky a video" }] : []),
+];
+const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase";
+const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 uppercase";
 ---
 
-<Base title={title} description={description} back={final ? { href: url("odehrane"), label: "Výsledky" } : { href: url(), label: "Rozpis" }}>
-  <h1 class="text-[clamp(2.25rem,7vw,3.75rem)]">
-    {home} <span class="text-primary">vs</span> {away}
-  </h1>
-
-  <div class="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-    <div class="min-w-0 space-y-10">
-      <div>
-        <MatchCard game={g} stars />
-        <nav class="mt-3 flex justify-between gap-4" aria-label="Předchozí a další zápas">
-          {
-            prev ? (
-              <a href={url(`zapas/${gameSlug(prev)}`)} class="label flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-                <ChevronLeft size={16} strokeWidth={3} aria-hidden="true" />
-                {shortDate(prev.date)} {team(opp(prev)).shortName ?? team(opp(prev)).name}
-              </a>
-            ) : (
-              <span />
-            )
-          }
-          {
-            next && (
-              <a href={url(`zapas/${gameSlug(next)}`)} class="label flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-                {shortDate(next.date)} {team(opp(next)).shortName ?? team(opp(next)).name}
-                <ChevronRight size={16} strokeWidth={3} aria-hidden="true" />
-              </a>
-            )
-          }
-        </nav>
-      </div>
-
-      {recap && <MatchRecap recap={recap} narrative={narrative} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
-
-      {media && <Gallery media={media} />}
-
-      <section aria-labelledby="souper" class="space-y-8">
-        <div class="flex items-center gap-3">
-          <Logo id={o} class="size-12" />
-          <h2 id="souper">
-            <span class="block text-base text-muted-foreground">Soupeř</span>
-            {them.name}
-          </h2>
+<Base title={title} description={description} nav={final ? "odehrane" : "rozpis"} bare>
+  <div class="flex items-stretch">
+    <div class="min-w-0 flex-1">
+      <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-10 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+        <div class="flex flex-col gap-4">
+          <a
+            href={final ? url("odehrane") : url()}
+            class="flex w-fit items-center gap-1 font-sans text-base font-semibold text-grey-500 transition-colors hover:text-grey-950"
+          >
+            <ChevronLeft size={18} aria-hidden="true" />
+            {final ? "Výsledky" : "Rozpis"}
+          </a>
+          <h1 class="font-display text-[clamp(2.5rem,6vw,3.5rem)] leading-none font-black text-grey-950 uppercase">
+            {home} <span class="text-grey-500">vs</span> {away}
+          </h1>
         </div>
 
-        <div class="rounded-2xl border-l-[6px] border-primary bg-card p-5">
-          <p class="label flex items-center gap-1.5 text-sm text-primary">
-            <Sparkles size={15} aria-hidden="true" /> {final ? "Rozbor soupeře" : "Shrnutí"}
-          </p>
-          <p class="mt-2 text-lg leading-relaxed">{opponentSummary(o)}</p>
-        </div>
+        <MatchHero game={g} />
 
-        <div>
-          <h3>Forma</h3>
-          {
-            form.length ? (
-              <div class="mt-3 flex items-center gap-2">
-                <span class="text-sm text-muted-foreground">nejstarší</span>
-                {form.map((r) => (
-                  <ResultChip result={r} />
-                ))}
-                <span class="text-sm text-muted-foreground">nejnovější</span>
-              </div>
-            ) : (
-              <p class="mt-2 text-muted-foreground">Zatím bez odehraného zápasu.</p>
-            )
-          }
-        </div>
+        {recap && <MatchRecap recap={recap} narrative={narrative} opponent={o} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
 
-        <div>
-          <h3>Srovnání</h3>
-          <table class="mt-3 w-full">
-            <thead>
-              <tr class="border-b-2 border-foreground">
-                <th scope="col" class="label w-1/4 py-2 text-left">
-                  <span class="flex items-center gap-2"><Logo id={OUR} class="size-6" /> PDG</span>
-                </th>
-                <th scope="col"><span class="sr-only">Ukazatel</span></th>
-                <th scope="col" class="label w-1/4 py-2 text-right">
-                  <span class="flex items-center justify-end gap-2">{themShort} <Logo id={o} class="size-6" /></span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+        <section aria-labelledby="souper" class="flex flex-col gap-6">
+          <div class="flex items-center gap-4">
+            <Logo id={o} round class="size-12" />
+            <h2 id="souper" class={h2}>
+              <span class="block font-display text-base leading-tight font-bold text-grey-500">Soupeř</span>
+              {them.name}
+            </h2>
+          </div>
+
+          <div data-tabs class="flex flex-col gap-6">
+            <div role="tablist" aria-label="Rozbor soupeře" hidden class="-mx-1 flex gap-6 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {
-                rows.map((r) => (
-                  <tr class="border-b border-border">
-                    <td class:list={["label py-3 text-left text-2xl", r.better === "us" ? "text-primary" : "text-muted-foreground/70"]}>
-                      {r.us}
-                    </td>
-                    <th scope="row" class="px-2 py-3 text-center text-sm font-normal text-muted-foreground">
-                      {r.label}
-                    </th>
-                    <td class:list={["label py-3 text-right text-2xl", r.better === "them" ? "text-accent" : "text-muted-foreground/70"]}>
-                      {r.them}
-                    </td>
-                  </tr>
+                tabs.map((t, k) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    id={`tab-${t.id}`}
+                    aria-controls={t.id}
+                    aria-selected={k === 0 ? "true" : "false"}
+                    tabindex={k === 0 ? 0 : -1}
+                    class="shrink-0 font-sans text-xl font-semibold whitespace-nowrap text-grey-500 transition-colors hover:text-grey-700 aria-selected:text-red-600"
+                  >
+                    {t.label}
+                  </button>
                 ))
               }
-            </tbody>
-          </table>
-          <p class="mt-2 text-sm text-muted-foreground">
-            Barevně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů.
-          </p>
-        </div>
+            </div>
 
-        <div>
-          <h3>Jejich poslední zápasy</h3>
-          {
-            theirs.length ? (
-              <>
-                <ul class="mt-2">
-                  {theirs.slice(0, 5).map((x) => (
-                    <GameRow game={x} perspective={o} />
-                  ))}
-                </ul>
-                {theirs.length > 5 && (
-                  <details class="group mt-1">
-                    <summary class="label cursor-pointer py-2 text-primary">
-                      <span class="group-open:hidden">Všechny jejich zápasy ({theirs.length})</span>
-                      <span class="hidden group-open:inline">Skrýt starší zápasy</span>
-                    </summary>
+            <div role="tabpanel" id="shrnuti" aria-labelledby="tab-shrnuti" tabindex="0" class="tab-panel flex flex-col gap-6">
+              <h3 data-tab-title class={h3}>Shrnutí</h3>
+              <div class="flex flex-col gap-5 rounded-lg bg-grey-100 p-5 md:p-8">
+                <p class="max-w-3xl text-lg leading-relaxed text-grey-950">{opponentSummary(o)}</p>
+                <div class="flex items-center gap-4">
+                  <span class="font-sans text-sm leading-[1.4] font-extrabold text-grey-950 uppercase">Forma</span>
+                  {
+                    form.length ? (
+                      <span class="flex gap-1" aria-label={`Forma soupeře, posledních ${form.length} zápasů, od nejstaršího`}>
+                        {form.map((r) => (
+                          <ResultChip result={r} />
+                        ))}
+                      </span>
+                    ) : (
+                      <span class="text-grey-600">Zatím bez odehraného zápasu.</span>
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div role="tabpanel" id="srovnani" aria-labelledby="tab-srovnani" tabindex="0" class="tab-panel flex flex-col gap-6">
+              <h3 data-tab-title class={h3}>Srovnání</h3>
+              <CompareTable
+                opponent={o}
+                rows={rows}
+                note="Barevně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů."
+              />
+            </div>
+
+            <div role="tabpanel" id="posledni-zapasy" aria-labelledby="tab-posledni-zapasy" tabindex="0" class="tab-panel flex flex-col gap-6">
+              <h3 data-tab-title class={h3}>Jejich poslední zápasy</h3>
+              {
+                theirs.length ? (
+                  <div>
                     <ul>
-                      {theirs.slice(5).map((x) => (
+                      {theirs.slice(0, 5).map((x) => (
                         <GameRow game={x} perspective={o} />
                       ))}
                     </ul>
-                  </details>
-                )}
-              </>
-            ) : (
-              <p class="mt-2 text-muted-foreground">Zatím bez odehraného zápasu.</p>
-            )
-          }
-        </div>
-
-        {
-          common.length > 0 && (
-            <div>
-              <h3>Společní soupeři</h3>
-              <p class="mt-1 text-muted-foreground">Jak jsme proti stejným týmům hráli my a jak oni.</p>
-              <table class="mt-3 w-full">
-                <thead>
-                  <tr class="border-b-2 border-foreground">
-                    <th scope="col" class="label py-2 text-left text-sm text-muted-foreground">Soupeř</th>
-                    <th scope="col" class="label py-2 text-right text-sm">PDG</th>
-                    <th scope="col" class="label py-2 pl-4 text-right text-sm">{themShort}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {common.map((c) => (
-                    <tr class="border-b border-border">
-                      <th scope="row" class="py-2.5 text-left font-normal">
-                        <span class="flex items-center gap-2.5">
-                          <Logo id={c.x} class="size-7" />
-                          <span class="leading-tight">
-                            <span class="font-semibold">{team(c.x).name}</span>{" "}
-                            <span class="text-sm text-muted-foreground">({rankOf(c.x) ?? "–"}.)</span>
-                          </span>
-                        </span>
-                      </th>
-                      {[
-                        { list: c.us, t: OUR },
-                        { list: c.them, t: o },
-                      ].map(({ list, t }, k) => (
-                        <td class:list={["py-2.5 text-right align-middle", k === 1 && "pl-4"]}>
-                          <span class="inline-flex flex-col items-end gap-1">
-                            {list.map((z) => {
-                              const r = forT(z, t);
-                              return (
-                                <span class="flex items-center gap-1.5">
-                                  <span class="label text-lg tabular-nums">
-                                    {r.f}:{r.a}
-                                  </span>
-                                  <ResultChip result={r.r} size="sm" />
-                                </span>
-                              );
-                            })}
-                          </span>
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                    {theirs.length > 5 && (
+                      <details class="group">
+                        <summary class="link-underline mt-4 w-fit cursor-pointer list-none font-display text-lg font-bold text-grey-600 uppercase hover:text-grey-950 [&::-webkit-details-marker]:hidden">
+                          <span class="group-open:hidden">Všechny jejich zápasy ({theirs.length})</span>
+                          <span class="hidden group-open:inline">Skrýt starší zápasy</span>
+                        </summary>
+                        <ul>
+                          {theirs.slice(5).map((x) => (
+                            <GameRow game={x} perspective={o} />
+                          ))}
+                        </ul>
+                      </details>
+                    )}
+                  </div>
+                ) : (
+                  <p class="text-grey-600">Zatím bez odehraného zápasu.</p>
+                )
+              }
             </div>
-          )
-        }
+
+            <div role="tabpanel" id="spolecni-souperi" aria-labelledby="tab-spolecni-souperi" tabindex="0" class="tab-panel flex flex-col gap-6">
+              <h3 data-tab-title class={h3}>Společní soupeři</h3>
+              {
+                common.length ? (
+                  <div class="flex flex-col gap-3">
+                    <p class="text-grey-600">Jak jsme proti stejným týmům hráli my a jak oni.</p>
+                    <table class="w-full">
+                      <thead>
+                        <tr class="border-b border-grey-300 font-display text-base font-bold text-grey-500 uppercase">
+                          <th scope="col" class="py-3 text-left font-bold">Soupeř</th>
+                          <th scope="col" class="py-3 text-right font-bold">{team(OUR).shortName}</th>
+                          <th scope="col" class="py-3 pl-6 text-right font-bold">{themShort}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {common.map((c) => (
+                          <tr class="border-b border-grey-300">
+                            <th scope="row" class="py-3 text-left font-normal">
+                              <span class="flex items-center gap-3">
+                                <Logo id={c.x} round class="size-10" />
+                                <span class="leading-tight">
+                                  <span class="block font-display text-base font-bold text-grey-950 uppercase">{team(c.x).name}</span>
+                                  <span class="text-sm text-grey-500">{rankOf(c.x) ?? "–"}. místo</span>
+                                </span>
+                              </span>
+                            </th>
+                            {[
+                              { list: c.us, t: OUR },
+                              { list: c.them, t: o },
+                            ].map(({ list, t }, k) => (
+                              <td class:list={["py-3 text-right align-middle", k === 1 && "pl-6"]}>
+                                <span class="inline-flex flex-col items-end gap-1">
+                                  {list.map((z) => {
+                                    const r = forT(z, t);
+                                    return (
+                                      <span class="flex items-center gap-2">
+                                        <span class="font-display text-[1.375rem] font-extrabold">
+                                          {r.f}:{r.a}
+                                        </span>
+                                        <ResultChip result={r.r} />
+                                      </span>
+                                    );
+                                  })}
+                                </span>
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p class="text-grey-600">Zatím jsme nehráli proti žádnému stejnému soupeři.</p>
+                )
+              }
+            </div>
+
+            {
+              media && (
+                <div role="tabpanel" id="fotky" aria-labelledby="tab-fotky" tabindex="0" class="tab-panel flex flex-col gap-6">
+                  <h3 data-tab-title class={h3}>
+                    Fotky a video
+                  </h3>
+                  <Gallery media={media} heading={false} />
+                </div>
+              )
+            }
+          </div>
+        </section>
 
         {
-          meet.length > 0 && (
-            <div>
-              <h3 class="mb-3">Další vzájemný zápas v sezóně</h3>
-              <ul class="space-y-3">
-                {meet.map((x) => (
+          earlier.length > 0 && (
+            <section aria-labelledby="predchozi" class="flex flex-col gap-4">
+              <h2 id="predchozi" class={h2}>
+                {earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy"}
+              </h2>
+              <ul class="flex flex-col gap-4">
+                {earlier.map((x) => (
                   <GameCard game={x} />
                 ))}
               </ul>
-            </div>
+            </section>
           )
         }
-      </section>
+      </div>
     </div>
 
-    <aside aria-labelledby="tabulka-h">
-      <div class="flex items-baseline justify-between">
-        <h2 id="tabulka-h">Tabulka</h2>
-        <a href={url("tabulka")} class="label text-sm text-primary hover:underline">Celá tabulka</a>
-      </div>
-      <div class="mt-3">
-        <Standings mode="around" compact highlight={[o]} />
-      </div>
-    </aside>
+    <TablePanel highlight={[o]} />
   </div>
 </Base>
+
+<style>
+  /* Tab panels fade in when selected (src/scripts/tabs.ts toggles `hidden`). */
+  .tab-panel:not([hidden]) {
+    animation: tab-in 200ms ease;
+  }
+  @keyframes tab-in {
+    from { opacity: 0; transform: translateY(4px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tab-panel:not([hidden]) { animation: none; }
+  }
+  /* The tablist itself never shows a focus box around the whole strip; tabs have their own ring. */
+  [role="tabpanel"]:focus-visible { outline-offset: 6px; }
+</style>
+
+<script>
+  import "../../scripts/tabs.ts";
+</script>

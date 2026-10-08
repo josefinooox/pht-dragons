@@ -1,76 +1,78 @@
 ---
 // Recap of a played game: short summary, "Řekni víc" with the commentator narrative
-// (AI-written at build time; template period breakdown as fallback), match stats and points.
+// (AI-written; template period breakdown as fallback), match stats and player points.
 // <details> keeps it working without JS; src/scripts/recap-reveal.ts adds the brief skeleton.
-import { ChevronDown, Sparkles } from "@lucide/astro";
+import { ChevronDown } from "@lucide/astro";
 import type { Narrative } from "../lib/data";
 import type { Recap } from "../lib/recap";
+import CompareTable from "./CompareTable.astro";
 
 interface Props {
   recap: Recap;
   narrative?: Narrative;
+  opponent: string;
   ourShort: string;
   theirShort: string;
 }
-const { recap, narrative, ourShort, theirShort } = Astro.props;
+const { recap, narrative, opponent, ourShort, theirShort } = Astro.props;
 const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`;
+const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 uppercase";
 ---
 
-<section aria-labelledby="shrnuti-zapasu" class="rounded-2xl border-l-[6px] border-primary bg-card p-5 sm:p-6">
-  <h2 id="shrnuti-zapasu" class="label flex items-center gap-1.5 text-sm text-primary">
-    <Sparkles size={15} aria-hidden="true" /> Shrnutí zápasu
-  </h2>
-  <p class="mt-2 text-lg leading-relaxed">{narrative?.summary ?? recap.summary}</p>
+<section aria-labelledby="shrnuti-zapasu" class="flex flex-col gap-4">
+  <h2 id="shrnuti-zapasu" class="font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Shrnutí zápasu</h2>
+  <p class="max-w-3xl text-lg leading-relaxed text-grey-950">{narrative?.summary ?? recap.summary}</p>
 
-  <details class="group mt-4" data-reveal>
+  <details class="group" data-reveal>
     <summary
-      class="label inline-flex cursor-pointer list-none items-center gap-1.5 rounded-md bg-secondary px-4 py-2.5 text-base leading-none text-secondary-foreground hover:bg-black [&::-webkit-details-marker]:hidden"
+      class="btn-fill inline-flex min-w-20 cursor-pointer list-none items-center justify-center gap-1 rounded-md border border-grey-300 bg-white p-3 text-grey-950 group-open:border-grey-950 group-open:text-white hover:border-grey-950 hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] [&::-webkit-details-marker]:hidden"
     >
-      <span class="group-open:hidden">Řekni víc</span>
-      <span class="hidden group-open:inline">Méně</span>
-      <ChevronDown size={16} strokeWidth={3} class="transition-transform group-open:rotate-180" aria-hidden="true" />
+      <span class="px-1 font-display text-lg leading-6 font-bold uppercase">
+        <span class="group-open:hidden">Řekni víc</span>
+        <span class="hidden group-open:inline">Méně</span>
+      </span>
+      <ChevronDown size={16} class="transition-transform group-open:rotate-180" aria-hidden="true" />
     </summary>
 
-    <div data-skeleton hidden class="mt-6 animate-pulse space-y-3 motion-reduce:animate-none" aria-hidden="true">
+    <div data-skeleton hidden class="mt-6 max-w-3xl animate-pulse space-y-3 motion-reduce:animate-none" aria-hidden="true">
       {["w-full", "w-11/12", "w-full", "w-4/5", "w-0", "w-full", "w-10/12", "w-3/5"].map((w) =>
-        w === "w-0" ? <div class="h-3" /> : <div class:list={["h-4 rounded bg-foreground/10", w]} />,
+        w === "w-0" ? <div class="h-3" /> : <div class:list={["h-4 rounded bg-grey-200", w]} />,
       )}
     </div>
 
-    <div data-content class="mt-6 space-y-8">
+    <div data-content class="mt-6 flex flex-col gap-10">
       {
         narrative && (
-          <div class="space-y-4 text-lg leading-relaxed">
+          <div class="flex max-w-3xl flex-col gap-4 text-lg leading-relaxed text-grey-950">
             {narrative.narrative.map((para) => (
               <p>{para}</p>
             ))}
-            <p class="text-sm text-muted-foreground">Text napsala AI podle dat ze zápasu.</p>
+            <p class="text-sm text-grey-500">Text napsala AI podle dat ze zápasu.</p>
           </div>
         )
       }
       {
         !narrative && recap.periods.length > 0 && (
-          <div class="space-y-6">
+          <div class="flex max-w-3xl flex-col gap-6">
             {recap.periods.map((p) => (
               <div>
-                <h3 class="flex items-baseline justify-between gap-4 border-b-2 border-foreground pb-1.5">
+                <h3 class:list={[h3, "flex items-baseline justify-between gap-4 border-b border-grey-300 pb-2"]}>
                   {p.title}
-                  <span class="tabular-nums">{p.score}</span>
+                  <span>{p.score}</span>
                 </h3>
                 {p.story && <p class="mt-2 font-semibold">{p.story}</p>}
                 {p.items.length > 0 && (
-                  <ol class="mt-2 space-y-1.5">
+                  <ol class="mt-2 flex flex-col gap-1.5">
                     {p.items.map((i) => (
                       <li class="flex gap-3">
-                        <span class="label w-14 shrink-0 whitespace-nowrap pt-0.5 text-right text-sm text-muted-foreground">{i.minute} min</span>
+                        <span class="w-14 shrink-0 pt-0.5 text-right font-display text-sm font-bold whitespace-nowrap text-grey-500 uppercase">
+                          {i.minute} min
+                        </span>
                         <span
-                          class:list={[
-                            "mt-2 size-2 shrink-0 rounded-full",
-                            i.goal ? (i.ours ? "bg-win" : "bg-loss") : "border-2 border-draw",
-                          ]}
+                          class:list={["mt-2 size-2 shrink-0 rounded-full", i.goal ? (i.ours ? "bg-win" : "bg-loss") : "border-2 border-draw"]}
                           aria-hidden="true"
                         />
-                        <span class:list={[i.goal && "font-semibold", !i.goal && "text-muted-foreground"]}>{i.text}</span>
+                        <span class:list={[i.goal ? "font-semibold" : "text-grey-600"]}>{i.text}</span>
                       </li>
                     ))}
                   </ol>
@@ -81,65 +83,38 @@ const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`
         )
       }
 
-      <div>
-        <h3>Statistiky zápasu</h3>
-        <table class="mt-3 w-full bg-white">
-          <thead>
-            <tr class="border-b-2 border-foreground">
-              <th scope="col" class="label w-1/4 px-3 py-2 text-left">{ourShort}</th>
-              <th scope="col"><span class="sr-only">Ukazatel</span></th>
-              <th scope="col" class="label w-1/4 px-3 py-2 text-right">{theirShort}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              recap.stats.map((s) => (
-                <tr class="border-b border-border">
-                  <td class:list={["label px-3 py-2.5 text-xl tabular-nums", s.better === "ours" ? "text-primary" : "text-muted-foreground/70"]}>
-                    {s.ours}
-                  </td>
-                  <th scope="row" class="px-2 py-2.5 text-center text-sm font-normal text-muted-foreground">
-                    {s.label}
-                  </th>
-                  <td
-                    class:list={["label px-3 py-2.5 text-right text-xl tabular-nums", s.better === "theirs" ? "text-accent" : "text-muted-foreground/70"]}
-                  >
-                    {s.theirs}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
+      <div class="flex flex-col gap-3">
+        <h3 class={h3}>Statistiky zápasu</h3>
+        <CompareTable opponent={opponent} rows={recap.stats} />
       </div>
 
       {
         (recap.points.ours.length > 0 || recap.points.theirs.length > 0) && (
-          <div>
-            <h3>Kanadské body</h3>
-            <div class="mt-3 grid gap-6 sm:grid-cols-2">
+          <div class="flex flex-col gap-3">
+            <h3 class={h3}>Kanadské body</h3>
+            <div class="grid gap-8 sm:grid-cols-2">
               {[
                 { label: ourShort, list: recap.points.ours },
                 { label: theirShort, list: recap.points.theirs },
               ].map((side) => (
                 <div>
-                  <p class="label text-sm text-muted-foreground">
-                    {side.label} <span class="normal-case">(góly + asistence)</span>
+                  <p class="font-display text-base font-bold text-grey-500 uppercase">
+                    {side.label} <span class="font-sans text-sm font-normal normal-case">(góly + asistence)</span>
                   </p>
                   {side.list.length ? (
                     <ul class="mt-1">
                       {side.list.map((pl) => (
-                        <li class="flex items-center justify-between gap-3 border-b border-border py-1.5">
+                        <li class="flex items-center justify-between gap-3 border-b border-grey-300 py-2">
                           <span>
                             {pl.name}
-                            {pl.number !== null && <span class="text-muted-foreground"> #{pl.number}</span>}
+                            {pl.number !== null && <span class="text-grey-500"> #{pl.number}</span>}
                           </span>
-                          <span class="label text-lg tabular-nums">{pts(pl)}</span>
+                          <span class="font-display text-lg font-extrabold">{pts(pl)}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p class="mt-1 text-muted-foreground">Nikdo nebodoval.</p>
+                    <p class="mt-1 text-grey-600">Nikdo nebodoval.</p>
                   )}
                 </div>
               ))}

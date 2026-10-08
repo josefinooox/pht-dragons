@@ -1,0 +1,51 @@
+---
+// Us vs them, one stat per row: our value | label | their value. The better value is colored
+// (ours blue-600, theirs red-600), the other one grey.
+import { OUR, team } from "../lib/data";
+import Logo from "./Logo.astro";
+
+interface Props {
+  opponent: string;
+  rows: { label: string; ours: string; theirs: string; better: "ours" | "theirs" | null }[];
+  note?: string;
+}
+const { opponent, rows, note } = Astro.props;
+const short = (id: string) => team(id).shortName ?? team(id).name;
+const value = "font-display text-[1.75rem] leading-none font-extrabold tabular-nums";
+---
+
+<div>
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-grey-300">
+        <th scope="col" class="w-1/4 py-3 text-left">
+          <span class="flex items-center gap-2 font-display text-base font-bold text-grey-950 uppercase">
+            <Logo id={OUR} round class="size-8" />
+            {short(OUR)}
+          </span>
+        </th>
+        <th scope="col"><span class="sr-only">Ukazatel</span></th>
+        <th scope="col" class="w-1/4 py-3 text-right">
+          <span class="flex items-center justify-end gap-2 font-display text-base font-bold text-grey-950 uppercase">
+            {short(opponent)}
+            <Logo id={opponent} round class="size-8" />
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((r) => (
+          <tr class="border-b border-grey-300">
+            <td class:list={[value, "py-4 text-left", r.better === "ours" ? "text-blue-600" : "text-grey-400"]}>{r.ours}</td>
+            <th scope="row" class="px-2 py-4 text-center text-sm font-normal text-grey-600">
+              {r.label}
+            </th>
+            <td class:list={[value, "py-4 text-right", r.better === "theirs" ? "text-red-600" : "text-grey-400"]}>{r.theirs}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  {note && <p class="mt-3 text-sm text-grey-500">{note}</p>}
+</div>

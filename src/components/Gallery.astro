@@ -7,18 +7,21 @@ import { plural } from "../lib/format";
 
 interface Props {
   media: Media;
+  /** Show the "Fotky a video" heading (off inside a tab, where the tab names the section). */
+  heading?: boolean;
 }
-const { photos, video } = Astro.props.media;
+const { media, heading = true } = Astro.props;
+const { photos, video } = media;
 const FIRST = 12;
 const n = photos.length;
-const thumb = "group relative block aspect-square overflow-hidden rounded-md bg-card";
+const thumb = "group relative block aspect-square overflow-hidden rounded-md bg-grey-100";
 const img = "size-full object-cover transition-transform duration-300 group-hover:scale-105";
 ---
 
-<section aria-labelledby="galerie" class="space-y-4">
+<section aria-labelledby={heading ? "galerie" : undefined} aria-label={heading ? undefined : "Fotky a video"} class="flex flex-col gap-4">
   <div class="flex items-baseline justify-between gap-4">
-    <h2 id="galerie">Fotky a video</h2>
-    {n > 0 && <span class="label text-sm text-muted-foreground">{n} {plural(n, "fotka", "fotky", "fotek")}</span>}
+    {heading && <h2 id="galerie" class="font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Fotky a video</h2>}
+    {n > 0 && <span class="font-display text-base font-bold text-grey-500 uppercase">{n} {plural(n, "fotka", "fotky", "fotek")}</span>}
   </div>
 
   {
@@ -27,7 +30,7 @@ const img = "size-full object-cover transition-transform duration-300 group-hove
         href={`https://www.youtube.com/watch?v=${video}`}
         target="_blank"
         rel="noopener"
-        class="group relative block aspect-video overflow-hidden rounded-2xl bg-secondary"
+        class="group relative block aspect-video overflow-hidden rounded-lg bg-grey-900"
       >
         <img
           src={`https://i.ytimg.com/vi/${video}/hqdefault.jpg`}
@@ -36,10 +39,10 @@ const img = "size-full object-cover transition-transform duration-300 group-hove
           class="size-full object-cover opacity-80 transition-opacity group-hover:opacity-100"
         />
         <span class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/30 text-white">
-          <span class="grid size-16 place-items-center rounded-full bg-primary transition-transform group-hover:scale-110">
+          <span class="grid size-16 place-items-center rounded-full bg-red-600 transition-transform group-hover:scale-110">
             <Play size={30} class="ml-1 fill-white" aria-hidden="true" />
           </span>
-          <span class="label text-xl">Záznam zápasu na YouTube</span>
+          <span class="font-display text-xl font-bold uppercase">Záznam zápasu na YouTube</span>
         </span>
       </a>
     )
@@ -59,7 +62,7 @@ const img = "size-full object-cover transition-transform duration-300 group-hove
         </ul>
         {n > FIRST && (
           <details class="group mt-1.5">
-            <summary class="label cursor-pointer list-none py-2 text-center text-primary hover:underline [&::-webkit-details-marker]:hidden">
+            <summary class="mx-auto my-2 w-fit cursor-pointer list-none font-display text-lg font-bold text-grey-600 uppercase link-underline hover:text-grey-950 [&::-webkit-details-marker]:hidden">
               <span class="group-open:hidden">Zobrazit všech {n} fotek</span>
               <span class="hidden group-open:inline">Skrýt</span>
             </summary>
@@ -74,7 +77,7 @@ const img = "size-full object-cover transition-transform duration-300 group-hove
             </ul>
           </details>
         )}
-        <p class="mt-2 text-sm text-muted-foreground">Fotky: PHM Cup</p>
+        <p class="mt-2 text-sm text-grey-500">Fotky: PHM Cup</p>
 
         <dialog
           data-lightbox

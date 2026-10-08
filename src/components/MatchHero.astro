@@ -1,0 +1,106 @@
+---
+// Match detail header card, in the homepage design language: big logos, big time or score,
+// meeting time, venue, add to calendar, share; game stars for played games.
+import { CalendarPlus, MapPin, Share2, Star } from "@lucide/astro";
+import { SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, type Game } from "../lib/data";
+import { longDate, mapUrl, minusMinutes } from "../lib/format";
+import { url } from "../lib/url";
+import Logo from "./Logo.astro";
+import When from "./When.astro";
+
+interface Props {
+  game: Game;
+}
+const { game: g } = Astro.props;
+const final = isFinal(g);
+const s = state(g);
+const slug = gameSlug(g);
+const home = team(g.homeTeamId);
+const away = team(g.awayTeamId);
+const shareText = `${home.name} vs ${away.name}, ${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}`;
+const upcoming = s === "upcoming" || s === "live";
+const small = "font-display text-base leading-[1.4] font-bold uppercase";
+---
+
+<section aria-label="Zápas" class="flex flex-col gap-8 rounded-lg bg-grey-100 p-5 md:p-10">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <time datetime={g.start} class:list={[small, "text-lg text-grey-600"]}>{longDate(g.date)}</time>
+    <When game={g} class="rounded-full bg-white px-3 py-2 font-display text-base leading-[1.4] font-bold text-grey-950 uppercase" />
+  </div>
+
+  <div class="grid grid-cols-[1fr_auto_1fr] items-start gap-3 md:gap-8">
+    {
+      [g.homeTeamId, g.awayTeamId].map((id, i) => (
+        <div class:list={["flex flex-col items-center gap-3 text-center", i === 1 && "order-3"]}>
+          <Logo id={id} round class="size-16 md:size-24" />
+          <div>
+            <p class="font-display text-lg leading-tight font-bold text-grey-950 uppercase md:text-xl">{team(id).name}</p>
+            {rankOf(id) && <p class="text-sm text-grey-500">{rankOf(id)}. místo</p>}
+          </div>
+        </div>
+      ))
+    }
+    <div class="order-2 flex flex-col items-center pt-1 text-center md:pt-3">
+      <span class:list={[small, "text-sm text-grey-500"]}>{final ? "Konečný výsledek" : "Začátek"}</span>
+      <span class="font-display text-5xl leading-none font-extrabold text-grey-950 md:text-7xl">
+        {final ? `${g.homeGoals}:${g.awayGoals}` : g.time}
+      </span>
+      {!final && <span class:list={[small, "mt-2 text-red-600"]}>Sraz {minusMinutes(g.time, SRAZ_MIN)}</span>}
+    </div>
+  </div>
+
+  {
+    final && g.stars.length > 0 && (
+      <ul class="flex flex-wrap justify-center gap-2" aria-label="Hvězdy zápasu">
+        {g.stars.map((st) => (
+          <li class="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-sm">
+            <Star size={14} class="fill-red-600 text-red-600" aria-hidden="true" />
+            <span class="font-semibold">
+              {st.firstName} {st.lastName}
+            </span>
+            {st.number !== null && <span class="text-grey-500">#{st.number}</span>}
+            <span class="font-display font-bold text-grey-500 uppercase">{team(st.teamId).shortName}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <div class="flex flex-col items-center gap-x-8 gap-y-5 md:flex-row md:justify-between">
+    {
+      g.venue && (
+        <a href={mapUrl(g.venue)} target="_blank" rel="noopener" class="link-underline flex items-center gap-1 text-base leading-[1.4] text-grey-950">
+          <MapPin size={14} aria-hidden="true" />
+          {g.venue}
+          <span class="sr-only">(otevře mapu)</span>
+        </a>
+      )
+    }
+    {
+      upcoming && (
+        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+          <a
+            href={url(`zapas/${slug}.ics`)}
+            download={`dragons-${slug}.ics`}
+            class="link-underline flex items-center gap-1 font-display text-lg leading-6 font-bold whitespace-nowrap text-grey-600 uppercase hover:text-grey-950 focus-visible:text-grey-950"
+          >
+            <CalendarPlus size={16} aria-hidden="true" />
+            Přidat do kalendáře
+          </a>
+          <button
+            type="button"
+            data-share
+            data-url={url(`zapas/${slug}`)}
+            data-text={shareText}
+            hidden
+            class="btn-fill flex min-w-20 items-center justify-center gap-1 rounded-md bg-white p-3 whitespace-nowrap text-grey-950 hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)]"
+          >
+            <Share2 size={16} aria-hidden="true" />
+            <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Sdílet</span>
+          </button>
+          <span role="status" class="text-sm text-grey-600 empty:hidden"></span>
+        </div>
+      )
+    }
+  </div>
+</section>
