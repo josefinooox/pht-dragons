@@ -46,7 +46,7 @@ jobs:
             echo "No data changes"
           else
             git commit -m "data: update snapshot [skip ci]"
-            git push
+            git pull --rebase && git push
           fi
 
       - id: pages
