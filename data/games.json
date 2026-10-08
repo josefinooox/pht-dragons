@@ -1693,21 +1693,6 @@
     "stars": []
   },
   {
-    "gameId": "F62C9A57-98CA-11F1-8BDF-EF2495D048F3",
-    "phaseId": "FE03DED0-869D-11F1-BDD5-8958B510B6A2",
-    "phaseName": "Základní část",
-    "date": "2026-11-04",
-    "time": "20:00",
-    "start": "2026-11-04T20:00:00+01:00",
-    "status": "scheduled",
-    "homeTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
-    "awayTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
-    "homeGoals": null,
-    "awayGoals": null,
-    "venue": "SPM Aréna",
-    "stars": []
-  },
-  {
     "gameId": "F62FF5B5-98CA-11F1-8BDF-EF2495D048F3",
     "phaseId": "FE03DED0-869D-11F1-BDD5-8958B510B6A2",
     "phaseName": "Základní část",
@@ -1720,6 +1705,21 @@
     "homeGoals": null,
     "awayGoals": null,
     "venue": "ICEARENA Kateřinky",
+    "stars": []
+  },
+  {
+    "gameId": "F62D5DA4-98CA-11F1-8BDF-EF2495D048F3",
+    "phaseId": "FE03DED0-869D-11F1-BDD5-8958B510B6A2",
+    "phaseName": "Základní část",
+    "date": "2026-11-05",
+    "time": "22:00",
+    "start": "2026-11-05T22:00:00+01:00",
+    "status": "scheduled",
+    "homeTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
+    "awayTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+    "homeGoals": null,
+    "awayGoals": null,
+    "venue": "Sportovní hala Fortuna",
     "stars": []
   },
   {
