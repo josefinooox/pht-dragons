@@ -102,3 +102,8 @@ Only re-download logos that are not already present.
 `docs/prototype-reference.html` is a working single-file prototype with snapshot data.
 Use it ONLY for behavior and calculations (summary rules, common opponents,
 per-game stats, match states). Ignore its visual design entirely.
+
+## Dračí mozek (/mozek)
+Stats dashboard computed in `src/lib/brain.ts` from games, standings, reports and
+`data/history.json`. History holds our games from past seasons; each finished season is
+fetched once (at most `HISTORY_PER_RUN` per build) and never refetched.

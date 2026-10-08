@@ -1,0 +1,35 @@
+---
+// Horizontal leaderboard: one series, one color (blue-600), bars <= 12px with a 4px rounded
+// data end, value at the tip in text color. Native title tooltips; values are always visible.
+interface Props {
+  items: { label: string; value: number; display?: string; note?: string }[];
+  max?: number;
+  empty?: string;
+  color?: "blue" | "red" | "grey";
+}
+const { items, max, empty = "Zatím žádná data.", color = "blue" } = Astro.props;
+const top = Math.max(1, max ?? Math.max(0, ...items.map((i) => i.value)));
+const fill = { blue: "bg-blue-600", red: "bg-red-600", grey: "bg-grey-600" }[color];
+---
+
+{
+  items.length ? (
+    <ol class="flex flex-col gap-3">
+      {items.map((it, k) => (
+        <li class="grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1" title={`${it.label}: ${it.display ?? it.value}`}>
+          <span class="font-display text-base font-bold text-grey-500">{k + 1}</span>
+          <span class="truncate text-base text-grey-950">
+            {it.label}
+            {it.note && <span class="text-grey-500"> {it.note}</span>}
+          </span>
+          <span class="font-display text-xl leading-none font-extrabold text-grey-950">{it.display ?? it.value}</span>
+          <span class="col-span-2 col-start-2 h-3 rounded-r-[4px] bg-white">
+            <span class:list={["block h-full rounded-r-[4px]", fill]} style={`width:${Math.max(2, (100 * it.value) / top)}%`} />
+          </span>
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <p class="text-grey-600">{empty}</p>
+  )
+}

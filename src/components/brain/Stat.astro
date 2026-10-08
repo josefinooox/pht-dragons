@@ -1,0 +1,20 @@
+---
+// Big number with a label (stat tile). Proportional figures, condensed display face.
+interface Props {
+  label: string;
+  value: string;
+  sub?: string;
+  size?: "md" | "lg";
+  tone?: "default" | "blue" | "red" | "green";
+}
+const { label, value, sub, size = "md", tone = "default" } = Astro.props;
+const color = { default: "text-grey-950", blue: "text-blue-600", red: "text-red-600", green: "text-success" }[tone];
+---
+
+<div class="flex min-w-0 flex-col gap-1">
+  <span class="font-display text-sm leading-[1.4] font-bold text-grey-500 uppercase">{label}</span>
+  <span class:list={["font-display leading-none font-extrabold", color, size === "lg" ? "text-[4.5rem] md:text-[6rem]" : "text-[2.5rem] md:text-5xl"]}>
+    {value}
+  </span>
+  {sub && <span class="text-sm text-grey-600">{sub}</span>}
+</div>

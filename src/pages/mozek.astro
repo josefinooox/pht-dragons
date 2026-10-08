@@ -1,0 +1,197 @@
+---
+// "Dračí mozek": the team's stats dashboard. Mostly big numbers and charts, little reading.
+// All numbers come from src/lib/brain.ts at build time.
+import Base from "../layouts/Base.astro";
+import SubBar from "../components/SubBar.astro";
+import Card from "../components/brain/Card.astro";
+import Stat from "../components/brain/Stat.astro";
+import BarList from "../components/brain/BarList.astro";
+import PointsChart from "../components/brain/PointsChart.astro";
+import DuoBars from "../components/brain/DuoBars.astro";
+import Diverging from "../components/brain/Diverging.astro";
+import sparkles from "../assets/sparkles.svg";
+import {
+  allTime,
+  assistPairs,
+  firstGoal,
+  goalies,
+  headToHead,
+  leaders,
+  periods,
+  pointsTimeline,
+  reportCount,
+  rosterSize,
+  season,
+  specialTeams,
+} from "../lib/brain";
+import { num, plural } from "../lib/format";
+
+const pct = (v: number | null) => (v == null ? "–" : `${Math.round(v)} %`);
+const top = (list: { name: string; value: number; number: number | null }[], n = 5, fmt?: (v: number) => string) =>
+  list.slice(0, n).map((p) => ({ label: p.name, value: p.value, display: fmt ? fmt(p.value) : String(p.value), note: p.number != null ? `#${p.number}` : undefined }));
+const pim = (m: number) => `${Math.floor(m)}:${String(Math.round((m % 1) * 60)).padStart(2, "0")}`;
+const wdl = (t: { V: number; R: number; P: number }) => `${t.V}–${t.R}–${t.P}`;
+const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
+---
+
+<Base
+  title="Dračí mozek – PHT Dragons"
+  description={`Statistiky PHT Dragons: ${season.points} bodů, ${season.wins} výher, ${season.gf}:${season.ga} skóre v sezóně ${season.name}.`}
+  nav="mozek"
+  bare
+>
+  <div class="mr-4 ml-(--gutter) max-w-7xl md:mr-20">
+    <SubBar />
+  </div>
+
+  <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+    <div class="flex flex-col gap-3">
+      <h1 class="flex items-center gap-4 font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">
+        <img src={sparkles.src} alt="" width="48" height="48" class="size-10 md:size-12" />
+        Dračí mozek
+      </h1>
+      <p class="font-sans text-xl font-semibold text-grey-500">Sezóna {season.name} v číslech</p>
+    </div>
+
+    <!-- 1. headline -->
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+      <section aria-label="Pozice v tabulce" class="flex flex-col justify-between gap-6 rounded-lg bg-blue-600 p-6 text-white">
+        <span class="font-display text-sm font-bold text-blue-100 uppercase">Pozice v tabulce</span>
+        <div class="flex items-end gap-4">
+          <span class="font-display text-[7rem] leading-[0.8] font-extrabold">{season.rank ?? "–"}.</span>
+          <span class="pb-1 font-display text-2xl leading-tight font-bold uppercase">
+            {season.points} {plural(season.points, "bod", "body", "bodů")}
+            <span class="block text-base text-blue-100">po {season.games} {plural(season.games, "zápase", "zápasech", "zápasech")}</span>
+          </span>
+        </div>
+      </section>
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Výhry" value={String(season.wins)} tone="green" /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Remízy" value={String(season.draws)} /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Prohry" value={String(season.losses)} tone="red" /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Skóre" value={`${season.gf}:${season.ga}`} /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Góly na zápas" value={num(season.gfPerGame)} tone="blue" /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Inkaso na zápas" value={num(season.gaPerGame)} tone="red" /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Hráčů v sestavách" value={String(rosterSize)} /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Trestné min. na zápas" value={pim(specialTeams.pimPerGame)} /></div>
+      </div>
+    </div>
+
+    <!-- 2. season progress -->
+    <Card title="Průběh sezóny" subtitle="Body po každém zápase. Najeď na tečku pro detail zápasu.">
+      <PointsChart points={pointsTimeline} />
+    </Card>
+
+    <!-- 3. leaderboards -->
+    <div class="grid gap-4 md:grid-cols-3">
+      <Card title="Kanadské body" subtitle="Góly + asistence"><BarList items={top(leaders.points)} /></Card>
+      <Card title="Kanonýři" subtitle="Vstřelené góly"><BarList items={top(leaders.goals)} /></Card>
+      <Card title="Nahrávači" subtitle="Asistence"><BarList items={top(leaders.assists)} /></Card>
+    </div>
+
+    <!-- 4. periods + special teams -->
+    <div class="grid gap-4 lg:grid-cols-2">
+      <Card title="Góly po třetinách" subtitle="Kdy skórujeme a kdy dostáváme">
+        <DuoBars rows={periods.map((p) => ({ label: p.label, a: p.for, b: p.against }))} aLabel="Vstřelené" bLabel="Obdržené" />
+      </Card>
+      <Card title="Speciální formace">
+        <div class="grid grid-cols-2 gap-x-6 gap-y-8">
+          <Stat
+            label="Přesilovky"
+            value={pct(specialTeams.powerPlay.pct)}
+            tone="blue"
+            sub={`${specialTeams.powerPlay.goals} gólů z ${specialTeams.powerPlay.chances} přesilovek`}
+          />
+          <Stat
+            label="Oslabení ubráněno"
+            value={pct(specialTeams.penaltyKill.pct)}
+            sub={`${specialTeams.penaltyKill.against} inkasované z ${specialTeams.penaltyKill.times} oslabení`}
+          />
+          <Stat
+            label="Úspěšnost střelby"
+            value={pct(specialTeams.shooting.pct)}
+            sub={`${specialTeams.shooting.goals} gólů z ${specialTeams.shooting.shots} střel`}
+          />
+          <Stat
+            label="Vyhraná vhazování"
+            value={pct(specialTeams.faceoffs.pct)}
+            sub={`${specialTeams.faceoffs.won} z ${specialTeams.faceoffs.all}`}
+          />
+        </div>
+      </Card>
+    </div>
+
+    <!-- 5. first goal, goalies, penalties, pairs, appearances -->
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Card title="Kdo dá první gól" subtitle="Výsledky (V–R–P) podle toho, kdo skóroval první">
+        <div class="grid grid-cols-2 gap-6">
+          <Stat label="My" value={wdl(firstGoal.us)} tone="blue" sub={`${firstGoal.us.games} ${plural(firstGoal.us.games, "zápas", "zápasy", "zápasů")}`} />
+          <Stat label="Soupeř" value={wdl(firstGoal.them)} tone="red" sub={`${firstGoal.them.games} ${plural(firstGoal.them.games, "zápas", "zápasy", "zápasů")}`} />
+        </div>
+      </Card>
+      <Card title="Brankáři" subtitle="Úspěšnost zákroků">
+        {
+          goalies.length ? (
+            <div class="flex flex-col gap-5">
+              {goalies.map((gk) => (
+                <Stat
+                  label={`${gk.name}${gk.number != null ? ` #${gk.number}` : ""}`}
+                  value={gk.svPct == null ? "–" : `${num(gk.svPct)} %`}
+                  sub={`${gk.games} ${plural(gk.games, "zápas", "zápasy", "zápasů")} · ${num(gk.gaa)} inkasovaných na zápas${gk.shutouts ? ` · ${gk.shutouts}× čisté konto` : ""}`}
+                />
+              ))}
+            </div>
+          ) : (
+            <p class="text-grey-600">Zatím žádná data.</p>
+          )
+        }
+      </Card>
+      <Card title="Hvězdy zápasu" subtitle="Kolikrát byl hráč vyhlášen hvězdou">
+        <BarList items={top(leaders.stars)} />
+      </Card>
+      <Card title="Trestná lavice" subtitle="Trestné minuty">
+        <BarList items={top(leaders.penaltyMinutes, 5, pim)} color="grey" />
+      </Card>
+      <Card title="Nahrávací dvojice" subtitle="Kdo komu nejčastěji přihrál na gól">
+        <BarList items={assistPairs.slice(0, 5).map((p) => ({ label: `${p.from} → ${p.to}`, value: p.count }))} />
+      </Card>
+      <Card title="Účast" subtitle={`Odehrané zápasy (z ${reportCount})`}>
+        <BarList items={top(leaders.gamesPlayed)} max={reportCount} color="grey" />
+      </Card>
+    </div>
+
+    <!-- 6. all seasons -->
+    <div class="flex flex-col gap-3 pt-6">
+      <h2 class="font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Dračí kronika</h2>
+      <p class="text-grey-500">Všechny sezóny v PHM Cupu od {allTime.bySeason[0]?.name ?? season.name}</p>
+    </div>
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Sezóny" value={String(allTime.seasons)} /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Zápasy" value={String(allTime.games)} /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Úspěšnost" value={`${Math.round(ourWinPct)} %`} tone="green" sub={`${allTime.wins}–${allTime.draws}–${allTime.losses}`} /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Vstřelené góly" value={String(allTime.gf)} tone="blue" /></div>
+        <div class="rounded-lg bg-grey-100 p-5"><Stat label="Obdržené góly" value={String(allTime.ga)} tone="red" /></div>
+        <div class="rounded-lg bg-grey-100 p-5">
+          <Stat label="Nejvyšší výhra" value={allTime.biggestWin?.score ?? "–"} sub={allTime.biggestWin ? `s ${allTime.biggestWin.opponent}` : undefined} />
+        </div>
+      </div>
+      <Card title="Úspěšnost po sezónách" subtitle="Podíl vyhraných zápasů">
+        <BarList
+          items={allTime.bySeason.map((s) => ({ label: s.name, value: s.winPct, display: `${Math.round(s.winPct)} %`, note: `${s.wins}–${s.draws}–${s.losses}` }))}
+          max={100}
+        />
+      </Card>
+    </div>
+
+    <Card title="Proti komu nám to jde" subtitle="Rozdíl skóre proti každému soupeři za všechny sezóny, V–R–P pod jménem">
+      <div slot="legend" class="flex flex-wrap gap-x-5 gap-y-1 text-sm text-grey-600">
+        <span class="flex items-center gap-2"><span class="h-3 w-4 rounded-r-[4px] bg-blue-600" />Lepší skóre</span>
+        <span class="flex items-center gap-2"><span class="h-3 w-4 rounded-l-[4px] bg-red-600" />Horší skóre</span>
+      </div>
+      <div class="columns-1 gap-10 lg:columns-2 [&>ul]:contents">
+        <Diverging rows={headToHead.map((h) => ({ label: h.name, diff: h.diff, note: `${h.V}–${h.R}–${h.P} · ${h.gf}:${h.ga}` }))} />
+      </div>
+    </Card>
+  </div>
+</Base>

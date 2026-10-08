@@ -6,7 +6,8 @@ import { mkdir, readFile, writeFile, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import sharp from "sharp";
-import { CompetitionInfoSchema, GameDetailSchema, GameMultimediaSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
+import { z } from "zod";
+import { CompetitionInfoSchema, GameDetailSchema, GameMultimediaSchema, GameSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
 import { checkConsistency, discoverSeason, normalize, normalizeMedia, normalizeReport, pragueDate } from "./lib/normalize.mjs";
 import { MODEL, createClient, narrativeKey, writeNarrative } from "./lib/narrate.mjs";
 import { matchFacts } from "../src/lib/recap.ts";
@@ -121,6 +122,54 @@ async function syncPerGame(games, { file, endpoint, schema, normalize: norm, ver
   return { entries: next, fetched, total: ours.length, changed };
 }
 
+// Past seasons (team-level history for the stats page). Finished seasons never change, so each
+// is fetched once and kept in data/history.json; at most HISTORY_PER_RUN seasons per run.
+const HISTORY_PER_RUN = 3;
+
+async function syncHistory(info, ctx) {
+  const file = path.join(DATA_DIR, "history.json");
+  const prevText = await readFile(file, "utf8").catch(() => null);
+  const history = prevText ? JSON.parse(prevText) : { seasons: {} };
+  const comp = info.Competitions.find((c) => c.competitionId === COMPETITION_ID);
+  const past = comp.Seasons.filter((s) => s.seasonId !== ctx.season.id && s.startDate && s.startDate < ctx.season.startDate)
+    .sort((a, b) => b.startDate.localeCompare(a.startDate));
+  let fetched = 0;
+  for (const season of past) {
+    if (history.seasons[season.seasonId] || fetched >= HISTORY_PER_RUN) continue;
+    try {
+      // Lenient: keep every game that matches the schema, skip odd old records.
+      const raw = await getJson("games", { seasonId: season.seasonId }, z.array(z.unknown()));
+      const games = raw
+        .map((g) => GameSchema.safeParse(g))
+        .filter((r) => r.success)
+        .map((r) => r.data)
+        .filter((g) => g.status === "FINISHED" && g.HomeTeam && g.AwayTeam && [g.HomeTeam.teamId, g.AwayTeam.teamId].includes(OUR_TEAM_ID))
+        .map((g) => ({
+          gameId: g.gameId,
+          date: g.startDate,
+          group: g.Phase.Group.name,
+          phase: g.Phase.name,
+          homeTeamId: g.HomeTeam.teamId,
+          awayTeamId: g.AwayTeam.teamId,
+          homeName: g.HomeTeam.name,
+          awayName: g.AwayTeam.name,
+          homeGoals: g.HomeTeamGoals,
+          awayGoals: g.AwayTeamGoals,
+          venue: g.Venue?.name ?? null,
+        }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+      history.seasons[season.seasonId] = { name: season.name, startDate: season.startDate, games };
+      fetched++;
+    } catch (err) {
+      warn(`history ${season.name}: ${err.message}`);
+    }
+  }
+  const sorted = { seasons: Object.fromEntries(Object.entries(history.seasons).sort((a, b) => a[1].startDate.localeCompare(b[1].startDate))) };
+  if (prevText !== toJson(sorted)) await writeFile(file, toJson(sorted));
+  const withUs = Object.values(sorted.seasons).filter((s) => s.games.length);
+  return { fetched, seasons: withUs.length, games: withUs.reduce((n, s) => n + s.games.length, 0), pending: past.length - Object.keys(sorted.seasons).length };
+}
+
 // Upper bound on model calls per run, so a bug can't run up a bill.
 const MAX_NARRATIVES_PER_RUN = 8;
 
@@ -231,9 +280,10 @@ async function main() {
     endpoint: "game",
     schema: GameDetailSchema,
     normalize: normalizeReport,
-    version: 2,
+    version: 3,
   });
   const narratives = await syncNarratives(result.games, teams, reports.entries, ctx);
+  const hist = await syncHistory(info, ctx);
   const withPhotos = Object.values(media.entries).filter((m) => m.photos.length).length;
   const complete = Object.values(reports.entries).filter((r) => r.complete).length;
 
@@ -259,6 +309,7 @@ async function main() {
           : narratives.pending
             ? ` (${narratives.pending} waiting: write them with npm run narratives:pending / narratives:save)`
             : " (all written)"),
+      `  history:   ${hist.games} games in ${hist.seasons} earlier seasons (${hist.fetched} fetched now${hist.pending ? `, ${hist.pending} pending` : ""})`,
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),
   );

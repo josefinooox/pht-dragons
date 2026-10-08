@@ -241,6 +241,13 @@ export function normalizeReport(raw) {
 
   const goals = (t) => events.filter((e) => e.type === "goal" && e.teamId === t).length;
   const shots = (saves, goalsFor) => (saves == null || goalsFor == null ? null : saves + goalsFor);
+  // Who played: both teams' lineups with jersey number and position (G = goalie).
+  const lineup = (raw.Lineups ?? []).map((l) => ({
+    teamId: l.teamId,
+    ...person(l.Player),
+    position: l.ListPosition?.isGoalie ? "G" : (l.ListPosition?.short ?? null),
+  }));
+
   return {
     homeNick: raw.HomeTeam.nick ?? null,
     awayNick: raw.AwayTeam.nick ?? null,
@@ -256,6 +263,9 @@ export function normalizeReport(raw) {
       goals: s.Goals ?? 0,
       assists: s.Assists ?? 0,
     })),
+    // Saves per team, to compute our goalies' save percentage.
+    saves: { home: raw.HomeTeamSaves ?? null, away: raw.AwayTeamSaves ?? null },
+    lineup,
     events,
   };
 }

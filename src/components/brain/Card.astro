@@ -1,0 +1,21 @@
+---
+// Dashboard card: grey surface, condensed all-caps title, optional subtitle and legend slot.
+interface Props {
+  title: string;
+  subtitle?: string;
+  class?: string;
+}
+const { title, subtitle, class: cls } = Astro.props;
+const id = `k-${title.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+---
+
+<section aria-labelledby={id} class:list={["flex min-w-0 flex-col gap-5 rounded-lg bg-grey-100 p-5 md:p-6", cls]}>
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+    <div>
+      <h2 id={id} class="font-display text-2xl leading-[1.2] font-black text-grey-950 uppercase">{title}</h2>
+      {subtitle && <p class="mt-1 text-sm text-grey-600">{subtitle}</p>}
+    </div>
+    <slot name="legend" />
+  </div>
+  <slot />
+</section>

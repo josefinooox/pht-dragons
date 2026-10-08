@@ -78,7 +78,14 @@ export const GameDetailSchema = z.object({
   HomeTeam: z.object({ teamId: z.string(), nick: z.string().nullish() }),
   AwayTeam: z.object({ teamId: z.string(), nick: z.string().nullish() }),
   Lineups: z
-    .array(z.object({ number: z.number().int().nullable(), teamId: z.string(), Player: PlayerRef }))
+    .array(
+      z.object({
+        number: z.number().int().nullable(),
+        teamId: z.string(),
+        Player: PlayerRef,
+        ListPosition: z.object({ short: z.string().nullish(), isGoalie: z.boolean().nullish() }).nullish(),
+      }),
+    )
     .nullish(),
   GameStars: z
     .array(

@@ -37,6 +37,9 @@ export interface Report {
   penaltyMinutes: { home: number | null; away: number | null };
   stars: (Person & { teamId: string; goals: number; assists: number })[];
   events: (GoalEvent | PenaltyEvent)[];
+  /** Who played (both teams); position "G" = goalie. Present since report cache version 3. */
+  lineup?: (Person & { teamId: string; position: string | null })[];
+  saves?: { home: number | null; away: number | null };
 }
 
 export interface Recap {

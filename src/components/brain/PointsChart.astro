@@ -1,0 +1,78 @@
+---
+// Season progress: cumulative points after each game (one 2px line, ~10% area wash), result
+// markers (>= 8px, 2px surface ring) colored by result with a legend; the end value is labeled.
+// Each marker has a native <title> tooltip; the result strip below repeats the data as text.
+import type { Result } from "../../lib/data";
+
+interface Props {
+  points: { i: number; total: number; result: Result; score: string; opponent: string }[];
+}
+const { points } = Astro.props;
+const maxY = Math.max(4, ...points.map((p) => p.total));
+const yTop = Math.ceil(maxY / 2) * 2;
+const n = Math.max(1, points.length);
+const pad = { l: 32, r: 40, t: 16, b: 28 };
+// Two renders with their own aspect ratio (wide on desktop, taller on phones) so text and
+// markers keep a readable size instead of scaling down with the viewBox.
+const sizes = [
+  { W: 1000, H: 240, cls: "hidden md:block" },
+  { W: 360, H: 220, cls: "md:hidden" },
+].map(({ W, H, cls }) => {
+  const x = (i: number) => pad.l + ((W - pad.l - pad.r) * i) / n;
+  const y = (v: number) => pad.t + (H - pad.t - pad.b) * (1 - v / yTop);
+  const all = [{ i: 0, total: 0 }, ...points];
+  const line = all.map((p, k) => `${k ? "L" : "M"}${x(p.i).toFixed(1)},${y(p.total).toFixed(1)}`).join(" ");
+  const area = `${line} L${x(all.at(-1)!.i).toFixed(1)},${y(0)} L${x(0)},${y(0)} Z`;
+  return { W, H, cls, x, y, line, area };
+});
+const ticks = [0, yTop / 2, yTop];
+const dot = { V: "var(--color-success)", R: "var(--color-grey-500)", P: "var(--color-red-600)" };
+const resultName = { V: "výhra", R: "remíza", P: "prohra" };
+const last = points.at(-1);
+---
+
+<figure class="flex flex-col gap-3">
+  {sizes.map(({ W, H, cls, x, y, line, area }) => (
+  <svg viewBox={`0 0 ${W} ${H}`} class:list={["h-auto w-full", cls]} role="img" aria-label={`Body v sezóně: ${last ? `${last.total} bodů po ${last.i} zápasech` : "zatím žádné"}`}>
+    {
+      ticks.map((t) => (
+        <g>
+          <line x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} stroke="var(--color-grey-300)" stroke-width="1" />
+          <text x={pad.l - 8} y={y(t) + 4} text-anchor="end" class="fill-grey-500 font-display text-[12px] font-bold">
+            {t}
+          </text>
+        </g>
+      ))
+    }
+    <path d={area} fill="var(--color-blue-600)" fill-opacity="0.1" />
+    <path d={line} fill="none" stroke="var(--color-blue-600)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    {
+      points.map((p) => (
+        <g>
+          <circle cx={x(p.i)} cy={y(p.total)} r="6" fill={dot[p.result]} stroke="var(--color-grey-100)" stroke-width="2" />
+          <circle cx={x(p.i)} cy={y(p.total)} r="12" fill="transparent">
+            <title>{`${p.i}. zápas: ${p.opponent} ${p.score} (${resultName[p.result]}), ${p.total} b.`}</title>
+          </circle>
+          <text x={x(p.i)} y={H - 8} text-anchor="middle" class="fill-grey-500 font-display text-[12px] font-bold">
+            {p.i}
+          </text>
+        </g>
+      ))
+    }
+    {
+      last && (
+        <text x={x(last.i) + 12} y={y(last.total) + 5} class="fill-grey-950 font-display text-[16px] font-extrabold">
+          {last.total}
+        </text>
+      )
+    }
+  </svg>
+  ))}
+  <figcaption class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-grey-600">
+    <span class="flex items-center gap-2"><span class="h-0.5 w-4 rounded bg-blue-600" />Body celkem</span>
+    <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-success" />Výhra</span>
+    <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-grey-500" />Remíza</span>
+    <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-red-600" />Prohra</span>
+    <span class="ml-auto">osa x: pořadí zápasu</span>
+  </figcaption>
+</figure>
