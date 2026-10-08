@@ -1294,11 +1294,11 @@
     "date": "2026-10-08",
     "time": "22:00",
     "start": "2026-10-08T22:00:00+02:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
     "awayTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
-    "homeGoals": 5,
-    "awayGoals": 2,
+    "homeGoals": 6,
+    "awayGoals": 3,
     "venue": "Sportovní hala Fortuna",
     "stars": [
       {
