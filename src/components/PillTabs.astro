@@ -1,0 +1,34 @@
+---
+// In-page content tabs as pills (Figma "Tablist"): active black, inactive white.
+// Renders only the tablist; the page writes the matching role="tabpanel" elements
+// (id = tab id) inside the same [data-tabs] root. Behaviour: src/scripts/tabs.ts.
+// Not to be confused with the homepage "Nadcházející / Minulé" links, which navigate between pages.
+interface Props {
+  tabs: { id: string; label: string }[];
+  label: string;
+}
+const { tabs, label } = Astro.props;
+---
+
+<div role="tablist" aria-label={label} hidden class="-mx-1 flex gap-2 overflow-x-auto px-1 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+  {
+    tabs.map((t, k) => (
+      <button
+        type="button"
+        role="tab"
+        id={`tab-${t.id}`}
+        aria-controls={t.id}
+        aria-selected={k === 0 ? "true" : "false"}
+        tabindex={k === 0 ? 0 : -1}
+        class="pill btn-fill shrink-0 rounded-full bg-white px-4 py-2 font-sans text-base leading-6 font-semibold whitespace-nowrap text-grey-600 [--btn-fill:var(--color-grey-200)] hover:text-grey-950 aria-selected:bg-grey-950 aria-selected:text-white"
+      >
+        {t.label}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  /* The selected pill is already filled; don't run the hover fill over it. */
+  .pill[aria-selected="true"]::before { display: none; }
+</style>

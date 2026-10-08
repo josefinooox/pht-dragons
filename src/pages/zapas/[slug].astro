@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { ChevronLeft } from "@lucide/astro";
+import PillTabs from "../../components/PillTabs.astro";
 import Base from "../../layouts/Base.astro";
 import CompareTable from "../../components/CompareTable.astro";
 import GameCard from "../../components/GameCard.astro";
@@ -77,13 +78,13 @@ const description = narrative
   ? `${home} ${g.homeGoals}:${g.awayGoals} ${away}, ${longDate(g.date)}. Rozbor soupeře ${them.name}.`
   : `${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}. Rozbor soupeře ${them.name}.`;
 
-// Tabs under the recap (panel ids double as URL hashes).
+// Opponent card tabs (panel ids double as URL hashes).
 const tabs = [
   { id: "shrnuti", label: "Shrnutí" },
   { id: "srovnani", label: "Srovnání" },
   { id: "posledni-zapasy", label: "Jejich poslední zápasy" },
   { id: "spolecni-souperi", label: "Společní soupeři" },
-  ...(media ? [{ id: "fotky", label: "Fotky a video" }] : []),
+  ...(earlier.length ? [{ id: "predchozi-zapasy", label: earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy" }] : []),
 ];
 const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase";
 const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 uppercase";
@@ -92,74 +93,58 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
 <Base title={title} description={description} nav={final ? "odehrane" : "rozpis"} bare>
   <div class="flex items-stretch">
     <div class="min-w-0 flex-1">
-      <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-10 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
-        <div class="flex flex-col gap-4">
-          <a
-            href={final ? url("odehrane") : url()}
-            class="flex w-fit items-center gap-1 font-sans text-base font-semibold text-grey-500 transition-colors hover:text-grey-950"
-          >
-            <ChevronLeft size={18} aria-hidden="true" />
-            {final ? "Výsledky" : "Rozpis"}
-          </a>
-          <h1 class="font-display text-[clamp(2.5rem,6vw,3.5rem)] leading-none font-black text-grey-950 uppercase">
-            {home} <span class="text-grey-500">vs</span> {away}
-          </h1>
-        </div>
+      <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+        <nav aria-label="Drobečková navigace">
+          <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
+            <li>
+              <a href={final ? url("odehrane") : url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
+                <ChevronLeft size={18} aria-hidden="true" />
+                {final ? "Výsledky" : "Rozpis"}
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-grey-400">/</li>
+            <li aria-current="page" class="font-semibold text-grey-950">{home} vs {away}</li>
+          </ol>
+        </nav>
+        <h1 class="sr-only">{home} vs {away}, {longDate(g.date)}</h1>
 
-        <MatchHero game={g} />
+        <MatchHero game={g}>
+          {recap && <MatchRecap recap={recap} narrative={narrative} opponent={o} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
+        </MatchHero>
 
-        {recap && <MatchRecap recap={recap} narrative={narrative} opponent={o} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
-
-        <section aria-labelledby="souper" class="flex flex-col gap-6">
-          <div class="flex items-center gap-4">
-            <Logo id={o} round class="size-12" />
-            <h2 id="souper" class={h2}>
-              <span class="block font-display text-base leading-tight font-bold text-grey-500">Soupeř</span>
-              {them.name}
-            </h2>
+        <section aria-labelledby="souper" class="flex flex-col gap-8 rounded-lg bg-grey-100 px-5 py-6 md:p-10">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <Logo id={o} round class="size-12" />
+              <h2 id="souper" class={h2}>
+                <span class="sr-only">Soupeř: </span>{them.name}
+              </h2>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="font-sans text-sm leading-[1.4] font-extrabold text-grey-950 uppercase">Forma</span>
+              {
+                form.length ? (
+                  <span class="flex gap-1" aria-label={`Forma soupeře, posledních ${form.length} zápasů, od nejstaršího`}>
+                    {form.map((r) => (
+                      <ResultChip result={r} />
+                    ))}
+                  </span>
+                ) : (
+                  <span class="text-sm text-grey-600">zatím bez zápasu</span>
+                )
+              }
+            </div>
           </div>
 
           <div data-tabs class="flex flex-col gap-6">
-            <div role="tablist" aria-label="Rozbor soupeře" hidden class="-mx-1 flex gap-6 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {
-                tabs.map((t, k) => (
-                  <button
-                    type="button"
-                    role="tab"
-                    id={`tab-${t.id}`}
-                    aria-controls={t.id}
-                    aria-selected={k === 0 ? "true" : "false"}
-                    tabindex={k === 0 ? 0 : -1}
-                    class="shrink-0 font-sans text-xl font-semibold whitespace-nowrap text-grey-500 transition-colors hover:text-grey-700 aria-selected:text-red-600"
-                  >
-                    {t.label}
-                  </button>
-                ))
-              }
-            </div>
+            <PillTabs tabs={tabs} label={`Rozbor soupeře ${them.name}`} />
 
-            <div role="tabpanel" id="shrnuti" aria-labelledby="tab-shrnuti" tabindex="0" class="tab-panel flex flex-col gap-6">
+            <div role="tabpanel" id="shrnuti" aria-labelledby="tab-shrnuti" tabindex="0" class="tab-panel flex flex-col gap-4">
               <h3 data-tab-title class={h3}>Shrnutí</h3>
-              <div class="flex flex-col gap-5 rounded-lg bg-grey-100 p-5 md:p-8">
-                <p class="max-w-3xl text-lg leading-relaxed text-grey-950">{opponentSummary(o)}</p>
-                <div class="flex items-center gap-4">
-                  <span class="font-sans text-sm leading-[1.4] font-extrabold text-grey-950 uppercase">Forma</span>
-                  {
-                    form.length ? (
-                      <span class="flex gap-1" aria-label={`Forma soupeře, posledních ${form.length} zápasů, od nejstaršího`}>
-                        {form.map((r) => (
-                          <ResultChip result={r} />
-                        ))}
-                      </span>
-                    ) : (
-                      <span class="text-grey-600">Zatím bez odehraného zápasu.</span>
-                    )
-                  }
-                </div>
-              </div>
+              <p class="max-w-3xl text-lg leading-[1.6] text-grey-950 md:text-xl">{opponentSummary(o)}</p>
             </div>
 
-            <div role="tabpanel" id="srovnani" aria-labelledby="tab-srovnani" tabindex="0" class="tab-panel flex flex-col gap-6">
+            <div role="tabpanel" id="srovnani" aria-labelledby="tab-srovnani" tabindex="0" class="tab-panel flex flex-col gap-4">
               <h3 data-tab-title class={h3}>Srovnání</h3>
               <CompareTable
                 opponent={o}
@@ -168,7 +153,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
               />
             </div>
 
-            <div role="tabpanel" id="posledni-zapasy" aria-labelledby="tab-posledni-zapasy" tabindex="0" class="tab-panel flex flex-col gap-6">
+            <div role="tabpanel" id="posledni-zapasy" aria-labelledby="tab-posledni-zapasy" tabindex="0" class="tab-panel flex flex-col gap-4">
               <h3 data-tab-title class={h3}>Jejich poslední zápasy</h3>
               {
                 theirs.length ? (
@@ -198,7 +183,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
               }
             </div>
 
-            <div role="tabpanel" id="spolecni-souperi" aria-labelledby="tab-spolecni-souperi" tabindex="0" class="tab-panel flex flex-col gap-6">
+            <div role="tabpanel" id="spolecni-souperi" aria-labelledby="tab-spolecni-souperi" tabindex="0" class="tab-panel flex flex-col gap-4">
               <h3 data-tab-title class={h3}>Společní soupeři</h3>
               {
                 common.length ? (
@@ -256,32 +241,23 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
             </div>
 
             {
-              media && (
-                <div role="tabpanel" id="fotky" aria-labelledby="tab-fotky" tabindex="0" class="tab-panel flex flex-col gap-6">
+              earlier.length > 0 && (
+                <div role="tabpanel" id="predchozi-zapasy" aria-labelledby="tab-predchozi-zapasy" tabindex="0" class="tab-panel flex flex-col gap-4">
                   <h3 data-tab-title class={h3}>
-                    Fotky a video
+                    {earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy"}
                   </h3>
-                  <Gallery media={media} heading={false} />
+                  <ul class="flex flex-col gap-4 [&>li]:bg-white [&>li:hover]:bg-grey-50">
+                    {earlier.map((x) => (
+                      <GameCard game={x} />
+                    ))}
+                  </ul>
                 </div>
               )
             }
           </div>
         </section>
 
-        {
-          earlier.length > 0 && (
-            <section aria-labelledby="predchozi" class="flex flex-col gap-4">
-              <h2 id="predchozi" class={h2}>
-                {earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy"}
-              </h2>
-              <ul class="flex flex-col gap-4">
-                {earlier.map((x) => (
-                  <GameCard game={x} />
-                ))}
-              </ul>
-            </section>
-          )
-        }
+        {media && <Gallery media={media} />}
       </div>
     </div>
 
