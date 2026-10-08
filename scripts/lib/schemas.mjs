@@ -56,6 +56,11 @@ export const StandingsSchema = z.array(
   }),
 );
 
+export const GameMultimediaSchema = z.object({
+  images: z.array(z.object({ full: z.string(), thumbnail: z.string() })).nullish(),
+  youtubeVideoUrl: z.string().nullish(),
+});
+
 export const CompetitionInfoSchema = z.object({
   Competitions: z.array(
     z.object({

@@ -1,0 +1,119 @@
+---
+// Photos (hotlinked from Flickr) and the YouTube recording of a played game.
+// Thumbnails link to the 1024 px image, so it works without JS; src/scripts/lightbox.ts upgrades it.
+import { ChevronLeft, ChevronRight, Play, X } from "@lucide/astro";
+import type { Media } from "../lib/data";
+import { plural } from "../lib/format";
+
+interface Props {
+  media: Media;
+}
+const { photos, video } = Astro.props.media;
+const FIRST = 12;
+const n = photos.length;
+const thumb = "group relative block aspect-square overflow-hidden rounded-md bg-card";
+const img = "size-full object-cover transition-transform duration-300 group-hover:scale-105";
+---
+
+<section aria-labelledby="galerie" class="space-y-4">
+  <div class="flex items-baseline justify-between gap-4">
+    <h2 id="galerie">Fotky a video</h2>
+    {n > 0 && <span class="label text-sm text-muted-foreground">{n} {plural(n, "fotka", "fotky", "fotek")}</span>}
+  </div>
+
+  {
+    video && (
+      <a
+        href={`https://www.youtube.com/watch?v=${video}`}
+        target="_blank"
+        rel="noopener"
+        class="group relative block aspect-video overflow-hidden rounded-2xl bg-secondary"
+      >
+        <img
+          src={`https://i.ytimg.com/vi/${video}/hqdefault.jpg`}
+          alt=""
+          loading="lazy"
+          class="size-full object-cover opacity-80 transition-opacity group-hover:opacity-100"
+        />
+        <span class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/30 text-white">
+          <span class="grid size-16 place-items-center rounded-full bg-primary transition-transform group-hover:scale-110">
+            <Play size={30} class="ml-1 fill-white" aria-hidden="true" />
+          </span>
+          <span class="label text-xl">Záznam zápasu na YouTube</span>
+        </span>
+      </a>
+    )
+  }
+
+  {
+    n > 0 && (
+      <div data-gallery>
+        <ul class="grid grid-cols-3 gap-1.5 sm:grid-cols-4">
+          {photos.slice(0, FIRST).map((p, i) => (
+            <li>
+              <a href={p.large} data-photo={i} class={thumb} aria-label={`Fotka ${i + 1} z ${n}`}>
+                <img src={p.thumb} alt="" loading="lazy" decoding="async" class={img} />
+              </a>
+            </li>
+          ))}
+        </ul>
+        {n > FIRST && (
+          <details class="group mt-1.5">
+            <summary class="label cursor-pointer list-none py-2 text-center text-primary hover:underline [&::-webkit-details-marker]:hidden">
+              <span class="group-open:hidden">Zobrazit všech {n} fotek</span>
+              <span class="hidden group-open:inline">Skrýt</span>
+            </summary>
+            <ul class="grid grid-cols-3 gap-1.5 sm:grid-cols-4">
+              {photos.slice(FIRST).map((p, k) => (
+                <li>
+                  <a href={p.large} data-photo={FIRST + k} class={thumb} aria-label={`Fotka ${FIRST + k + 1} z ${n}`}>
+                    <img src={p.thumb} alt="" loading="lazy" decoding="async" class={img} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+        <p class="mt-2 text-sm text-muted-foreground">Fotky: PHM Cup</p>
+
+        <dialog
+          data-lightbox
+          aria-label="Prohlížeč fotek"
+          class="m-0 h-dvh max-h-none w-screen max-w-none bg-black/95 p-0 text-white backdrop:bg-black/80"
+        >
+          <div class="flex h-full flex-col">
+            <div class="flex items-center justify-between px-4 py-3">
+              <span data-counter class="label text-lg"></span>
+              <button type="button" data-close class="grid size-11 place-items-center rounded-full hover:bg-white/10" aria-label="Zavřít">
+                <X size={26} aria-hidden="true" />
+              </button>
+            </div>
+            <div data-stage class="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-6">
+              <img data-image alt="" class="max-h-full max-w-full object-contain select-none" />
+              <button
+                type="button"
+                data-prev
+                class="absolute left-2 top-1/2 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-black/40 hover:bg-white/15 sm:grid"
+                aria-label="Předchozí fotka"
+              >
+                <ChevronLeft size={30} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                data-next
+                class="absolute right-2 top-1/2 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-black/40 hover:bg-white/15 sm:grid"
+                aria-label="Další fotka"
+              >
+                <ChevronRight size={30} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </dialog>
+      </div>
+    )
+  }
+</section>
+
+<script>
+  import "../scripts/lightbox.ts";
+</script>

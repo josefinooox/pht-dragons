@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { GamesSchema, StandingsSchema } from "./schemas.mjs";
-import { checkConsistency, normalize, pragueToIso } from "./normalize.mjs";
+import { GameMultimediaSchema, GamesSchema, StandingsSchema } from "./schemas.mjs";
+import { checkConsistency, normalize, normalizeMedia, pragueToIso, youtubeId } from "./normalize.mjs";
 
 const DRAGONS = "E70C43E0-264E-11EF-BE38-052B0AF887CA";
 const RAPTORS = "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F";
@@ -99,4 +99,30 @@ test("checkConsistency flags missing data", () => {
 
 test("schema rejects an unknown game status", () => {
   assert.equal(GamesSchema.safeParse([game({ status: "POSTPONED" })]).success, false);
+});
+
+test("normalizeMedia derives Flickr sizes and skips the PNG placeholder", () => {
+  const flickr = "https://live.staticflickr.com/65535";
+  const raw = GameMultimediaSchema.parse({
+    images: [
+      { full: `${flickr}/1_aaa_o.png`, thumbnail: `${flickr}/1_bbb_q.jpg` },
+      { full: `${flickr}/2_ccc_o.jpg`, thumbnail: `${flickr}/2_ddd_q.jpg` },
+      { full: "https://example.com/full.jpg", thumbnail: "https://example.com/thumb.jpg" },
+    ],
+    youtubeVideoUrl: "https://youtube.com/live/oRmhHDlaoFI?feature=share",
+  });
+  assert.deepEqual(normalizeMedia(raw), {
+    photos: [
+      { thumb: `${flickr}/2_ddd_n.jpg`, large: `${flickr}/2_ddd_b.jpg` },
+      { thumb: "https://example.com/thumb.jpg", large: "https://example.com/full.jpg" },
+    ],
+    video: "oRmhHDlaoFI",
+  });
+  assert.deepEqual(normalizeMedia(GameMultimediaSchema.parse({})), { photos: [], video: null });
+});
+
+test("youtubeId handles watch, live and short URLs", () => {
+  assert.equal(youtubeId("https://www.youtube.com/watch?v=GIEp4KuLx2Y"), "GIEp4KuLx2Y");
+  assert.equal(youtubeId("https://youtu.be/kBr_VByBJgo"), "kBr_VByBJgo");
+  assert.equal(youtubeId("https://example.com/video"), null);
 });

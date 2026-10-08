@@ -141,6 +141,31 @@ export function normalize({ rawGames, rawStandings }) {
   };
 }
 
+// Flickr URLs: .../{server}/{id}_{secret}_{size}.jpg. Sizes up to "b" (1024 px) share the secret,
+// so the 320 px thumbnail and 1024 px view are derived from the 150 px "q" thumbnail.
+const FLICKR = /^(https:\/\/live\.staticflickr\.com\/\d+\/\d+_[0-9a-f]+)_q\.jpg$/;
+
+/** YouTube video ID from watch?v=, youtu.be/ or /live/ URLs. */
+export function youtubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:[?&]v=|youtu\.be\/|\/live\/|\/embed\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+
+/**
+ * Game photos + video. PNG "full" images are the league's "coming up shortly" placeholder, skipped.
+ * @returns {{ photos: {thumb: string, large: string}[], video: string|null }}
+ */
+export function normalizeMedia(raw) {
+  const photos = [];
+  for (const img of raw.images ?? []) {
+    if (/\.png$/i.test(img.full)) continue;
+    const m = img.thumbnail.match(FLICKR);
+    photos.push(m ? { thumb: `${m[1]}_n.jpg`, large: `${m[1]}_b.jpg` } : { thumb: img.thumbnail, large: img.full });
+  }
+  return { photos, video: youtubeId(raw.youtubeVideoUrl) };
+}
+
 /** Sanity checks beyond the schema: catches "valid but empty/wrong" responses. */
 export function checkConsistency({ teams, games, standings }, ourTeamId) {
   const problems = [];

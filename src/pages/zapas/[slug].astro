@@ -5,6 +5,7 @@ import Base from "../../layouts/Base.astro";
 import GameRow from "../../components/GameRow.astro";
 import Logo from "../../components/Logo.astro";
 import GameCard from "../../components/GameCard.astro";
+import Gallery from "../../components/Gallery.astro";
 import ResultChip from "../../components/ResultChip.astro";
 import MatchCard from "../../components/MatchCard.astro";
 import Standings from "../../components/Standings.astro";
@@ -14,6 +15,7 @@ import {
   forT,
   gameSlug,
   isFinal,
+  mediaFor,
   mine,
   opp,
   played,
@@ -45,6 +47,7 @@ const form = played(o)
 const meet = mine.filter((x) => opp(x) === o && x !== g);
 const common = commonOpponents(o);
 const final = isFinal(g);
+const media = final ? mediaFor(g) : undefined;
 
 // Per-game comparison; "better" marks the better value (higher or lower is better).
 const better = (x: number, y: number, higher = true) => (x === y ? null : (higher ? x > y : x < y) ? "us" : "them");
@@ -94,6 +97,8 @@ const description = final
           }
         </nav>
       </div>
+
+      {media && <Gallery media={media} />}
 
       <section aria-labelledby="souper" class="space-y-8">
         <div class="flex items-center gap-3">

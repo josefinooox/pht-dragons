@@ -3,6 +3,7 @@ import teamsJson from "../../data/teams.json";
 import gamesJson from "../../data/games.json";
 import standingsJson from "../../data/standings.json";
 import metaJson from "../../data/meta.json";
+import mediaJson from "../../data/media.json";
 
 export type Status = "scheduled" | "running" | "finished";
 export type Result = "V" | "R" | "P";
@@ -47,6 +48,11 @@ export interface StandingRow {
   penaltyMinutes: number;
 }
 
+export interface Media {
+  photos: { thumb: string; large: string }[];
+  video: string | null; // YouTube video ID
+}
+
 export const GAME_MIN = 90; // how long after the start a game counts as in progress
 export const SRAZ_MIN = 30; // team meets 30 min before the start
 export const FRESH_H = 20; // how long after a game its result stays on top of the schedule
@@ -59,6 +65,13 @@ export const standings = standingsJson as StandingRow[];
 
 /** Build time; NOW=2026-10-07T09:00 overrides it for testing states. */
 export const NOW = process.env.NOW ? new Date(process.env.NOW) : new Date();
+
+const mediaById = mediaJson as Record<string, Media>;
+/** Photos + video of one of our finished games, if the league published any. */
+export const mediaFor = (g: Game): Media | undefined => {
+  const m = mediaById[g.gameId];
+  return m && (m.photos.length || m.video) ? m : undefined;
+};
 
 const teamById = new Map(teams.map((t) => [t.teamId, t]));
 export const team = (id: string): Team =>

@@ -1,7 +1,7 @@
 ---
 // One of our games as a Sparta-style row: colored bar, both logos, big date/time, venue, CTA or score.
-import { ChevronRight } from "@lucide/astro";
-import { OUR, forT, gameSlug, isFinal, opp, rankOf, team, type Game } from "../lib/data";
+import { Camera, ChevronRight } from "@lucide/astro";
+import { OUR, forT, gameSlug, isFinal, mediaFor, opp, rankOf, team, type Game } from "../lib/data";
 import { dayMonth, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -16,6 +16,7 @@ const o = opp(g);
 const r = isFinal(g) ? forT(g, OUR) : null;
 const bar = r ? { V: "bg-win", R: "bg-draw", P: "bg-loss" }[r.r] : "bg-primary";
 const rank = rankOf(o);
+const photos = r ? (mediaFor(g)?.photos.length ?? 0) : 0;
 ---
 
 <li>
@@ -35,6 +36,15 @@ const rank = rankOf(o);
           <span class="truncate">{team(o).name}</span>
           {rank && <span class="text-muted-foreground">{rank}. místo</span>}
           <When game={g} />
+          {
+            photos > 0 && (
+              <span class="flex items-center gap-1 text-primary" title={`${photos} fotek`}>
+                <Camera size={15} strokeWidth={2.5} aria-hidden="true" />
+                <span class="sr-only">Fotky:</span>
+                {photos}
+              </span>
+            )
+          }
         </p>
         <p class="label mt-0.5 text-2xl leading-none tabular-nums sm:text-[2.25rem]">
           <time datetime={g.start} class="flex flex-wrap gap-x-[0.25em]">

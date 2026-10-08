@@ -38,8 +38,16 @@ Base: https://api.prod.hms.wootera.net/public
   Seasons, groups and phases with IDs. Use it to discover the current season and
   KLASIK phase instead of relying on the hardcoded IDs above forever.
 
+- GET /gameMultimedia?gameId=...
+  Photos and video of one game: images [{full, thumbnail}] (Flickr URLs), youtubeVideoUrl.
+  "full" is the multi-MB original: derive Flickr sizes from the "_q" thumbnail instead
+  (_n = 320 px, _b = 1024 px; larger sizes need a different secret). A PNG image is the
+  league's "coming up shortly" placeholder: skip it. Photos are hotlinked, not downloaded.
+
 Validate every response with a schema (zod). The API can change without notice.
-Keep request volume low: one call per endpoint per build.
+Keep request volume low: one call per endpoint per build. Exception: gameMultimedia is
+per game, so it is cached in data/media.json, fetched only for our finished games, and
+re-checked only while a game is less than 14 days old.
 
 ## Logos
 `logoUrl` contains "[size]". Try "cropped_md", then "md". Do not add query strings

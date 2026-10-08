@@ -6,14 +6,16 @@ import { mkdir, readFile, writeFile, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import sharp from "sharp";
-import { CompetitionInfoSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
-import { checkConsistency, discoverSeason, normalize, pragueDate } from "./lib/normalize.mjs";
+import { CompetitionInfoSchema, GameMultimediaSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
+import { checkConsistency, discoverSeason, normalize, normalizeMedia, pragueDate } from "./lib/normalize.mjs";
 
 const API = process.env.HMS_API ?? "https://api.prod.hms.wootera.net/public"; // override for testing
 const COMPETITION_ID = "C7C0BB15-5D29-415D-851E-5D777C6CC621"; // PHM Cup
 const OUR_TEAM_ID = "E70C43E0-264E-11EF-BE38-052B0AF887CA"; // PHT Dragons
 const LOGO_SIZES = ["cropped_md", "md"];
 const TIMEOUT_MS = 30_000;
+// Photos often appear days after a game: keep re-checking a game's media this long after it starts.
+const MEDIA_RECHECK_DAYS = 14;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DATA_DIR = path.join(root, "data");
@@ -82,6 +84,40 @@ async function syncLogos(teams) {
   return downloaded;
 }
 
+/**
+ * Photos + video of our finished games, cached in data/media.json. The API needs one call per
+ * game, so to keep request volume low a game is fetched once and then only re-checked while it
+ * is recent. Failures are warnings only and keep the cached entry.
+ */
+async function syncMedia(games) {
+  const file = path.join(DATA_DIR, "media.json");
+  const prevText = await readFile(file, "utf8").catch(() => null);
+  const cache = prevText ? JSON.parse(prevText) : {};
+  const recentSince = Date.now() - MEDIA_RECHECK_DAYS * 864e5;
+  const ours = games.filter(
+    (g) => g.status === "finished" && (g.homeTeamId === OUR_TEAM_ID || g.awayTeamId === OUR_TEAM_ID),
+  );
+  let fetched = 0;
+  for (const g of ours) {
+    const cached = cache[g.gameId];
+    if (cached && Date.parse(g.start) < recentSince) continue;
+    try {
+      const raw = await getJson("gameMultimedia", { gameId: g.gameId }, GameMultimediaSchema);
+      cache[g.gameId] = normalizeMedia(raw);
+      fetched++;
+    } catch (err) {
+      warn(`media ${g.date} ${g.gameId}: ${err.message}`);
+    }
+  }
+  // Drop entries for games that are no longer ours/finished (e.g. a corrected result).
+  const keep = new Set(ours.map((g) => g.gameId));
+  const next = Object.fromEntries(Object.keys(cache).filter((id) => keep.has(id)).sort().map((id) => [id, cache[id]]));
+  const changed = prevText !== toJson(next);
+  if (changed) await writeFile(file, toJson(next));
+  const withPhotos = Object.values(next).filter((m) => m.photos.length).length;
+  return { fetched, withPhotos, total: ours.length, changed };
+}
+
 async function main() {
   const today = pragueDate();
 
@@ -130,7 +166,10 @@ async function main() {
     await writeFile(path.join(DATA_DIR, "meta.json"), toJson(meta));
   }
 
-  // 6. Summary.
+  // 6. Photos and videos (best effort, cached).
+  const media = await syncMedia(result.games);
+
+  // 7. Summary.
   const byStatus = Object.groupBy(result.games, (g) => g.status);
   const ours = result.games.filter((g) => g.homeTeamId === OUR_TEAM_ID || g.awayTeamId === OUR_TEAM_ID);
   const nextOurs = ours.find((g) => g.status !== "finished");
@@ -144,6 +183,7 @@ async function main() {
       `  standings: ${result.standings.length} rows; PHT Dragons #${ourRow.rank}, ${ourRow.points} pts from ${ourRow.played} games`,
       `  ours:      ${ours.length} games` +
         (nextOurs ? `; next ${nextOurs.date} ${nextOurs.time} ${nameOf(nextOurs.homeTeamId)} vs ${nameOf(nextOurs.awayTeamId)} @ ${nextOurs.venue}` : ""),
+      `  media:     ${media.withPhotos}/${media.total} played games with photos (${media.fetched} checked now${media.changed ? ", updated" : ""})`,
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),
   );
