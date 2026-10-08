@@ -22,12 +22,12 @@ const max = Math.max(1, ...rows.flatMap((r) => [r.a, r.b]));
           <span class="font-display text-base font-bold text-grey-950 uppercase">{r.label}</span>
           <span class="flex flex-col gap-1">
             {[
-              { v: r.a, c: "bg-blue-600", t: aLabel },
-              { v: r.b, c: "bg-red-600", t: bLabel },
+              { v: r.a, c: "bg-blue-600", ink: "text-blue-600", t: aLabel },
+              { v: r.b, c: "bg-red-600", ink: "text-red-600", t: bLabel },
             ].map((s) => (
               <span class="flex items-center gap-2" title={`${r.label}, ${s.t}: ${s.v}`}>
                 <span class:list={["block h-2 min-w-2 rounded-full", s.c]} style={`width:${Math.max(1.5, (88 * s.v) / max)}%`} />
-                <span class="font-display text-base leading-none font-extrabold text-grey-950">{s.v}</span>
+                <span class:list={["font-display text-base leading-none font-extrabold", s.ink]}>{s.v}</span>
               </span>
             ))}
           </span>

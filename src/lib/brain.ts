@@ -74,7 +74,7 @@ export const leaders = {
   penaltyMinutes: leaderboard((bump) => ourPenalties.forEach((p) => bump(p.player, toMin(p.duration)))),
   stars: leaderboard((bump) =>
     played.forEach((g) =>
-      g.stars.filter(ours).forEach((s) => bump({ playerId: `${s.firstName} ${s.lastName}`, name: `${s.firstName} ${s.lastName}`, number: s.number })),
+      g.stars.filter(ours).forEach((s) => bump({ playerId: `${s.firstName} ${s.lastName}`.replace(/\s+/g, " ").trim(), name: `${s.firstName} ${s.lastName}`.replace(/\s+/g, " ").trim(), number: s.number })),
     ),
   ),
   gamesPlayed: leaderboard((bump) =>
@@ -256,8 +256,11 @@ const players = (n: number, sg: string, pl: string) => (n >= 2 && n <= 4 ? `${pl
 const games = (n: number) => `${n} ${plural(n, "zápas", "zápasy", "zápasů")}`;
 // Czech "z" / "ze" before a number as it is read aloud (ze dvou, ze tří, ze sedmi, z pěti).
 const z = (n: number) => `${(n >= 10 && n < 20 ? [12, 13, 14, 17].includes(n) : "2347".includes(String(n)[0])) ? "ze" : "z"} ${n}`;
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const wdl = (t: { V: number; R: number; P: number }) => `${t.V}–${t.R}–${t.P}`;
-const has = <T,>(x: T | false | null | undefined | ""): x is T => !!x;
+
+export type InsightText = { big?: string; text: string };
+type Maybe = InsightText | null | false | undefined;
 
 export const insights = (() => {
   const { us, them } = firstGoal;
@@ -265,49 +268,72 @@ export const insights = (() => {
   const gf = periods.reduce((n, p) => n + p.for, 0);
   const worst = [...periods].sort((a, b) => b.against - a.against)[0];
   const best = [...periods].sort((a, b) => b.for - a.for)[0];
-  const play = [
-    us.games > 0 &&
-      (us.P === 0
-        ? `Když dáme první gól, jsme zatím neporažení: ${wdl(us)}.`
-        : `Když dáme první gól, vyhráváme ${us.V} ${z(us.games)}.`),
-    them.games > 0 &&
-      (them.V === 0
-        ? `Když první skóruje soupeř, zatím jsme to neotočili (${games(them.games)}).`
-        : `Když první skóruje soupeř, otočili jsme to ${them.V}× ${z(them.games)}.`),
-    worst && worst.against > 0 && worst.against / ga >= 0.4
-      ? `Nejvíc gólů dostáváme ${inPeriod(worst.key)}: ${worst.against} ${z(ga)}.`
-      : best && best.for > 0 && `Nejvíc gólů dáváme ${inPeriod(best.key)}: ${best.for} ${z(gf)}.`,
-  ].filter(has);
-
   const assisted = ourGoals.filter((g) => g.assists.length > 0).length;
-  const team = [
-    leaders.goals.length > 1 && `Góly už ${players(leaders.goals.length, "dalo", "dali")}.`,
-    ourGoals.length > 0 && `${assisted} ${z(ourGoals.length)} našich gólů padlo po přihrávce.`,
-    leaders.stars.length > 1 && `Hvězdou zápasu už ${players(leaders.stars.length, "bylo", "byli")}.`,
-  ].filter(has);
-
-  const { powerPlay: pp, penaltyKill: pk } = specialTeams;
-  const special = [
-    pp.chances > 0 &&
-      (pp.goals > 0
-        ? `Přesilovku proměníme zhruba jednou ${z(Math.round(pp.chances / pp.goals))}.`
-        : `V přesilovce jsme zatím nedali gól (${pp.chances} pokusů).`),
-    pk.pct != null && `Oslabení ubráníme v ${Math.round(pk.pct)} % případů.`,
-  ].filter(has);
-
+  const { powerPlay: pp, shooting } = specialTeams;
   const seasons = allTime.bySeason;
   const rising = seasons.length > 1 && seasons.every((s, i) => i === 0 || s.winPct > seasons[i - 1].winPct);
-  const top = [...seasons].sort((a, b) => b.winPct - a.winPct)[0];
-  const rivals = headToHead.filter((h) => h.games >= 2);
+  const topSeason = [...seasons].sort((a, b) => b.winPct - a.winPct)[0];
+  const current = seasons.at(-1);
+  // Rivals need a few games before "favourite" / "nemesis" means anything.
+  const rivals = headToHead.filter((h) => h.games >= 3);
   const fav = rivals[0];
-  const nemesis = rivals.at(-1);
-  const history = [
-    rising
-      ? `Úspěšnost roste každou sezónu: ${seasons.map((s) => `${Math.round(s.winPct)} %`).join(" → ")}.`
-      : top && `Nejlepší sezóna: ${top.name} s ${Math.round(top.winPct)} % výher.`,
-    fav && fav.share > 0.5 && `Oblíbený soupeř: ${fav.name}. Bilance ${wdl(fav)}, skóre ${fav.gf}:${fav.ga}.`,
-    nemesis && nemesis !== fav && nemesis.share < 0.5 && `Nejtěžší soupeř: ${nemesis.name}. Bilance ${wdl(nemesis)}, skóre ${nemesis.gf}:${nemesis.ga}.`,
-  ].filter(has);
+  const nemesis = [...rivals].sort((a, b) => a.share - b.share || b.games - a.games || a.diff - b.diff)[0];
+  const scorers = leaders.goals.length;
+  const stars = leaders.stars.length;
+  const shotsPerGoal = shooting.goals ? Math.round(shooting.shots / shooting.goals) : 0;
+  const pick = (x: Maybe) => (x ? x : null);
 
-  return { play, team, special, history };
+  return {
+    firstUs: pick(
+      us.games > 0 && {
+        text:
+          us.P === 0
+            ? `Když dáme první gól, jsme zatím neporažení: ${wdl(us)}.`
+            : `Když dáme první gól, vyhráváme ${us.V} ${z(us.games)}.`,
+      },
+    ),
+    firstThem: pick(
+      them.games > 0 && {
+        text:
+          them.V === 0
+            ? `Když první skóruje soupeř, zatím jsme to neotočili (${games(them.games)}).`
+            : `Když první skóruje soupeř, otočili jsme to ${them.V}× ${z(them.games)}.`,
+      },
+    ),
+    period: pick(
+      worst && worst.against > 0 && worst.against / ga >= 0.4
+        ? { text: `Nejvíc gólů dostáváme ${inPeriod(worst.key)}: ${worst.against} ${z(ga)}.` }
+        : best && best.for > 0 && { text: `Nejvíc gólů dáváme ${inPeriod(best.key)}: ${best.for} ${z(gf)}.` },
+    ),
+    scorers: pick(
+      scorers > 1 && {
+        big: String(scorers),
+        text: scorers <= 4 ? "různí hráči už dali gól" : "různých hráčů už dalo gól",
+      },
+    ),
+    assisted: pick(ourGoals.length > 0 && { big: `${assisted} ${z(ourGoals.length)}`, text: "našich gólů padlo po přihrávce" }),
+    stars: pick(stars > 1 && { text: `Hvězdou zápasu už ${players(stars, "bylo", "byli")}.` }),
+    powerPlay: pick(
+      pp.chances > 0 && {
+        text:
+          pp.goals > 0
+            ? `${cap(z(pp.chances))} vyloučení soupeře jsme vytěžili ${pp.goals} ${plural(pp.goals, "gól", "góly", "gólů")}.`
+            : `Z vyloučení soupeře jsme zatím nevytěžili ani gól.`,
+      },
+    ),
+    shooting: pick(
+      shotsPerGoal > 0 && { big: String(shotsPerGoal), text: `${plural(shotsPerGoal, "střelu", "střely", "střel")} v průměru potřebujeme na jeden gól` },
+    ),
+    trend: pick(
+      rising
+        ? {
+            text: `Podíl výher roste každou sezónu: ${seasons.map((s) => `${Math.round(s.winPct)}\u00a0%`).join("\u00a0→ ")}${current && current.games < 20 ? ` (letos po ${current.games} zápasech)` : ""}.`,
+          }
+        : topSeason && { text: `Nejlepší sezóna: ${topSeason.name} s ${Math.round(topSeason.winPct)}\u00a0% výher.` },
+    ),
+    fav: pick(fav && fav.share > 0.5 && { text: `Oblíbený soupeř: ${fav.name}. Bilance ${wdl(fav)}, skóre ${fav.gf}:${fav.ga}.` }),
+    nemesis: pick(
+      nemesis && nemesis !== fav && nemesis.share < 0.5 && { text: `Nejtěžší soupeř: ${nemesis.name}. Bilance ${wdl(nemesis)}, skóre ${nemesis.gf}:${nemesis.ga}.` },
+    ),
+  };
 })();

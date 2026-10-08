@@ -10,6 +10,7 @@ interface Props {
 const { items, max, empty = "Zatím žádná data.", color = "blue" } = Astro.props;
 const top = Math.max(1, max ?? Math.max(0, ...items.map((i) => i.value)));
 const fill = { blue: "bg-blue-600", red: "bg-red-600", grey: "bg-grey-600" }[color];
+const ink = { blue: "text-blue-600", red: "text-red-600", grey: "text-grey-950" }[color];
 ---
 
 {
@@ -22,7 +23,7 @@ const fill = { blue: "bg-blue-600", red: "bg-red-600", grey: "bg-grey-600" }[col
             {it.label}
             {it.note && <span class="text-grey-500"> {it.note}</span>}
           </span>
-          <span class="font-display text-xl leading-none font-extrabold text-grey-950">{it.display ?? it.value}</span>
+          <span class:list={["font-display text-xl leading-none font-extrabold", ink]}>{it.display ?? it.value}</span>
           <span class="col-span-2 col-start-2 h-2 rounded-full bg-grey-100">
             <span class:list={["block h-full min-w-2 rounded-full", fill]} style={`width:${Math.max(2, (100 * it.value) / top)}%`} />
           </span>
