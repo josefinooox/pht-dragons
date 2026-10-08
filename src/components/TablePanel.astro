@@ -1,9 +1,11 @@
 ---
 // Standings side panel (Figma "Tabulka expanded" / "collapsed"), desktop only.
 // Collapsed by default; the choice is remembered (localStorage, see src/scripts/table-panel.ts).
-// State lives on <html data-table="open">, set before first paint by the inline script in Base.
+// State lives on <html data-table="open">, set before first paint by the inline script in Base,
+// so a restored state doesn't animate; toggling animates the width and cross-fades the content.
 import { TableProperties, X } from "@lucide/astro";
 import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
+import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 
@@ -12,22 +14,24 @@ interface Props {
 }
 const { highlight = [] } = Astro.props;
 
-// Rows around us and the highlighted opponent (two above, two below us), like the design excerpt.
+// Five rows around us (one above, three below), like the design excerpt.
 const ourIndex = standings.findIndex((r) => r.teamId === OUR);
 const from = Math.max(0, Math.min(ourIndex - 1, standings.length - 5));
 const rows = standings.slice(from, from + 5).map((row) => {
   const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
   return { row, href: target ? url(`zapas/${gameSlug(target)}`) : null };
 });
-const cell = "flex h-14 items-center px-2";
+// Each row is a plain block (a link when it leads to our game against that team): a real
+// element instead of a stretched ::after, which can't be scoped to a table row reliably.
+const grid = "grid grid-cols-[56px_56px_minmax(0,1fr)_56px_56px] items-center";
 ---
 
-<aside class="table-panel hidden shrink-0 border-l border-grey-200 bg-white lg:block" aria-label="Tabulka">
+<aside class="table-panel relative hidden shrink-0 overflow-x-clip border-l border-grey-200 bg-white lg:block" aria-label="Tabulka">
   <!-- collapsed: the whole rail (full height) is the button; its content stays in view -->
   <button
     type="button"
     data-table-toggle="open"
-    class="table-rail flex h-full w-[73px] flex-col justify-start text-grey-500 transition-colors hover:bg-grey-100 hover:text-grey-700"
+    class="table-rail absolute inset-y-0 left-0 flex w-[73px] flex-col justify-start text-grey-500 transition-colors hover:bg-grey-100 hover:text-grey-700"
     aria-expanded="false"
     aria-controls="table-panel"
   >
@@ -40,7 +44,7 @@ const cell = "flex h-14 items-center px-2";
   </button>
 
   <!-- expanded -->
-  <div id="table-panel" class="table-open sticky top-0 w-[420px] flex-col gap-6 px-6 py-6">
+  <div id="table-panel" class="table-open sticky top-0 flex w-[420px] flex-col gap-6 px-6 py-6">
     <div class="flex items-center justify-between">
       <h2 class="font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Tabulka</h2>
       <button
@@ -54,50 +58,54 @@ const cell = "flex h-14 items-center px-2";
       </button>
     </div>
 
-    <table class="w-full font-display text-base leading-[1.4] text-grey-950">
-      <thead>
-        <tr class="border-b border-grey-300 font-bold text-grey-500 uppercase">
-          <th scope="col" class="w-14 pr-2 pl-4 text-left font-bold">#</th>
-          <th scope="col" class="w-14"><span class="sr-only">Logo</span></th>
-          <th scope="col" class="px-2 text-left font-bold">Tým</th>
-          <th scope="col" class="w-14 px-2 text-left font-bold"><abbr title="Odehrané zápasy">Z</abbr></th>
-          <th scope="col" class="w-14 px-2 text-left font-bold">Body</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div class="font-display text-base leading-[1.4] text-grey-950">
+      <div class:list={[grid, "h-14 border-b border-grey-300 font-bold text-grey-500 uppercase"]} aria-hidden="true">
+        <span class="pl-4">#</span>
+        <span></span>
+        <span class="px-2">Tým</span>
+        <span class="px-2" title="Odehrané zápasy">Z</span>
+        <span class="px-2">Body</span>
+      </div>
+      <ol>
         {
           rows.map(({ row, href }) => {
             const us = row.teamId === OUR;
+            const Tag = href ? "a" : "div";
             return (
-              <tr
-                aria-current={us ? "true" : undefined}
-                class:list={[
-                  "relative border-b border-grey-300",
-                  us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50",
-                  !us && highlight.includes(row.teamId) && "bg-grey-50",
-                ]}
-              >
-                <td class="h-14 pr-2 pl-4 font-bold uppercase">{row.rank}</td>
-                <td class="px-2">
-                  <Logo id={row.teamId} round class="size-10" />
-                </td>
-                <td class="px-2">
-                  {href ? (
-                    <a href={href} class="after:absolute after:inset-0 after:content-['']">
-                      {team(row.teamId).name}
-                    </a>
-                  ) : (
-                    team(row.teamId).name
-                  )}
-                </td>
-                <td class="px-2">{row.played}</td>
-                <td class="px-2 font-bold">{row.points}</td>
-              </tr>
+              <li>
+                <Tag
+                  href={href ?? undefined}
+                  aria-current={us ? "true" : undefined}
+                  class:list={[
+                    grid,
+                    "h-14 border-b border-grey-300",
+                    us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50 active:bg-grey-100",
+                    !us && highlight.includes(row.teamId) && "bg-grey-50",
+                  ]}
+                >
+                  <span class="pl-4 font-bold">
+                    {row.rank}
+                    <span class="sr-only">. místo</span>
+                  </span>
+                  <span class="px-2">
+                    <Logo id={row.teamId} round class="size-10" />
+                  </span>
+                  <span class="truncate px-2">{team(row.teamId).name}</span>
+                  <span class="px-2">
+                    {row.played}
+                    <span class="sr-only"> {plural(row.played, "zápas", "zápasy", "zápasů")}</span>
+                  </span>
+                  <span class="px-2 font-bold">
+                    {row.points}
+                    <span class="sr-only"> {plural(row.points, "bod", "body", "bodů")}</span>
+                  </span>
+                </Tag>
+              </li>
             );
           })
         }
-      </tbody>
-    </table>
+      </ol>
+    </div>
 
     <a
       href={url("tabulka")}
@@ -109,10 +117,40 @@ const cell = "flex h-14 items-center px-2";
 </aside>
 
 <style>
-  /* collapsed by default; <html data-table="open"> shows the expanded panel */
-  .table-open { display: none; }
-  :global(html[data-table="open"]) .table-open { display: flex; }
-  :global(html[data-table="open"]) .table-rail { display: none; }
+  /* Collapsed by default; <html data-table="open"> expands. The width eases, the rail fades out
+     first and the panel fades/slides in slightly after. Hidden parts are `visibility: hidden`
+     so they can't take focus or clicks. */
+  .table-panel {
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    width: 73px;
+    transition: width 380ms var(--ease);
+  }
+  .table-rail {
+    transition: opacity 150ms ease, visibility 0s, background-color 150ms ease, color 150ms ease;
+  }
+  .table-open {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(24px);
+    transition: opacity 150ms ease, transform 380ms var(--ease), visibility 0s linear 150ms;
+  }
+  :global(html[data-table="open"]) .table-panel { width: 420px; }
+  :global(html[data-table="open"]) .table-rail {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 120ms ease, visibility 0s linear 120ms;
+  }
+  :global(html[data-table="open"]) .table-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 240ms ease 120ms, transform 380ms var(--ease), visibility 0s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .table-panel, .table-rail, .table-open,
+    :global(html[data-table="open"]) .table-rail,
+    :global(html[data-table="open"]) .table-open { transition: none; }
+  }
 </style>
 
 <script>

@@ -1,7 +1,9 @@
 ---
 // One of our games as a row (Figma "Frame 1948760502"): both logos, opponent, big date + time
 // (or score), venue with map link, add-to-calendar link and "Detail zápasu".
-// The detail link is stretched over the whole card; the inner links sit above it.
+// The whole card is clickable through an extra overlay link (hidden from assistive tech, the
+// "Detail zápasu" button is the real one), so hovering the card doesn't put the button in its
+// hover state. Buttons and links inside sit above the overlay.
 import { CalendarPlus, Camera, MapPin } from "@lucide/astro";
 import { OUR, forT, gameSlug, isFinal, mediaFor, opp, team, type Game } from "../lib/data";
 import { dayMonthDot, mapUrl, weekdayShort } from "../lib/format";
@@ -22,8 +24,9 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
 ---
 
 <li
-  class="group relative flex flex-col gap-4 rounded-lg bg-grey-100 px-4 py-4 transition-colors hover:bg-grey-200 sm:px-6 md:flex-row md:items-center md:justify-between"
+  class="relative flex flex-col gap-4 rounded-lg bg-grey-100 px-4 py-4 transition-colors hover:bg-grey-200 sm:px-6 md:flex-row md:items-center md:justify-between"
 >
+  <a href={url(`zapas/${slug}`)} class="absolute inset-0 rounded-lg" tabindex="-1" aria-hidden="true"></a>
   <div class="flex min-w-0 items-center gap-4 md:gap-10">
     <div class="flex shrink-0 items-center gap-2" aria-hidden="true">
       <Logo id={g.homeTeamId} round class="size-12 md:size-16" />
@@ -66,7 +69,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
             rel="noopener"
             class:list={[
               inner,
-              "flex w-fit items-center gap-1 border-b border-grey-300 pb-1 text-base leading-[1.4] text-grey-950 transition-colors hover:border-blue-600",
+              "link-underline flex w-fit items-center gap-1 text-base leading-[1.4] text-grey-950",
             ]}
           >
             <MapPin size={12} aria-hidden="true" />
@@ -86,7 +89,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
           download={`dragons-${slug}.ics`}
           class:list={[
             inner,
-            "flex shrink-0 items-center gap-1 border-b border-grey-300 pb-1 font-display text-lg whitespace-nowrap leading-6 font-bold uppercase text-grey-600 transition-colors hover:border-grey-950 hover:text-grey-950",
+            "link-underline flex shrink-0 items-center gap-1 font-display text-lg leading-6 font-bold whitespace-nowrap text-grey-600 uppercase",
           ]}
         >
           <CalendarPlus size={16} aria-hidden="true" />
@@ -96,7 +99,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
     }
     <a
       href={url(`zapas/${slug}`)}
-      class="ml-auto flex min-w-20 shrink-0 items-center whitespace-nowrap justify-center rounded-md bg-white p-3 transition-colors after:absolute after:inset-0 after:rounded-lg after:content-[''] hover:bg-grey-50 hover:text-blue-600 active:bg-grey-100 md:ml-0"
+      class:list={[inner, "ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-white p-3 whitespace-nowrap transition-colors hover:bg-grey-50 hover:text-blue-600 active:bg-grey-100 md:ml-0"]}
     >
       <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Detail zápasu</span>
       <span class="sr-only">: {team(g.homeTeamId).name} – {team(g.awayTeamId).name}</span>
