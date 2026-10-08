@@ -85,10 +85,10 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
         <PointsChart points={pointsTimeline} />
       </Card>
       <div class="flex flex-col gap-4 md:col-span-2 md:flex-row lg:col-span-1 lg:flex-col [&>*]:flex-1">
-        <Insight insight={insights.firstUs} />
-        <Insight insight={insights.firstThem} />
+        <Insight tone="blue" insight={insights.firstUs} />
+        <Insight tone="white" insight={insights.firstThem} />
       </div>
-      <Insight class="max-md:order-1" insight={insights.period} />
+      <Insight class="max-md:order-1" tone="grey" insight={insights.period} />
       <Card title="Góly po třetinách" subtitle="Kdy skórujeme a kdy dostáváme">
         <DuoBars rows={periods.map((p) => ({ label: p.label, a: p.for, b: p.against }))} aLabel="Vstřelené" bLabel="Obdržené" />
       </Card>
@@ -105,8 +105,8 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Card title="Kanadské body" subtitle="Góly + asistence"><BarList items={top(leaders.points)} /></Card>
       <Card title="Kanonýři" subtitle="Vstřelené góly"><BarList items={top(leaders.goals)} /></Card>
-      <Insight insight={insights.scorers} />
-      <Insight class="max-md:order-1" insight={insights.assisted} />
+      <Insight tone="blue" insight={insights.scorers} />
+      <Insight class="max-md:order-1" tone="white" insight={insights.assisted} />
       <Card title="Nahrávači" subtitle="Asistence"><BarList items={top(leaders.assists)} /></Card>
       <Card title="Nahrávací dvojice" subtitle="Kdo komu nejčastěji přihrál na gól">
         <BarList items={assistPairs.slice(0, 5).map((p) => ({ label: `${p.from} → ${p.to}`, value: p.count }))} />
@@ -114,7 +114,7 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
       <Card title="Hvězdy zápasu" subtitle="Kolikrát byl hráč vyhlášen hvězdou">
         <BarList items={top(leaders.stars)} />
       </Card>
-      <Insight insight={insights.stars} />
+      <Insight tone="grey" insight={insights.stars} />
       <Card title="Účast" subtitle={`Odehrané zápasy (z ${reportCount})`}>
         <BarList items={top(leaders.gamesPlayed)} max={reportCount} color="grey" />
       </Card>
@@ -123,7 +123,7 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
     <!-- goalies & special situations -->
     <SectionHead title="Brankáři a speciální situace" sub="Zákroky, přesilovky, oslabení a trestná lavice" />
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Insight insight={insights.shooting} />
+      <Insight tone="blue" insight={insights.shooting} />
       <Card title="Speciální formace" subtitle="Přesilovky, oslabení, střelba a vhazování">
         <div class="grid grid-cols-2 gap-x-6 gap-y-8">
           <Stat
@@ -169,13 +169,13 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
       <Card class="md:col-span-2" title="Trestná lavice" subtitle="Trestné minuty">
         <BarList items={top(leaders.penaltyMinutes, 5, pim)} color="grey" />
       </Card>
-      <Insight insight={insights.powerPlay} />
+      <Insight tone="white" insight={insights.powerPlay} />
     </div>
 
     <!-- all seasons -->
     <SectionHead title="Dračí kronika" sub={`Všechny sezóny v PHM Cupu od ${allTime.bySeason[0]?.name ?? season.name}`} />
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Insight insight={insights.trend} />
+      <Insight tone="grey" insight={insights.trend} />
       <Card class="md:col-span-1 lg:col-span-2" title="Úspěšnost po sezónách" subtitle="Podíl vyhraných zápasů">
         <BarList
           items={allTime.bySeason.map((s) => ({ label: s.name, value: s.winPct, display: `${Math.round(s.winPct)} %`, note: `${s.wins}–${s.draws}–${s.losses}` }))}
@@ -203,8 +203,8 @@ const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
         <ResultBars rows={headToHead.map((h) => ({ label: h.name, V: h.V, R: h.R, P: h.P, gf: h.gf, ga: h.ga }))} />
       </Card>
       <div class="flex flex-col gap-4 md:col-span-2 md:flex-row lg:sticky lg:top-6 lg:col-span-1 lg:flex-col lg:self-start [&>*]:flex-1">
-        <Insight insight={insights.fav} />
-        <Insight insight={insights.nemesis} />
+        <Insight tone="blue" insight={insights.fav} />
+        <Insight tone="white" insight={insights.nemesis} />
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 ---
-// Season progress: cumulative points after each game (one 2px line, ~10% area wash), result
+// Season progress: cumulative points after each game (one 4px line, ~10% area wash), result
 // markers (>= 8px, 2px surface ring) colored by result with a legend; the end value is labeled.
 // Each marker has a native <title> tooltip; the result strip below repeats the data as text.
 import type { Result } from "../../lib/data";
@@ -45,11 +45,11 @@ const last = points.at(-1);
       ))
     }
     <path d={area} fill="var(--color-blue-600)" fill-opacity="0.1" />
-    <path d={line} fill="none" stroke="var(--color-blue-600)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    <path d={line} fill="none" stroke="var(--color-blue-600)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
     {
       points.map((p) => (
         <g>
-          <circle cx={x(p.i)} cy={y(p.total)} r="6" fill={dot[p.result]} stroke="var(--color-white, #fff)" stroke-width="2" />
+          <circle cx={x(p.i)} cy={y(p.total)} r="7" fill={dot[p.result]} stroke="var(--color-white, #fff)" stroke-width="2" />
           <circle cx={x(p.i)} cy={y(p.total)} r="12" fill="transparent">
             <title>{`${p.i}. zápas: ${p.opponent} ${p.score} (${resultName[p.result]}), ${p.total} b.`}</title>
           </circle>
@@ -69,7 +69,7 @@ const last = points.at(-1);
   </svg>
   ))}
   <figcaption class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-grey-600">
-    <span class="flex items-center gap-2"><span class="h-0.5 w-4 rounded bg-blue-600" />Body celkem</span>
+    <span class="flex items-center gap-2"><span class="h-1 w-4 rounded-full bg-blue-600" />Body celkem</span>
     <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-success" />Výhra</span>
     <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-grey-500" />Remíza</span>
     <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-red-600" />Prohra</span>
