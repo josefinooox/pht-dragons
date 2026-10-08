@@ -85,7 +85,9 @@ Only re-download logos that are not already present.
 ## Opponent summary and match recap
 - Upcoming games: opponent summary, template-based from computed facts (src/lib/summary.ts).
 - Played games: commentator-style narrative written by Claude. Default path (no cost
-  beyond the Claude subscription): a scheduled Claude Code routine runs every morning,
+  beyond the Claude subscription): a scheduled Claude Code cloud routine runs every morning
+  at 7:00 Prague (it cannot reach the league API, so it relies on the data GitHub Actions
+  commits; it never runs `npm run fetch`),
   `npm run narratives:pending` lists games without a current text plus the writing rules,
   Claude writes them, `npm run narratives:save -- file.json` validates and stores them.
   Optional paid path: the build writes them via the API (scripts/lib/narrate.mjs,
