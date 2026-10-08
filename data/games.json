@@ -1300,7 +1300,20 @@
     "homeGoals": 5,
     "awayGoals": 2,
     "venue": "Sportovní hala Fortuna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "number": 8,
+        "firstName": "Tomáš",
+        "lastName": "Meruna"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "number": 68,
+        "firstName": "Martin",
+        "lastName": "Žák"
+      }
+    ]
   },
   {
     "gameId": "F62F0B5A-98CA-11F1-8BDF-EF2495D048F3",
