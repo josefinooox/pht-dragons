@@ -44,10 +44,19 @@ Base: https://api.prod.hms.wootera.net/public
   (_n = 320 px, _b = 1024 px; larger sizes need a different secret). A PNG image is the
   league's "coming up shortly" placeholder: skip it. Photos are hotlinked, not downloaded.
 
+- GET /game?gameId=...
+  One game in detail: GameEvents (GameEventGoal with scorer/assists, GameEventPenalty with
+  player, duration "1:45" and reason), period name per event, gameTime ("8:28", cumulative),
+  Home/AwayTeamSaves (shots = opponent saves + own goals), FaceOffs, PenaltyMinutes (decimal),
+  GameStars with Goals/Assists, Lineups (jersey numbers), team nick. headline/perex/body exist
+  but the league leaves them empty. Events are unsorted; player names may contain extra spaces.
+  Used for the match recap (src/lib/recap.ts): facts in code, sentences from templates.
+
 Validate every response with a schema (zod). The API can change without notice.
-Keep request volume low: one call per endpoint per build. Exception: gameMultimedia is
-per game, so it is cached in data/media.json, fetched only for our finished games, and
-re-checked only while a game is less than 14 days old.
+Keep request volume low: one call per endpoint per build. Exception: gameMultimedia and game
+are per game, so they are cached in data/media.json and data/reports.json, fetched only for
+our finished games, and re-checked only while a game is less than 14 days old. Bump the
+`version` passed to syncPerGame when a normalizer changes, so cached games are refetched once.
 
 ## Logos
 `logoUrl` contains "[size]". Try "cropped_md", then "md". Do not add query strings

@@ -4,6 +4,8 @@ import gamesJson from "../../data/games.json";
 import standingsJson from "../../data/standings.json";
 import metaJson from "../../data/meta.json";
 import mediaJson from "../../data/media.json";
+import reportsJson from "../../data/reports.json";
+import type { Report } from "./recap";
 
 export type Status = "scheduled" | "running" | "finished";
 export type Result = "V" | "R" | "P";
@@ -72,6 +74,10 @@ export const mediaFor = (g: Game): Media | undefined => {
   const m = mediaById[g.gameId];
   return m && (m.photos.length || m.video) ? m : undefined;
 };
+
+const reportById = reportsJson as unknown as Record<string, Report>;
+/** Goals, penalties and stats of one of our finished games, if fetched. */
+export const reportFor = (g: Game): Report | undefined => reportById[g.gameId];
 
 const teamById = new Map(teams.map((t) => [t.teamId, t]));
 export const team = (id: string): Team =>

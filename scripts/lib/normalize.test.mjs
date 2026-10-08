@@ -126,3 +126,34 @@ test("youtubeId handles watch, live and short URLs", () => {
   assert.equal(youtubeId("https://youtu.be/kBr_VByBJgo"), "kBr_VByBJgo");
   assert.equal(youtubeId("https://example.com/video"), null);
 });
+
+test("normalizeReport orders events, detects power play and checks completeness", async () => {
+  const { GameDetailSchema } = await import("./schemas.mjs");
+  const { normalizeReport } = await import("./normalize.mjs");
+  const player = (id, first, last) => ({ playerId: id, firstName: first, lastName: last });
+  const raw = GameDetailSchema.parse({
+    status: "FINISHED",
+    HomeTeamGoals: 1,
+    AwayTeamGoals: 1,
+    HomeTeamSaves: 10,
+    AwayTeamSaves: 12,
+    HomeTeam: { teamId: DRAGONS, nick: "Dragons" },
+    AwayTeam: { teamId: RAPTORS, nick: "Raptors" },
+    Lineups: [{ number: 9, teamId: DRAGONS, Player: player("p1", "Jan", "Novák ") }],
+    GameStars: [],
+    GameEvents: [
+      { entity: "GameEventGoal", period: "2. Třetina", gameTime: "20:30", scoredByTeamId: DRAGONS, ScoredByPlayer: player("p1", "Jan", "Novák ") },
+      { entity: "GameEventPenalty", period: "2. Třetina", gameTime: "19:52", duration: "1:45", penalizedTeamId: RAPTORS, PenalizedPlayer: player("p2", "Petr", "Pudil"), ListPenaltySubtype: { name: "Hákování" } },
+      { entity: "GameEventGoal", period: "Prodloužení", gameTime: "46:10", scoredByTeamId: RAPTORS, ScoredByPlayer: player("p2", "Petr", "Pudil") },
+      { entity: "GameEventSomethingNew", period: "1. Třetina", gameTime: "1:00" },
+    ],
+  });
+  const r = normalizeReport(raw);
+  assert.equal(r.complete, true);
+  assert.deepEqual(r.shots, { home: 13, away: 11 }); // opponent saves + own goals
+  assert.deepEqual(r.events.map((e) => `${e.type}@${e.time}/${e.period}`), ["penalty@19:52/2", "goal@20:30/2", "goal@46:10/OT"]);
+  assert.equal(r.events[1].strength, "pp");
+  assert.deepEqual(r.events[1].scorer, { playerId: "p1", name: "Jan Novák", number: 9 });
+  assert.equal(r.events[2].strength, "even");
+  assert.equal(normalizeReport({ ...raw, HomeTeamGoals: 2 }).complete, false);
+});

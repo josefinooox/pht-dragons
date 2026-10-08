@@ -6,6 +6,7 @@ import GameRow from "../../components/GameRow.astro";
 import Logo from "../../components/Logo.astro";
 import GameCard from "../../components/GameCard.astro";
 import Gallery from "../../components/Gallery.astro";
+import MatchRecap from "../../components/MatchRecap.astro";
 import ResultChip from "../../components/ResultChip.astro";
 import MatchCard from "../../components/MatchCard.astro";
 import Standings from "../../components/Standings.astro";
@@ -16,6 +17,7 @@ import {
   gameSlug,
   isFinal,
   mediaFor,
+  reportFor,
   mine,
   opp,
   played,
@@ -26,6 +28,7 @@ import {
 } from "../../lib/data";
 import { longDate, num, shortDate } from "../../lib/format";
 import { opponentSummary } from "../../lib/summary";
+import { buildRecap } from "../../lib/recap";
 import { url } from "../../lib/url";
 
 export const getStaticPaths = (() =>
@@ -48,6 +51,8 @@ const meet = mine.filter((x) => opp(x) === o && x !== g);
 const common = commonOpponents(o);
 const final = isFinal(g);
 const media = final ? mediaFor(g) : undefined;
+const report = final ? reportFor(g) : undefined;
+const recap = report ? buildRecap(g, report, OUR, them.name) : undefined;
 
 // Per-game comparison; "better" marks the better value (higher or lower is better).
 const better = (x: number, y: number, higher = true) => (x === y ? null : (higher ? x > y : x < y) ? "us" : "them");
@@ -62,7 +67,9 @@ const rows = [
 const home = team(g.homeTeamId).name;
 const away = team(g.awayTeamId).name;
 const title = `${home} vs ${away}, ${shortDate(g.date)}`;
-const description = final
+const description = recap
+  ? recap.summary
+  : final
   ? `${home} ${g.homeGoals}:${g.awayGoals} ${away}, ${longDate(g.date)}. Rozbor soupeře ${them.name}.`
   : `${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}. Rozbor soupeře ${them.name}.`;
 ---
@@ -98,6 +105,8 @@ const description = final
         </nav>
       </div>
 
+      {recap && <MatchRecap recap={recap} ourShort={team(OUR).shortName ?? "My"} theirShort={themShort} />}
+
       {media && <Gallery media={media} />}
 
       <section aria-labelledby="souper" class="space-y-8">
@@ -111,7 +120,7 @@ const description = final
 
         <div class="rounded-2xl border-l-[6px] border-primary bg-card p-5">
           <p class="label flex items-center gap-1.5 text-sm text-primary">
-            <Sparkles size={15} aria-hidden="true" /> Shrnutí
+            <Sparkles size={15} aria-hidden="true" /> {final ? "Rozbor soupeře" : "Shrnutí"}
           </p>
           <p class="mt-2 text-lg leading-relaxed">{opponentSummary(o)}</p>
         </div>

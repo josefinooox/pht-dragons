@@ -166,6 +166,89 @@ export function normalizeMedia(raw) {
   return { photos, video: youtubeId(raw.youtubeVideoUrl) };
 }
 
+const toSec = (clock) => {
+  const [m, s] = clock.split(":").map(Number);
+  return m * 60 + s;
+};
+
+/** "1. Třetina" -> "1", "Prodloužení" -> "OT", "Samostatné nájezdy" -> "SN". */
+function periodKey(name) {
+  const m = name.match(/^(\d)\./);
+  if (m) return m[1];
+  if (/prodlou/i.test(name)) return "OT";
+  if (/nájezd|najezd/i.test(name)) return "SN";
+  return name;
+}
+
+/**
+ * Match report facts from /public/game: goals and penalties in time order, team stats, stars.
+ * `complete` is false when the goal events do not add up to the final score
+ * (e.g. a result entered without events); the site then skips the event-based story.
+ */
+export function normalizeReport(raw) {
+  const home = raw.HomeTeam.teamId;
+  const away = raw.AwayTeam.teamId;
+  const numbers = new Map((raw.Lineups ?? []).map((l) => [l.Player.playerId, l.number]));
+  const person = (p) =>
+    p
+      ? { playerId: p.playerId, name: `${p.firstName} ${p.lastName}`.replace(/\s+/g, " ").trim(), number: numbers.get(p.playerId) ?? null }
+      : null;
+
+  const events = [];
+  for (const e of raw.GameEvents ?? []) {
+    const base = { period: periodKey(e.period), time: e.gameTime, sec: toSec(e.gameTime) };
+    if (e.entity === "GameEventGoal" && e.scoredByTeamId) {
+      events.push({
+        type: "goal",
+        ...base,
+        teamId: e.scoredByTeamId,
+        scorer: person(e.ScoredByPlayer),
+        assists: [e.AssistedBy1Player, e.AssistedBy2Player].filter(Boolean).map(person),
+      });
+    } else if (e.entity === "GameEventPenalty" && e.penalizedTeamId) {
+      events.push({
+        type: "penalty",
+        ...base,
+        teamId: e.penalizedTeamId,
+        player: person(e.PenalizedPlayer),
+        duration: e.duration ?? null,
+        reason: e.ListPenaltySubtype?.name ?? e.ListPenaltyType?.name ?? null,
+      });
+    }
+  }
+  events.sort((a, b) => a.sec - b.sec || (a.type === b.type ? 0 : a.type === "penalty" ? -1 : 1));
+
+  // Power play / short-handed: count penalties running at the moment of the goal.
+  const running = (teamId, sec) =>
+    events.filter((p) => p.type === "penalty" && p.teamId === teamId && p.duration && p.sec < sec && sec <= p.sec + toSec(p.duration)).length;
+  for (const g of events) {
+    if (g.type !== "goal") continue;
+    const other = g.teamId === home ? away : home;
+    const diff = running(other, g.sec) - running(g.teamId, g.sec);
+    g.strength = diff > 0 ? "pp" : diff < 0 ? "sh" : "even";
+  }
+
+  const goals = (t) => events.filter((e) => e.type === "goal" && e.teamId === t).length;
+  const shots = (saves, goalsFor) => (saves == null || goalsFor == null ? null : saves + goalsFor);
+  return {
+    homeNick: raw.HomeTeam.nick ?? null,
+    awayNick: raw.AwayTeam.nick ?? null,
+    complete: goals(home) === raw.HomeTeamGoals && goals(away) === raw.AwayTeamGoals,
+    // Shots on goal = opponent's saves + own goals.
+    shots: { home: shots(raw.AwayTeamSaves, raw.HomeTeamGoals), away: shots(raw.HomeTeamSaves, raw.AwayTeamGoals) },
+    faceoffs: { home: raw.HomeTeamFaceOffs ?? null, away: raw.AwayTeamFaceOffs ?? null },
+    penaltyMinutes: { home: raw.HomeTeamPenaltyMinutes ?? null, away: raw.AwayTeamPenaltyMinutes ?? null },
+    stars: (raw.GameStars ?? []).map((s) => ({
+      teamId: s.teamId,
+      ...person(s.Player),
+      number: s.LineupNumber ?? numbers.get(s.Player.playerId) ?? null,
+      goals: s.Goals ?? 0,
+      assists: s.Assists ?? 0,
+    })),
+    events,
+  };
+}
+
 /** Sanity checks beyond the schema: catches "valid but empty/wrong" responses. */
 export function checkConsistency({ teams, games, standings }, ourTeamId) {
   const problems = [];

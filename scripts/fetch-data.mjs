@@ -6,15 +6,15 @@ import { mkdir, readFile, writeFile, access } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import sharp from "sharp";
-import { CompetitionInfoSchema, GameMultimediaSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
-import { checkConsistency, discoverSeason, normalize, normalizeMedia, pragueDate } from "./lib/normalize.mjs";
+import { CompetitionInfoSchema, GameDetailSchema, GameMultimediaSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
+import { checkConsistency, discoverSeason, normalize, normalizeMedia, normalizeReport, pragueDate } from "./lib/normalize.mjs";
 
 const API = process.env.HMS_API ?? "https://api.prod.hms.wootera.net/public"; // override for testing
 const COMPETITION_ID = "C7C0BB15-5D29-415D-851E-5D777C6CC621"; // PHM Cup
 const OUR_TEAM_ID = "E70C43E0-264E-11EF-BE38-052B0AF887CA"; // PHT Dragons
 const LOGO_SIZES = ["cropped_md", "md"];
 const TIMEOUT_MS = 30_000;
-// Photos often appear days after a game: keep re-checking a game's media this long after it starts.
+// Photos and corrections arrive days after a game: keep re-checking per-game data this long.
 const MEDIA_RECHECK_DAYS = 14;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -85,13 +85,15 @@ async function syncLogos(teams) {
 }
 
 /**
- * Photos + video of our finished games, cached in data/media.json. The API needs one call per
- * game, so to keep request volume low a game is fetched once and then only re-checked while it
- * is recent. Failures are warnings only and keep the cached entry.
+ * Per-game data of our finished games (photos, match report), cached in data/{file}.
+ * The API needs one call per game, so to keep request volume low a game is fetched once and
+ * then only re-checked while it is recent (photos and corrections arrive days later).
+ * Each entry stores the normalizer `version`; bump it when the normalizer changes so cached
+ * games are fetched once more. Failures are warnings only and keep the cached entry.
  */
-async function syncMedia(games) {
-  const file = path.join(DATA_DIR, "media.json");
-  const prevText = await readFile(file, "utf8").catch(() => null);
+async function syncPerGame(games, { file, endpoint, schema, normalize: norm, version }) {
+  const target = path.join(DATA_DIR, file);
+  const prevText = await readFile(target, "utf8").catch(() => null);
   const cache = prevText ? JSON.parse(prevText) : {};
   const recentSince = Date.now() - MEDIA_RECHECK_DAYS * 864e5;
   const ours = games.filter(
@@ -100,22 +102,20 @@ async function syncMedia(games) {
   let fetched = 0;
   for (const g of ours) {
     const cached = cache[g.gameId];
-    if (cached && Date.parse(g.start) < recentSince) continue;
+    if (cached?.version === version && Date.parse(g.start) < recentSince) continue;
     try {
-      const raw = await getJson("gameMultimedia", { gameId: g.gameId }, GameMultimediaSchema);
-      cache[g.gameId] = normalizeMedia(raw);
+      cache[g.gameId] = { version, ...norm(await getJson(endpoint, { gameId: g.gameId }, schema)) };
       fetched++;
     } catch (err) {
-      warn(`media ${g.date} ${g.gameId}: ${err.message}`);
+      warn(`${endpoint} ${g.date} ${g.gameId}: ${err.message}`);
     }
   }
   // Drop entries for games that are no longer ours/finished (e.g. a corrected result).
   const keep = new Set(ours.map((g) => g.gameId));
   const next = Object.fromEntries(Object.keys(cache).filter((id) => keep.has(id)).sort().map((id) => [id, cache[id]]));
   const changed = prevText !== toJson(next);
-  if (changed) await writeFile(file, toJson(next));
-  const withPhotos = Object.values(next).filter((m) => m.photos.length).length;
-  return { fetched, withPhotos, total: ours.length, changed };
+  if (changed) await writeFile(target, toJson(next));
+  return { entries: next, fetched, total: ours.length, changed };
 }
 
 async function main() {
@@ -166,8 +166,23 @@ async function main() {
     await writeFile(path.join(DATA_DIR, "meta.json"), toJson(meta));
   }
 
-  // 6. Photos and videos (best effort, cached).
-  const media = await syncMedia(result.games);
+  // 6. Photos/videos and match reports of our played games (best effort, cached).
+  const media = await syncPerGame(result.games, {
+    file: "media.json",
+    endpoint: "gameMultimedia",
+    schema: GameMultimediaSchema,
+    normalize: normalizeMedia,
+    version: 1,
+  });
+  const reports = await syncPerGame(result.games, {
+    file: "reports.json",
+    endpoint: "game",
+    schema: GameDetailSchema,
+    normalize: normalizeReport,
+    version: 1,
+  });
+  const withPhotos = Object.values(media.entries).filter((m) => m.photos.length).length;
+  const complete = Object.values(reports.entries).filter((r) => r.complete).length;
 
   // 7. Summary.
   const byStatus = Object.groupBy(result.games, (g) => g.status);
@@ -183,7 +198,8 @@ async function main() {
       `  standings: ${result.standings.length} rows; PHT Dragons #${ourRow.rank}, ${ourRow.points} pts from ${ourRow.played} games`,
       `  ours:      ${ours.length} games` +
         (nextOurs ? `; next ${nextOurs.date} ${nextOurs.time} ${nameOf(nextOurs.homeTeamId)} vs ${nameOf(nextOurs.awayTeamId)} @ ${nextOurs.venue}` : ""),
-      `  media:     ${media.withPhotos}/${media.total} played games with photos (${media.fetched} checked now${media.changed ? ", updated" : ""})`,
+      `  media:     ${withPhotos}/${media.total} played games with photos (${media.fetched} checked now${media.changed ? ", updated" : ""})`,
+      `  reports:   ${complete}/${reports.total} played games with full events (${reports.fetched} checked now${reports.changed ? ", updated" : ""})`,
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),
   );

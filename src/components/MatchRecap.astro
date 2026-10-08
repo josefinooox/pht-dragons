@@ -1,0 +1,133 @@
+---
+// Recap of a played game: short summary, "Řekni víc" with the period-by-period story,
+// match stats and player points. <details> keeps it working without JS.
+import { ChevronDown, Sparkles } from "@lucide/astro";
+import type { Recap } from "../lib/recap";
+
+interface Props {
+  recap: Recap;
+  ourShort: string;
+  theirShort: string;
+}
+const { recap, ourShort, theirShort } = Astro.props;
+const pts = (p: { goals: number; assists: number }) => `${p.goals}+${p.assists}`;
+---
+
+<section aria-labelledby="shrnuti-zapasu" class="rounded-2xl border-l-[6px] border-primary bg-card p-5 sm:p-6">
+  <h2 id="shrnuti-zapasu" class="label flex items-center gap-1.5 text-sm text-primary">
+    <Sparkles size={15} aria-hidden="true" /> Shrnutí zápasu
+  </h2>
+  <p class="mt-2 text-lg leading-relaxed">{recap.summary}</p>
+
+  <details class="group mt-4">
+    <summary
+      class="label inline-flex cursor-pointer list-none items-center gap-1.5 rounded-md bg-secondary px-4 py-2.5 text-base leading-none text-secondary-foreground hover:bg-black [&::-webkit-details-marker]:hidden"
+    >
+      <span class="group-open:hidden">Řekni víc</span>
+      <span class="hidden group-open:inline">Méně</span>
+      <ChevronDown size={16} strokeWidth={3} class="transition-transform group-open:rotate-180" aria-hidden="true" />
+    </summary>
+
+    <div class="mt-6 space-y-8">
+      {
+        recap.periods.length > 0 && (
+          <div class="space-y-6">
+            {recap.periods.map((p) => (
+              <div>
+                <h3 class="flex items-baseline justify-between gap-4 border-b-2 border-foreground pb-1.5">
+                  {p.title}
+                  <span class="tabular-nums">{p.score}</span>
+                </h3>
+                {p.story && <p class="mt-2 font-semibold">{p.story}</p>}
+                {p.items.length > 0 && (
+                  <ol class="mt-2 space-y-1.5">
+                    {p.items.map((i) => (
+                      <li class="flex gap-3">
+                        <span class="label w-14 shrink-0 whitespace-nowrap pt-0.5 text-right text-sm text-muted-foreground">{i.minute} min</span>
+                        <span
+                          class:list={[
+                            "mt-2 size-2 shrink-0 rounded-full",
+                            i.goal ? (i.ours ? "bg-win" : "bg-loss") : "border-2 border-draw",
+                          ]}
+                          aria-hidden="true"
+                        />
+                        <span class:list={[i.goal && "font-semibold", !i.goal && "text-muted-foreground"]}>{i.text}</span>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      <div>
+        <h3>Statistiky zápasu</h3>
+        <table class="mt-3 w-full bg-white">
+          <thead>
+            <tr class="border-b-2 border-foreground">
+              <th scope="col" class="label w-1/4 px-3 py-2 text-left">{ourShort}</th>
+              <th scope="col"><span class="sr-only">Ukazatel</span></th>
+              <th scope="col" class="label w-1/4 px-3 py-2 text-right">{theirShort}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              recap.stats.map((s) => (
+                <tr class="border-b border-border">
+                  <td class:list={["label px-3 py-2.5 text-xl tabular-nums", s.better === "ours" ? "text-primary" : "text-muted-foreground/70"]}>
+                    {s.ours}
+                  </td>
+                  <th scope="row" class="px-2 py-2.5 text-center text-sm font-normal text-muted-foreground">
+                    {s.label}
+                  </th>
+                  <td
+                    class:list={["label px-3 py-2.5 text-right text-xl tabular-nums", s.better === "theirs" ? "text-accent" : "text-muted-foreground/70"]}
+                  >
+                    {s.theirs}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+
+      {
+        (recap.points.ours.length > 0 || recap.points.theirs.length > 0) && (
+          <div>
+            <h3>Kanadské body</h3>
+            <div class="mt-3 grid gap-6 sm:grid-cols-2">
+              {[
+                { label: ourShort, list: recap.points.ours },
+                { label: theirShort, list: recap.points.theirs },
+              ].map((side) => (
+                <div>
+                  <p class="label text-sm text-muted-foreground">
+                    {side.label} <span class="normal-case">(góly + asistence)</span>
+                  </p>
+                  {side.list.length ? (
+                    <ul class="mt-1">
+                      {side.list.map((pl) => (
+                        <li class="flex items-center justify-between gap-3 border-b border-border py-1.5">
+                          <span>
+                            {pl.name}
+                            {pl.number !== null && <span class="text-muted-foreground"> #{pl.number}</span>}
+                          </span>
+                          <span class="label text-lg tabular-nums">{pts(pl)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="mt-1 text-muted-foreground">Nikdo nebodoval.</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </details>
+</section>

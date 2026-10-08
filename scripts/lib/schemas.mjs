@@ -61,6 +61,58 @@ export const GameMultimediaSchema = z.object({
   youtubeVideoUrl: z.string().nullish(),
 });
 
+const PlayerRef = z.object({ playerId: z.string(), firstName: z.string(), lastName: z.string() });
+const clock = z.string().regex(/^\d+:\d{2}$/);
+
+/** /public/game: events, team stats and stars of one game. Unknown event types are kept but ignored. */
+export const GameDetailSchema = z.object({
+  status: z.string(),
+  HomeTeamGoals: z.number().int().nullable(),
+  AwayTeamGoals: z.number().int().nullable(),
+  HomeTeamSaves: z.number().int().nullish(),
+  AwayTeamSaves: z.number().int().nullish(),
+  HomeTeamFaceOffs: z.number().int().nullish(),
+  AwayTeamFaceOffs: z.number().int().nullish(),
+  HomeTeamPenaltyMinutes: z.number().nullish(),
+  AwayTeamPenaltyMinutes: z.number().nullish(),
+  HomeTeam: z.object({ teamId: z.string(), nick: z.string().nullish() }),
+  AwayTeam: z.object({ teamId: z.string(), nick: z.string().nullish() }),
+  Lineups: z
+    .array(z.object({ number: z.number().int().nullable(), teamId: z.string(), Player: PlayerRef }))
+    .nullish(),
+  GameStars: z
+    .array(
+      z.object({
+        teamId: z.string(),
+        LineupNumber: z.number().int().nullable(),
+        Goals: z.number().int().nullish(),
+        Assists: z.number().int().nullish(),
+        Player: PlayerRef,
+      }),
+    )
+    .nullish(),
+  GameEvents: z
+    .array(
+      z.object({
+        entity: z.string(),
+        period: z.string(),
+        gameTime: clock,
+        // goal
+        scoredByTeamId: z.string().nullish(),
+        ScoredByPlayer: PlayerRef.nullish(),
+        AssistedBy1Player: PlayerRef.nullish(),
+        AssistedBy2Player: PlayerRef.nullish(),
+        // penalty
+        penalizedTeamId: z.string().nullish(),
+        PenalizedPlayer: PlayerRef.nullish(),
+        duration: clock.nullish(),
+        ListPenaltySubtype: z.object({ name: z.string() }).nullish(),
+        ListPenaltyType: z.object({ name: z.string() }).nullish(),
+      }),
+    )
+    .nullish(),
+});
+
 export const CompetitionInfoSchema = z.object({
   Competitions: z.array(
     z.object({
