@@ -266,6 +266,33 @@
   @media (prefers-reduced-motion: reduce) {
     .link-underline::after { transition: none; }
   }
+  /* Button hover: a grey-950 fill slides in from the left with the same easing as .link-underline.
+     The resting colors and the hover text color (hover:text-white) are utilities on the element.
+     An open <details> keeps its summary filled. --btn-fill can be overridden (e.g. on :active). */
+  .btn-fill {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transition: color 300ms ease, border-color 300ms ease;
+  }
+  .btn-fill::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--btn-fill, var(--color-grey-950));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), background-color 150ms ease;
+  }
+  .btn-fill:hover::before,
+  .btn-fill:focus-visible::before,
+  details[open] > .btn-fill::before {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-fill, .btn-fill::before { transition: none; }
+  }
   /* Relative/state label filled in by src/scripts/live.ts. */
   [data-when] {
     font-family: var(--font-display);

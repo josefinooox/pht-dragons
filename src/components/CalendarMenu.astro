@@ -19,8 +19,8 @@ const feedWebcal = feedHttp.href.replace(/^https?:/, "webcal:");
 <details class="group relative" data-menu>
   <summary
     class:list={[
-      "flex min-w-20 cursor-pointer list-none items-center justify-center gap-1 rounded-md bg-white p-3 text-grey-950 transition-colors active:bg-grey-100 [&::-webkit-details-marker]:hidden",
-      variant === "outline" ? "border border-grey-300 hover:border-grey-400 hover:bg-grey-50" : "hover:bg-blue-50 active:bg-blue-100",
+      "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] flex min-w-20 cursor-pointer list-none items-center justify-center gap-1 rounded-md bg-white p-3 text-grey-950 group-open:text-white [&::-webkit-details-marker]:hidden",
+      variant === "outline" && "border border-grey-300 hover:border-grey-950 group-open:border-grey-950",
     ]}
   >
     <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Přidat do kalendáře</span>

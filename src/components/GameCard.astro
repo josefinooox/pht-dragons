@@ -99,7 +99,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
     }
     <a
       href={url(`zapas/${slug}`)}
-      class:list={[inner, "ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-white p-3 whitespace-nowrap transition-colors hover:bg-grey-50 hover:text-blue-600 active:bg-grey-100 md:ml-0"]}
+      class:list={[inner, "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-white p-3 whitespace-nowrap text-grey-950 md:ml-0"]}
     >
       <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Detail zápasu</span>
       <span class="sr-only">: {team(g.homeTeamId).name} – {team(g.awayTeamId).name}</span>
