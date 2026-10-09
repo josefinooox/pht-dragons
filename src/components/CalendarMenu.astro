@@ -1,7 +1,9 @@
 ---
-// "Přidat do kalendáře" dropdown: subscribe to the season feed (webcal) or download the .ics.
+// "Přidat do kalendáře" dropdown: subscribe to the season feed in Google Calendar (by URL) or
+// Apple Calendar (webcal), or download the .ics. Each option says what it does.
 // <details> keeps it working without JS; src/scripts/menus.ts closes it on outside click / Esc.
-import { ChevronDown, Download, RefreshCw } from "@lucide/astro";
+// Opening plays the same motion as the mobile menu (panel eases in, options follow one by one).
+import { ChevronDown, Download } from "@lucide/astro";
 import { url } from "../lib/url";
 
 interface Props {
@@ -14,6 +16,12 @@ interface Props {
 const { variant = "outline", up = false, align = "right" } = Astro.props;
 const feedHttp = new URL(url("dragons.ics"), Astro.site);
 const feedWebcal = feedHttp.href.replace(/^https?:/, "webcal:");
+const google = `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(feedWebcal)}`;
+const options = [
+  { href: google, icon: "google", title: "Google Kalendář", text: "Odběr celé sezóny, změny se propíšou samy.", external: true },
+  { href: feedWebcal, icon: "apple", title: "Apple Kalendář", text: "Odběr v iPhonu nebo Macu, aktualizuje se sám." },
+  { href: feedHttp.href, icon: "file", title: "Stáhnout soubor .ics", text: "Jednorázový import všech zápasů, třeba do Outlooku.", download: "dragons.ics" },
+];
 ---
 
 <details class="group relative" data-menu>
@@ -27,28 +35,85 @@ const feedWebcal = feedHttp.href.replace(/^https?:/, "webcal:");
     <ChevronDown size={16} class="transition-transform group-open:rotate-180" aria-hidden="true" />
   </summary>
   <div
+    data-menu-panel
     class:list={[
-      "absolute z-20 w-72 rounded-lg border border-grey-300 bg-white p-2 text-grey-950 shadow-lg",
-      up ? "bottom-full mb-2" : "top-full mt-2",
+      "absolute z-20 w-80 rounded-lg border border-grey-300 bg-white p-2 text-grey-950 shadow-lg",
+      up ? "bottom-full mb-2 [--from:8px]" : "top-full mt-2",
+      up ? (align === "right" ? "origin-bottom-right" : "origin-bottom-left") : align === "right" ? "origin-top-right" : "origin-top-left",
       align === "right" ? "right-0" : "left-0",
     ]}
   >
-    <a href={feedWebcal} class="flex gap-3 rounded-md p-3 transition-colors hover:bg-grey-100 active:bg-grey-200">
-      <RefreshCw size={18} class="mt-0.5 shrink-0 text-blue-600" aria-hidden="true" />
-      <span>
-        <span class="block font-semibold">Odebírat celou sezónu</span>
-        <span class="text-sm text-grey-600">Kalendář se sám aktualizuje při změnách.</span>
-      </span>
-    </a>
-    <a href={feedHttp.href} download="dragons.ics" class="flex gap-3 rounded-md p-3 transition-colors hover:bg-grey-100 active:bg-grey-200">
-      <Download size={18} class="mt-0.5 shrink-0 text-blue-600" aria-hidden="true" />
-      <span>
-        <span class="block font-semibold">Stáhnout soubor .ics</span>
-        <span class="text-sm text-grey-600">Jednorázový import všech zápasů.</span>
-      </span>
-    </a>
+    <p class="px-3 pt-2 pb-1 font-display text-sm font-bold text-grey-500 uppercase">Celá sezóna</p>
+    {
+      options.map((o, i) => (
+        <a
+          href={o.href}
+          download={o.download}
+          target={o.external ? "_blank" : undefined}
+          rel={o.external ? "noopener" : undefined}
+          style={`--d:${60 + i * 40}ms`}
+          class="flex gap-3 rounded-md p-3 transition-colors hover:bg-grey-100 active:bg-grey-200"
+        >
+          <span class="mt-0.5 grid size-5 shrink-0 place-items-center" aria-hidden="true">
+            {o.icon === "google" && (
+              <svg viewBox="0 0 24 24" class="size-5">
+                <path fill="#fff" d="M6 6h12v12H6z" />
+                <path fill="#4285F4" d="M6 2h12v4H6z" />
+                <path fill="#1967D2" d="M2 4a2 2 0 0 1 2-2h2v16H2z" />
+                <path fill="#FBBC04" d="M18 6h4v12h-4z" />
+                <path fill="#1967D2" d="M18 2h2a2 2 0 0 1 2 2v2h-4z" />
+                <path fill="#34A853" d="M6 18h12v4H6z" />
+                <path fill="#188038" d="M2 18h4v4H4a2 2 0 0 1-2-2z" />
+                <path fill="#EA4335" d="M18 18h4l-4 4z" />
+                <text x="12" y="15.2" text-anchor="middle" font-family="Arial, sans-serif" font-size="7.5" font-weight="700" fill="#4285F4">31</text>
+              </svg>
+            )}
+            {o.icon === "apple" && (
+              <svg viewBox="0 0 24 24" class="size-5 fill-grey-950">
+                <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701" />
+              </svg>
+            )}
+            {o.icon === "file" && <Download size={18} class="text-blue-600" />}
+          </span>
+          <span>
+            <span class="block font-semibold">{o.title}</span>
+            <span class="text-sm text-grey-600">{o.text}</span>
+          </span>
+        </a>
+      ))
+    }
   </div>
 </details>
+
+<style>
+  /* Same motion as the mobile menu: the panel eases in (500ms, cubic-bezier(.32,.72,0,1)),
+     the options fade and slide in one after another (--d). Opening only; closing is instant. */
+  details[open] > [data-menu-panel] {
+    animation: menu-panel 500ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+  details[open] > [data-menu-panel] > a {
+    animation: menu-item 300ms ease-out both;
+    animation-delay: var(--d, 0ms);
+  }
+  @keyframes menu-panel {
+    from {
+      opacity: 0;
+      transform: translateY(var(--from, -8px)) scale(0.98);
+    }
+  }
+  @keyframes menu-item {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    details[open] > [data-menu-panel],
+    details[open] > [data-menu-panel] > a {
+      animation: none;
+    }
+  }
+</style>
 
 <script>
   import "../scripts/menus.ts";

@@ -11,3 +11,15 @@ document.addEventListener("keydown", (e) => {
     m.querySelector("summary")?.focus();
   }
 });
+
+// Replay the opening animation (CalendarMenu.astro) on every open: a closed <details> may only
+// hide its content (content-visibility), so CSS animations would otherwise run just once.
+for (const m of document.querySelectorAll<HTMLDetailsElement>("details[data-menu]")) {
+  m.addEventListener("toggle", () => {
+    if (!m.open) return;
+    for (const a of m.getAnimations({ subtree: true })) {
+      a.cancel();
+      a.play();
+    }
+  });
+}
