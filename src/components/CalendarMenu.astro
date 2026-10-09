@@ -88,11 +88,17 @@ const options = [
 <style>
   /* Same motion as the mobile menu: the panel eases in (500ms, cubic-bezier(.32,.72,0,1)),
      the options fade and slide in one after another (--d). Opening only; closing is instant. */
+  /* A closed <details> may only hide its content, and Chrome can leave the animated panel's
+     layer painted on screen; take it out of rendering explicitly. */
+  details:not([open]) > [data-menu-panel] {
+    display: none;
+  }
+  /* "backwards", not "both": once finished, nothing keeps the panel on its own layer. */
   details[open] > [data-menu-panel] {
-    animation: menu-panel 500ms cubic-bezier(0.32, 0.72, 0, 1) both;
+    animation: menu-panel 500ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
   }
   details[open] > [data-menu-panel] > a {
-    animation: menu-item 300ms ease-out both;
+    animation: menu-item 300ms ease-out backwards;
     animation-delay: var(--d, 0ms);
   }
   @keyframes menu-panel {

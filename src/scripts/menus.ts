@@ -12,14 +12,13 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Replay the opening animation (CalendarMenu.astro) on every open: a closed <details> may only
+// Replay the opening animation (CalendarMenu.astro) on every open, drop it on close: a closed <details> may only
 // hide its content (content-visibility), so CSS animations would otherwise run just once.
 for (const m of document.querySelectorAll<HTMLDetailsElement>("details[data-menu]")) {
   m.addEventListener("toggle", () => {
-    if (!m.open) return;
     for (const a of m.getAnimations({ subtree: true })) {
       a.cancel();
-      a.play();
+      if (m.open) a.play();
     }
   });
 }
