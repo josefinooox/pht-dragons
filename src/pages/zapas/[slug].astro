@@ -97,9 +97,15 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
         <nav aria-label="Drobečková navigace">
           <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
             <li>
-              <a href={final ? url("odehrane") : url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
+              <a href={url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
                 <ChevronLeft size={18} aria-hidden="true" />
-                {final ? "Minulé zápasy" : "Rozpis"}
+                Zápasy
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-grey-400">/</li>
+            <li>
+              <a href={final ? url("odehrane") : url()} class="text-grey-500 transition-colors hover:text-grey-950">
+                {final ? "Minulé" : "Nadcházející"}
               </a>
             </li>
             <li aria-hidden="true" class="text-grey-400">/</li>

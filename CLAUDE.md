@@ -71,7 +71,7 @@ Only re-download logos that are not already present.
 - `/` – schedule. Tabs Nadcházející | Odehrané (`/odehrane`).
   Next match emphasized: date, time, venue with map link, add to calendar, share.
   Button to subscribe to the whole season (webcal link to /dragons.ics).
-  Desktop: table excerpt in a side column. Mobile: position chip in header linking to /tabulka.
+  Desktop: table excerpt in a side column. Mobile: hamburger menu in the header.
 - `/zapas/[yyyy-mm-dd-opponent-slug]` – match + opponent analysis: summary text,
   form (last 5), per-game comparison (points, goals for/against, penalty minutes),
   their recent results with each opponent's rank, common opponents, the other

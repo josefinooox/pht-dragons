@@ -75,17 +75,17 @@ for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
   const { date = "", start = "", status = "" } = el.dataset;
   const state = stateLabel(start, status);
   const label = el.querySelector<HTMLElement>("[data-countdown-label]");
+  const short = el.querySelector<HTMLElement>("[data-countdown-short]");
   const value = el.querySelector<HTMLElement>("[data-countdown-value]");
   if (!label || !value) continue;
   const n = dayNumber(date) - today;
-  if (state) {
-    label.textContent = "Další zápas:";
-    value.textContent = state[1];
-  } else if (n === 0) {
-    label.textContent = "Další zápas:";
-    value.textContent = "dnes";
-  } else if (n > 0) {
-    label.textContent = "Do dalšího zápasu zbývá:";
-    value.textContent = `${n} ${plural(n, "den", "dny", "dní")}`;
-  }
+  // Full label on desktop, short one on phones (keeps the sub-bar on one line).
+  const set = (full: string, brief: string, v: string) => {
+    label.textContent = full;
+    if (short) short.textContent = brief;
+    value.textContent = v;
+  };
+  if (state) set("Další zápas:", "Zápas:", state[1]);
+  else if (n === 0) set("Další zápas:", "Zápas:", "dnes");
+  else if (n > 0) set("Do dalšího zápasu zbývá:", "Zápas za", `${n} ${plural(n, "den", "dny", "dní")}`);
 }

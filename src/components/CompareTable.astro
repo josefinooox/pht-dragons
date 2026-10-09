@@ -1,6 +1,6 @@
 ---
 // Us vs them, one stat per row: our value | label | their value. The better value is colored
-// (ours blue-600, theirs red-600), the other one grey.
+// green (success) for whichever team it is, the other one grey.
 import { OUR, team } from "../lib/data";
 import Logo from "./Logo.astro";
 
@@ -37,11 +37,11 @@ const value = "font-display text-[1.75rem] leading-none font-extrabold tabular-n
       {
         rows.map((r) => (
           <tr class="border-b border-grey-300">
-            <td class:list={[value, "py-4 text-left", r.better === "ours" ? "text-blue-600" : "text-grey-400"]}>{r.ours}</td>
+            <td class:list={[value, "py-4 text-left", r.better === "ours" ? "text-success" : "text-grey-400"]}>{r.ours}</td>
             <th scope="row" class="px-2 py-4 text-center text-sm font-normal text-grey-600">
               {r.label}
             </th>
-            <td class:list={[value, "py-4 text-right", r.better === "theirs" ? "text-red-600" : "text-grey-400"]}>{r.theirs}</td>
+            <td class:list={[value, "py-4 text-right", r.better === "theirs" ? "text-success" : "text-grey-400"]}>{r.theirs}</td>
           </tr>
         ))
       }

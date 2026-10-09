@@ -1,7 +1,6 @@
 ---
-import { ChevronLeft } from "@lucide/astro";
-import { OUR, meta, rankOf, standingOf, team } from "../lib/data";
-import { plural } from "../lib/format";
+import { ChevronLeft, Menu, X } from "@lucide/astro";
+import { OUR, meta, team } from "../lib/data";
 import { url } from "../lib/url";
 import CalendarMenu from "../components/CalendarMenu.astro";
 import logo from "../assets/dragons-logo.svg";
@@ -21,8 +20,6 @@ interface Props {
 const { title, description, nav, back, bare = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const me = team(OUR);
-const myRank = rankOf(OUR);
-const myPoints = standingOf(OUR)?.points ?? 0;
 const links = [
   { key: "rozpis", href: url(), label: "Rozpis" },
   { key: "tabulka", href: url("tabulka"), label: "Tabulka" },
@@ -87,20 +84,35 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
             }
           </ul>
         </nav>
-        {
-          myRank && (
-            <a
-              href={url("tabulka")}
-              class="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 font-display text-sm leading-none font-bold text-white uppercase transition-colors hover:bg-white/20 md:hidden"
-            >
-              {myRank}. místo
-              <span class="text-grey-400">
-                {myPoints} {plural(myPoints, "bod", "body", "bodů")}
-              </span>
-            </a>
-          )
-        }
+        <button
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          class="group -mr-2 grid size-10 place-items-center rounded-md text-white transition-colors hover:bg-white/10 md:hidden"
+        >
+          <Menu size={24} class="group-aria-expanded:hidden" aria-hidden="true" />
+          <X size={24} class="hidden group-aria-expanded:block" aria-hidden="true" />
+          <span class="sr-only">Menu</span>
+        </button>
       </div>
+      <nav id="mobile-menu" aria-label="Hlavní" hidden class="border-t border-white/10 px-(--gutter) pt-2 pb-6 md:hidden">
+        <ul class="flex flex-col">
+          {
+            links.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  aria-current={nav === l.key ? "page" : undefined}
+                  class="block py-3 font-display text-[2rem] leading-tight font-black text-grey-500 uppercase transition-colors hover:text-white aria-[current=page]:text-white"
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </header>
 
     {
@@ -171,6 +183,25 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     </footer>
     <script>
       import "../scripts/live.ts";
+    </script>
+    <script>
+      // Mobile menu: toggle the panel under the header; close on Esc or when the viewport grows.
+      const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+      const menu = document.getElementById("mobile-menu");
+      if (toggle && menu) {
+        const set = (open: boolean) => {
+          toggle.setAttribute("aria-expanded", String(open));
+          menu.hidden = !open;
+        };
+        toggle.addEventListener("click", () => set(menu.hidden));
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && !menu.hidden) {
+            set(false);
+            toggle.focus();
+          }
+        });
+        matchMedia("(min-width: 48rem)").addEventListener("change", (e) => e.matches && set(false));
+      }
     </script>
   </body>
 </html>

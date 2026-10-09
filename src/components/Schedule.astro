@@ -31,28 +31,28 @@ const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 
     </div>
 
     <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-10 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
-      <div class="flex flex-wrap items-start justify-between gap-6">
-        <div class="flex flex-col gap-6 md:gap-8">
-          <h1 class="font-display text-[3.5rem] leading-[56px] font-black text-grey-950 uppercase">Zápasy</h1>
-          <nav aria-label="Filtr zápasů">
-            <ul class="flex gap-6">
-              {
-                tabs.map((t) => (
-                  <li>
-                    <a
-                      href={t.href}
-                      aria-current={tab === t.key ? "page" : undefined}
-                      class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600"
-                    >
-                      {t.label}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </nav>
+      <div class="flex flex-col gap-6 md:gap-8">
+        <div class="flex items-center justify-between gap-4">
+          <h1 class="font-display text-[2.75rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem] md:leading-[56px]">Zápasy</h1>
+          <CalendarMenu />
         </div>
-        <CalendarMenu />
+        <nav aria-label="Filtr zápasů">
+          <ul class="flex gap-6">
+            {
+              tabs.map((t) => (
+                <li>
+                  <a
+                    href={t.href}
+                    aria-current={tab === t.key ? "page" : undefined}
+                    class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600"
+                  >
+                    {t.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
 
       {

@@ -4,7 +4,7 @@
 // (Dračí oko) sits inside the same card. Upcoming games get add-to-calendar and share instead.
 import { CalendarPlus, MapPin, Share2, Star } from "@lucide/astro";
 import { SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, type Game } from "../lib/data";
-import { longDate, mapUrl, minusMinutes } from "../lib/format";
+import { dayMonthDot, longDate, mapUrl, minusMinutes, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 import When from "./When.astro";
@@ -21,15 +21,19 @@ const away = team(g.awayTeamId);
 const shareText = `${home.name} vs ${away.name}, ${longDate(g.date)} ${g.time}${g.venue ? `, ${g.venue}` : ""}`;
 const upcoming = s === "upcoming" || s === "live";
 const date = longDate(g.date);
-const pill = "flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-base leading-[1.4] text-grey-950";
+// Mobile: date, relative label and venue share one line (short date, venue truncated).
+const pill = "flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-sm leading-[1.4] whitespace-nowrap text-grey-950 md:text-base";
 const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 md:text-[10rem]";
 ---
 
 <section aria-label="Zápas" class="flex flex-col gap-8 rounded-lg bg-grey-100 px-5 py-6 md:gap-8 md:p-10">
-  <div class="flex flex-wrap items-center justify-between gap-2">
-    <span class="flex items-center gap-2">
-      <time datetime={g.start} class={pill}>{date.charAt(0).toUpperCase() + date.slice(1)}</time>
-      <When game={g} class="flex h-8 items-center rounded-full bg-white px-3 font-display text-base font-bold text-grey-950 uppercase" />
+  <div class="flex items-center justify-between gap-1.5 md:flex-wrap md:gap-2">
+    <span class="flex shrink-0 items-center gap-1.5 md:gap-2">
+      <time datetime={g.start} class:list={[pill, "shrink-0"]}>
+        <span class="md:hidden">{weekdayShort(g.date)} {dayMonthDot(g.date)}</span>
+        <span class="max-md:hidden">{date.charAt(0).toUpperCase() + date.slice(1)}</span>
+      </time>
+      <When game={g} class:list={[pill, "shrink-0 font-sans font-normal tracking-normal normal-case"]} />
     </span>
     {
       g.venue && (
@@ -37,10 +41,10 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
           href={mapUrl(g.venue)}
           target="_blank"
           rel="noopener"
-          class:list={[pill, "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)]"]}
+          class:list={[pill, "btn-fill min-w-0 shrink hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)]"]}
         >
-          <MapPin size={14} aria-hidden="true" />
-          {g.venue}
+          <MapPin size={14} class="shrink-0" aria-hidden="true" />
+          <span class="min-w-0 truncate">{g.venue}</span>
           <span class="sr-only">(otevře mapu)</span>
         </a>
       )
@@ -70,7 +74,7 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
           </span>
         ) : (
           <>
-            <span class:list={[big, "md:text-[7.5rem]"]}>{g.time}</span>
+            <span class:list={[big, "max-md:text-[3.25rem] md:text-[7.5rem]"]}>{g.time}</span>
             <span class="font-display text-base leading-[1.4] font-bold text-red-600 uppercase md:text-lg">Sraz {minusMinutes(g.time, SRAZ_MIN)}</span>
           </>
         )
@@ -112,10 +116,10 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
           data-url={url(`zapas/${slug}`)}
           data-text={shareText}
           hidden
-          class="btn-fill flex min-w-20 items-center justify-center gap-1 rounded-md bg-white p-3 whitespace-nowrap text-grey-950 hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)]"
+          class="link-underline flex cursor-pointer items-center gap-1 font-display text-lg leading-6 font-bold whitespace-nowrap text-grey-600 uppercase hover:text-grey-950 focus-visible:text-grey-950"
         >
           <Share2 size={16} aria-hidden="true" />
-          <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Sdílet</span>
+          Sdílet
         </button>
         <span role="status" class="text-sm text-grey-600 empty:hidden"></span>
       </div>
