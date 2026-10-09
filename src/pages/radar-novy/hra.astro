@@ -1,0 +1,127 @@
+---
+// Dračí radar v2 – Hra: how our games go. Points over the season, when goals fall (minute by
+// minute, split into the three periods), what the first goal means, shots, special teams.
+import RadarShell from "../../components/radar/RadarShell.astro";
+import UpDown from "../../components/radar/UpDown.astro";
+import Ring from "../../components/radar/Ring.astro";
+import ResultDots from "../../components/radar/ResultDots.astro";
+import PointsChart from "../../components/brain/PointsChart.astro";
+import Card from "../../components/brain/Card.astro";
+import Insight from "../../components/brain/Insight.astro";
+import Stat from "../../components/brain/Stat.astro";
+import SectionHead from "../../components/brain/SectionHead.astro";
+import { insights, periods, pointsTimeline, season, specialTeams } from "../../lib/brain";
+import { firstGoalGames, goalTimeline, league, perGame } from "../../lib/radar";
+import { num, plural, shortDate } from "../../lib/format";
+import { url } from "../../lib/url";
+
+const ppg = league.find((m) => m.key === "ppg")!;
+const won = (list: { r: string }[]) => list.filter((x) => x.r === "V").length;
+const z = (n: number) => `${(n >= 10 && n < 20 ? [12, 13, 14, 17].includes(n) : "2347".includes(String(n)[0])) ? "ze" : "z"} ${n}`;
+const firstCards = [
+  { title: "Když dáme první gól", list: firstGoalGames.us, tone: "text-blue-600" },
+  { title: "Když první skóruje soupeř", list: firstGoalGames.them, tone: "text-red-600" },
+];
+const periodNames = ["1. třetina", "2. třetina", "3. třetina"];
+const withShots = perGame.filter((g) => g.shotsFor != null);
+const { powerPlay: pp, penaltyKill: pk, shooting, faceoffs } = specialTeams;
+const goals = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
+---
+
+<RadarShell tab="hra" title="Hra – Dračí radar – PHT Dragons" description="Jak hrajeme: body v sezóně, kdy padají góly, první gól, střely a speciální situace.">
+  <!-- points over the season -->
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Card class="lg:col-span-2" title="Body v průběhu sezóny" subtitle="Za výhru 2 body, za remízu 1. Najeď na tečku pro detail zápasu.">
+      <PointsChart points={pointsTimeline} />
+    </Card>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+      <div class="rounded-lg bg-surface p-6">
+        <Stat size="xl" label="Body na zápas" value={num(ppg.ours, 2)} sub={`Průměr ligy ${num(ppg.avg, 2)}`} />
+      </div>
+      <div class="rounded-lg bg-surface p-6">
+        <Stat
+          size="xl"
+          label="Rozdíl skóre"
+          value={season.gf - season.ga > 0 ? `+${season.gf - season.ga}` : String(season.gf - season.ga)}
+          tone={season.gf >= season.ga ? "green" : "red"}
+          sub={`${goals(season.gf)} dáno, ${goals(season.ga)} obdrženo`}
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- when goals fall -->
+  <SectionHead title="Kdy padají góly" sub="Všechny góly sezóny podle minuty zápasu (3 × 15 minut)" />
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Insight tone="blue" class="max-lg:order-1" insight={insights.period} />
+    <Card class="lg:col-span-2" title="Góly po pěti minutách" subtitle="Nad čarou naše góly, pod čarou obdržené. Nahoře skóre každé třetiny.">
+      <UpDown
+        aLabel="Vstřelené"
+        bLabel="Obdržené"
+        half={64}
+        groups={periods.slice(0, 3).map((p, k) => ({ label: periodNames[k], note: `${p.for}:${p.against}`, span: 3 }))}
+        items={goalTimeline.map((b) => ({
+          a: b.for,
+          b: b.against,
+          label: `${b.from}.–${b.to}.`,
+          tip: `${b.from}.–${b.to}. minuta\n${goals(b.for)} dáno, ${goals(b.against)} obdrženo`,
+        }))}
+      />
+    </Card>
+  </div>
+
+  <!-- first goal -->
+  <SectionHead title="Na prvním gólu záleží" sub="Výsledky podle toho, kdo skóroval jako první" />
+  <div class="grid gap-4 md:grid-cols-2">
+    {
+      firstCards.map((c) => (
+        <Card title={c.title}>
+          <p class="flex items-baseline gap-3">
+            <span class:list={["font-display text-[4rem] leading-none font-extrabold", c.tone]}>
+              {won(c.list)} {z(c.list.length)}
+            </span>
+            <span class="font-display text-xl font-bold text-grey-600 uppercase">
+              {c.list.length === 1 ? "zápasu vyhrán" : "zápasů vyhráno"}
+            </span>
+          </p>
+          {c.list.length > 0 ? <ResultDots results={c.list} /> : <p class="text-grey-600">Zatím žádný zápas.</p>}
+        </Card>
+      ))
+    }
+  </div>
+
+  <!-- shots -->
+  <SectionHead title="Střely" sub="Kolik střílíme a kolik to stojí gólů" />
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Card class="lg:col-span-2" title="Střely na branku" subtitle="Nahoru naše střely, dolů střely soupeře. Klikni na zápas pro detail.">
+      <UpDown
+        aLabel="Naše střely"
+        bLabel="Střely soupeře"
+        half={72}
+        items={withShots.map((g) => ({
+          a: g.shotsFor ?? 0,
+          b: g.shotsAgainst ?? 0,
+          label: g.short,
+          result: g.result,
+          href: url(`zapas/${g.slug}`),
+          tip: `${shortDate(g.date)} · ${g.opponent}\nStřely ${g.shotsFor}:${g.shotsAgainst}, góly ${g.gf}:${g.ga}`,
+        }))}
+      />
+    </Card>
+    <Insight tone="grey" insight={insights.shooting} />
+  </div>
+
+  <!-- special teams -->
+  <SectionHead title="Speciální situace" sub="Přesilovky, oslabení, střelba a vhazování" />
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Card class="lg:col-span-2" title="V procentech">
+      <div class="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
+        <Ring value={pp.pct} label="Přesilovky" sub={`${goals(pp.goals)} po ${pp.chances} vyloučeních soupeře`} />
+        <Ring value={pk.pct} label="Ubráněná oslabení" sub={`${pk.against} ${plural(pk.against, "inkasovaný gól", "inkasované góly", "inkasovaných gólů")} po ${pk.times} našich vyloučeních`} />
+        <Ring value={shooting.pct} label="Proměněné střely" sub={`${goals(shooting.goals)} z ${shooting.shots} střel`} />
+        <Ring value={faceoffs.pct} label="Vyhraná vhazování" sub={`${faceoffs.won} z ${faceoffs.all}`} />
+      </div>
+    </Card>
+    <Insight tone="white" insight={insights.powerPlay} />
+  </div>
+</RadarShell>

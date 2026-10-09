@@ -1,0 +1,41 @@
+---
+// Percentage as a ring gauge: grey track, blue arc with round ends, the value in the middle,
+// label and a plain-words explanation underneath.
+interface Props {
+  value: number | null;
+  label: string;
+  sub?: string;
+}
+const { value, label, sub } = Astro.props;
+const R = 40;
+const C = 2 * Math.PI * R;
+const pct = Math.max(0, Math.min(100, value ?? 0));
+---
+
+<figure class="flex flex-col items-center gap-3 text-center">
+  <svg viewBox="0 0 100 100" class="size-28" role="img" aria-label={`${label}: ${value == null ? "bez dat" : `${Math.round(pct)} %`}`}>
+    <circle cx="50" cy="50" r={R} fill="none" stroke="var(--color-grey-200)" stroke-width="9" />
+    {
+      value != null && pct > 0 && (
+        <circle
+          cx="50"
+          cy="50"
+          r={R}
+          fill="none"
+          stroke="var(--color-blue-600)"
+          stroke-width="9"
+          stroke-linecap="round"
+          stroke-dasharray={`${(C * pct) / 100} ${C}`}
+          transform="rotate(-90 50 50)"
+        />
+      )
+    }
+    <text x="50" y="57" text-anchor="middle" class="fill-grey-950 font-display text-[22px] font-extrabold">
+      {value == null ? "–" : `${Math.round(pct)} %`}
+    </text>
+  </svg>
+  <figcaption class="flex flex-col gap-1">
+    <span class="font-display text-base font-bold text-grey-950 uppercase">{label}</span>
+    {sub && <span class="text-sm text-grey-600">{sub}</span>}
+  </figcaption>
+</figure>

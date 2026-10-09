@@ -1,0 +1,70 @@
+---
+// Where we stand in the league, one row per metric: every team is a grey dot on one line, we are
+// the big blue dot, the tick is the league average. Each line runs from worse (left) to better
+// (right), so "further right = better" holds for every row, also where lower values are better
+// (goals against, penalty minutes). Hover / tap a dot for the team and value.
+import type { LeagueMetric } from "../../lib/radar";
+import { num } from "../../lib/format";
+import { OUR } from "../../lib/data";
+
+interface Props {
+  metrics: LeagueMetric[];
+}
+const { metrics } = Astro.props;
+---
+
+<div class="flex flex-col gap-7">
+  {
+    metrics.map((m) => {
+      const values = m.teams.map((t) => t.value);
+      const lo = Math.min(...values);
+      const hi = Math.max(...values);
+      const span = hi - lo || 1;
+      // position 0..100 %, better on the right
+      const pos = (v: number) => 4 + 92 * (m.higher ? (v - lo) / span : (hi - v) / span);
+      const others = m.teams.filter((t) => t.teamId !== OUR);
+      return (
+        <div class="flex flex-col gap-2">
+          <div class="flex items-baseline justify-between gap-4">
+            <span class="text-base text-grey-950">{m.label}</span>
+            <span class="font-display text-base font-bold whitespace-nowrap text-grey-500 uppercase">
+              <span class="text-xl text-blue-600">{m.rank}.</span> z {m.count}
+            </span>
+          </div>
+          <div class="relative h-8" role="img" aria-label={`${m.label}: ${num(m.ours)}, ${m.rank}. místo z ${m.count}, průměr ligy ${num(m.avg)}`}>
+            <span class="absolute inset-x-0 top-1/2 h-px bg-grey-300" aria-hidden="true" />
+            <span
+              class="absolute top-1 bottom-1 w-0.5 -translate-x-1/2 rounded-full bg-grey-500"
+              style={`left:${pos(m.avg)}%`}
+              data-tip={`Průměr ligy: ${num(m.avg)}`}
+            />
+            {
+              others.map((t) => (
+                <span
+                  class="absolute top-1/2 size-3 -translate-1/2 rounded-full bg-grey-400 ring-2 ring-surface hover:bg-grey-600"
+                  style={`left:${pos(t.value)}%`}
+                  data-tip={`${t.name}\n${num(t.value)}`}
+                />
+              ))
+            }
+            <span
+              class="absolute top-1/2 size-5 -translate-1/2 rounded-full bg-blue-600 ring-3 ring-surface"
+              style={`left:${pos(m.ours)}%`}
+              tabindex="0"
+              data-tip={`PHT Dragons\n${num(m.ours)} · ${m.rank}. z ${m.count}`}
+            />
+          </div>
+          <div class="flex justify-between font-display text-xs font-bold text-grey-500 uppercase" aria-hidden="true">
+            <span>Horší</span>
+            <span>Lepší</span>
+          </div>
+        </div>
+      );
+    })
+  }
+  <p class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-grey-600">
+    <span class="flex items-center gap-2"><span class="size-3 rounded-full bg-blue-600"></span>PHT Dragons</span>
+    <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-grey-400"></span>Ostatní týmy</span>
+    <span class="flex items-center gap-2"><span class="h-3 w-0.5 rounded-full bg-grey-500"></span>Průměr ligy</span>
+  </p>
+</div>

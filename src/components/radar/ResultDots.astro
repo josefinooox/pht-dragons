@@ -1,0 +1,25 @@
+---
+// A run of results as small V / R / P chips in time order, each with the score in a tooltip.
+import ResultChip from "../ResultChip.astro";
+import { fullDate, resultName } from "../../lib/format";
+import type { Result } from "../../lib/data";
+
+interface Props {
+  results: { r: Result; score: string; date: string; opponent?: string }[];
+  /** Show at most this many (the latest ones). */
+  max?: number;
+}
+const { results, max = 12 } = Astro.props;
+const shown = results.slice(-max);
+---
+
+<span class="flex flex-wrap items-center gap-1">
+  {results.length > shown.length && <span class="pr-1 text-sm text-grey-500">…</span>}
+  {
+    shown.map((x) => (
+      <span tabindex="0" class="rounded-full" data-tip={`${fullDate(x.date)}${x.opponent ? ` · ${x.opponent}` : ""}\n${resultName[x.r]} ${x.score}`}>
+        <ResultChip result={x.r} size="sm" />
+      </span>
+    ))
+  }
+</span>

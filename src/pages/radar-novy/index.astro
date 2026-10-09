@@ -1,0 +1,136 @@
+---
+// Dračí radar v2 – Přehled: "how are we doing?" in ten seconds (rank, record, score), then the
+// season game by game, our place in the league, and doors to the deeper sub-pages.
+import { ArrowRight } from "@lucide/astro";
+import RadarShell from "../../components/radar/RadarShell.astro";
+import UpDown from "../../components/radar/UpDown.astro";
+import LeagueDots from "../../components/radar/LeagueDots.astro";
+import Card from "../../components/brain/Card.astro";
+import Insight from "../../components/brain/Insight.astro";
+import { allTime, insights, leaders, recordText, season } from "../../lib/brain";
+import { RADAR_ROOT, league, leagueInsight, perGame, tally, teamCount } from "../../lib/radar";
+import { num, plural, resultName, shortDate } from "../../lib/format";
+import { url } from "../../lib/url";
+
+const diff = season.gf - season.ga;
+const total = Math.max(1, tally.V + tally.R + tally.P);
+const topScorer = leaders.points[0];
+const label = "font-display text-base font-bold text-grey-500 uppercase";
+const parts = [
+  { k: "V", n: tally.V, word: plural(tally.V, "výhra", "výhry", "výher"), bar: "bg-success", ink: "text-success" },
+  { k: "R", n: tally.R, word: plural(tally.R, "remíza", "remízy", "remíz"), bar: "bg-grey-400", ink: "text-grey-950" },
+  { k: "P", n: tally.P, word: plural(tally.P, "prohra", "prohry", "proher"), bar: "bg-red-600", ink: "text-red-600" },
+] as const;
+const doors = [
+  { href: url(`${RADAR_ROOT}/hra`), title: "Hra", text: insights.period?.text ?? "Kdy dáváme a kdy dostáváme góly." },
+  {
+    href: url(`${RADAR_ROOT}/hraci`),
+    title: "Hráči",
+    text: topScorer ? `Nejvíc kanadských bodů: ${topScorer.name} (${topScorer.value}).` : "Body, góly a asistence hráčů.",
+  },
+  {
+    href: url(`${RADAR_ROOT}/historie`),
+    title: "Historie",
+    text: insights.trend?.text ?? `${allTime.seasons} ${plural(allTime.seasons, "sezóna", "sezóny", "sezón")}, ${allTime.games} zápasů.`,
+  },
+];
+---
+
+<RadarShell
+  tab="prehled"
+  title="Dračí radar – PHT Dragons"
+  description={`PHT Dragons v číslech: ${season.rank ?? "–"}. místo, ${season.points} bodů, ${recordText(tally)}.`}
+>
+  <!-- 1. the answer: rank, record, score -->
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_minmax(0,1fr)]">
+    <section aria-label="Pozice v tabulce" class="flex flex-col justify-between gap-4 rounded-lg bg-blue-600 p-6 text-white md:row-span-2 lg:row-span-1">
+      <span class="font-display text-base font-bold text-blue-100 uppercase">Pozice v tabulce</span>
+      <div>
+        <p class="flex items-baseline gap-3 font-display leading-[0.8] font-extrabold">
+          <span class="text-[8rem] md:text-[9rem]">{season.rank ?? "–"}.</span>
+          {teamCount > 0 && <span class="text-3xl font-bold text-blue-200">z {teamCount}</span>}
+        </p>
+        <p class="pt-3 font-display text-lg font-bold text-blue-100 uppercase">
+          {season.points} {plural(season.points, "bod", "body", "bodů")} po {season.games} {plural(season.games, "zápase", "zápasech", "zápasech")}
+        </p>
+      </div>
+    </section>
+
+    <section aria-label="Bilance" class="flex flex-col justify-between gap-6 rounded-lg bg-surface p-6">
+      <span class={label}>Bilance</span>
+      <div class="grid grid-cols-3 gap-2">
+        {
+          parts.map((p) => (
+            <p class="flex flex-col">
+              <span class:list={["font-display text-[3.5rem] leading-none font-extrabold md:text-[4.5rem]", p.n ? p.ink : "text-grey-400"]}>{p.n}</span>
+              <span class="font-display text-lg font-bold text-grey-600 uppercase">{p.word}</span>
+            </p>
+          ))
+        }
+      </div>
+      <div class="flex h-2 gap-0.5" aria-hidden="true">
+        {parts.filter((p) => p.n).map((p) => <span class:list={["h-full rounded-full", p.bar]} style={`flex:${p.n / total}`} />)}
+      </div>
+    </section>
+
+    <section aria-label="Skóre" class="flex flex-col justify-between gap-6 rounded-lg bg-surface p-6">
+      <span class={label}>Skóre</span>
+      <p class="font-display text-[3.5rem] leading-none font-extrabold md:text-[4.5rem]">
+        <span class="text-blue-600">{season.gf}</span><span class="px-1 text-grey-400">:</span><span class="text-red-600">{season.ga}</span>
+      </p>
+      <p class="flex flex-col gap-1 text-base text-grey-600">
+        <span>Rozdíl <strong class="font-semibold text-grey-950">{diff > 0 ? `+${diff}` : diff}</strong></span>
+        <span>Na zápas dáváme <strong class="font-semibold text-grey-950">{num(season.gfPerGame)}</strong> a dostáváme <strong class="font-semibold text-grey-950">{num(season.gaPerGame)}</strong></span>
+      </p>
+    </section>
+  </div>
+
+  <!-- 2. the season game by game -->
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Card class="lg:col-span-2" title="Zápas po zápase" subtitle="Nahoru naše góly, dolů obdržené. Klikni na zápas pro detail.">
+      <UpDown
+        aLabel="Vstřelené"
+        bLabel="Obdržené"
+        half={72}
+        items={perGame.map((g) => ({
+          a: g.gf,
+          b: g.ga,
+          label: g.short,
+          result: g.result,
+          href: url(`zapas/${g.slug}`),
+          tip: `${shortDate(g.date)} · ${g.opponent}\n${resultName[g.result]} ${g.gf}:${g.ga}`,
+        }))}
+      />
+    </Card>
+    <div class="flex flex-col gap-4 md:flex-row lg:flex-col [&>*]:flex-1">
+      <Insight tone="blue" insight={insights.firstUs} />
+      <Insight tone="white" insight={insights.firstThem} />
+    </div>
+  </div>
+
+  <!-- 3. our place in the league -->
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Insight tone="grey" class="max-lg:order-1" insight={leagueInsight} />
+    <Card class="lg:col-span-2" title="Kde jsme v lize" subtitle={`Každá tečka je jeden tým skupiny, průměry na zápas. Vpravo je vždy lépe.`}>
+      <LeagueDots metrics={league} />
+    </Card>
+  </div>
+
+  <!-- 4. doors into the details -->
+  <h2 class="pt-8 font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">Jdi do hloubky</h2>
+  <ul class="grid gap-4 md:grid-cols-3">
+    {
+      doors.map((d) => (
+        <li>
+          <a href={d.href} class="group flex h-full flex-col justify-between gap-6 rounded-lg bg-surface p-6 transition-colors hover:bg-grey-50">
+            <span class="flex items-center justify-between font-display text-2xl leading-tight font-black text-grey-950 uppercase">
+              {d.title}
+              <ArrowRight size={22} class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+            </span>
+            <span class="text-base text-grey-600">{d.text}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</RadarShell>

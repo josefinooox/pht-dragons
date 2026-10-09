@@ -18,6 +18,11 @@ export const shortDate = (date: string) => {
   const p = parts(date);
   return `${WDS[p.wd]} ${p.d}. ${p.m}.`;
 };
+/** "14. 12. 2025" (past seasons, where the year matters) */
+export const fullDate = (date: string) => {
+  const p = parts(date);
+  return `${p.d}. ${p.m}. ${p.y}`;
+};
 export const monthLabel = (date: string) => {
   const p = parts(date);
   return `${MN[p.m - 1]} ${p.y}`;

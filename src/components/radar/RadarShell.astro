@@ -1,0 +1,58 @@
+---
+// Dračí radar v2 frame: title with the season on the right, sub-page links (same pattern as the
+// homepage "Nadcházející / Minulé"), grey page with white cards. Sub-pages go from the quick
+// overview to the details: Přehled → Hra → Hráči → Historie.
+import Base from "../../layouts/Base.astro";
+import { season } from "../../lib/brain";
+import { RADAR_ROOT } from "../../lib/radar";
+import { url } from "../../lib/url";
+
+interface Props {
+  tab: "prehled" | "hra" | "hraci" | "historie";
+  title: string;
+  description: string;
+}
+const { tab, title, description } = Astro.props;
+const ROOT = RADAR_ROOT;
+const tabs = [
+  { key: "prehled", href: url(`${ROOT}`), label: "Přehled" },
+  { key: "hra", href: url(`${ROOT}/hra`), label: "Hra" },
+  { key: "hraci", href: url(`${ROOT}/hraci`), label: "Hráči" },
+  { key: "historie", href: url(`${ROOT}/historie`), label: "Historie" },
+];
+---
+
+<Base title={title} description={description} nav="radar" bare>
+  <div class="bg-grey-100">
+    <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-4 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+      <div class="flex flex-col gap-6 pb-4 md:gap-8">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+          <h1 class="font-display text-[2.75rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem] md:leading-[56px]">Dračí radar</h1>
+          <p class="font-sans text-base font-semibold text-grey-500 md:text-xl">Sezóna {season.name}</p>
+        </div>
+        <nav aria-label="Části radaru">
+          <ul class="flex gap-6">
+            {
+              tabs.map((t) => (
+                <li>
+                  <a
+                    href={t.href}
+                    aria-current={tab === t.key ? "page" : undefined}
+                    class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600"
+                  >
+                    {t.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+      <slot />
+    </div>
+  </div>
+</Base>
+
+<script>
+  import "../../scripts/tip.ts";
+</script>

@@ -18,7 +18,8 @@ for (const root of document.querySelectorAll<HTMLElement>("[data-tabs]")) {
       panels[k].hidden = !on;
     });
     if (focus) tabs[i].focus();
-    if (updateHash) history.replaceState(null, "", `#${panels[i].id}`);
+    // data-tabs="local": in-card switchers (e.g. the radar player board) leave the URL alone.
+    if (updateHash && root.dataset.tabs !== "local") history.replaceState(null, "", `#${panels[i].id}`);
   };
 
   tabs.forEach((t, i) => {

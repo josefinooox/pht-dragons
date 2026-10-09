@@ -228,10 +228,11 @@ export const allTime = (() => {
 
 /** Head-to-head against every opponent over all seasons, best share of points first. */
 export const headToHead = (() => {
-  const map = new Map<string, { teamId: string; name: string; games: number; V: number; R: number; P: number; gf: number; ga: number }>();
-  for (const g of allGames) {
+  const map = new Map<string, { teamId: string; name: string; games: number; V: number; R: number; P: number; gf: number; ga: number; results: { r: Result; score: string; date: string }[] }>();
+  for (const g of [...allGames].sort((a, b) => a.date.localeCompare(b.date))) {
     const p = perspective(g);
-    const t = map.get(p.oppId) ?? { teamId: p.oppId, name: p.oppName, games: 0, V: 0, R: 0, P: 0, gf: 0, ga: 0 };
+    const t = map.get(p.oppId) ?? { teamId: p.oppId, name: p.oppName, games: 0, V: 0, R: 0, P: 0, gf: 0, ga: 0, results: [] };
+    t.results.push({ r: p.r, score: `${p.f}:${p.a}`, date: g.date });
     t.name = p.oppName; // latest name wins (games are oldest first)
     t.games++;
     t[p.r]++;
@@ -257,7 +258,16 @@ const games = (n: number) => `${n} ${plural(n, "zápas", "zápasy", "zápasů")}
 // Czech "z" / "ze" before a number as it is read aloud (ze dvou, ze tří, ze sedmi, z pěti).
 const z = (n: number) => `${(n >= 10 && n < 20 ? [12, 13, 14, 17].includes(n) : "2347".includes(String(n)[0])) ? "ze" : "z"} ${n}`;
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-const wdl = (t: { V: number; R: number; P: number }) => `${t.V}–${t.R}–${t.P}`;
+/** Record in words, zeros left out: "3 výhry a 1 prohra", "2 výhry, 1 remíza a 1 prohra".
+ *  Never "3–0–1": with three periods that format reads like a score. */
+export const recordText = (t: { V: number; R: number; P: number }) => {
+  const parts = [
+    t.V && `${t.V} ${plural(t.V, "výhra", "výhry", "výher")}`,
+    t.R && `${t.R} ${plural(t.R, "remíza", "remízy", "remíz")}`,
+    t.P && `${t.P} ${plural(t.P, "prohra", "prohry", "proher")}`,
+  ].filter(Boolean) as string[];
+  return parts.length > 1 ? `${parts.slice(0, -1).join(", ")} a ${parts.at(-1)}` : (parts[0] ?? "bez zápasu");
+};
 
 export type InsightText = { big?: string; text: string };
 type Maybe = InsightText | null | false | undefined;
@@ -288,7 +298,7 @@ export const insights = (() => {
       us.games > 0 && {
         text:
           us.P === 0
-            ? `Když dáme první gól, jsme zatím neporažení: ${wdl(us)}.`
+            ? `Když dáme první gól, zatím jsme neprohráli: ${recordText(us)} ${z(us.games)} ${us.games === 1 ? "zápasu" : "zápasů"}.`
             : `Když dáme první gól, vyhráváme ${us.V} ${z(us.games)}.`,
       },
     ),
@@ -331,9 +341,9 @@ export const insights = (() => {
           }
         : topSeason && { text: `Nejlepší sezóna: ${topSeason.name} s ${Math.round(topSeason.winPct)}\u00a0% výher.` },
     ),
-    fav: pick(fav && fav.share > 0.5 && { text: `Oblíbený soupeř: ${fav.name}. Bilance ${wdl(fav)}, skóre ${fav.gf}:${fav.ga}.` }),
+    fav: pick(fav && fav.share > 0.5 && { text: `Oblíbený soupeř: ${fav.name}. ${cap(recordText(fav))}, skóre ${fav.gf}:${fav.ga}.` }),
     nemesis: pick(
-      nemesis && nemesis !== fav && nemesis.share < 0.5 && { text: `Nejtěžší soupeř: ${nemesis.name}. Bilance ${wdl(nemesis)}, skóre ${nemesis.gf}:${nemesis.ga}.` },
+      nemesis && nemesis !== fav && nemesis.share < 0.5 && { text: `Nejtěžší soupeř: ${nemesis.name}. ${cap(recordText(nemesis))}, skóre ${nemesis.gf}:${nemesis.ga}.` },
     ),
   };
 })();

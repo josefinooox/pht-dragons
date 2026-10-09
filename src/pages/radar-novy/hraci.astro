@@ -1,0 +1,89 @@
+---
+// Dračí radar v2 – Hráči: one leaderboard with a metric switch (points, goals, assists, stars,
+// penalty minutes, games) instead of six separate lists; assist pairs and goalies next to it.
+import RadarShell from "../../components/radar/RadarShell.astro";
+import Ring from "../../components/radar/Ring.astro";
+import PillTabs from "../../components/PillTabs.astro";
+import BarList from "../../components/brain/BarList.astro";
+import Card from "../../components/brain/Card.astro";
+import Insight from "../../components/brain/Insight.astro";
+import SectionHead from "../../components/brain/SectionHead.astro";
+import { assistPairs, goalies, insights, reportCount } from "../../lib/brain";
+import { players } from "../../lib/radar";
+import { num, plural } from "../../lib/format";
+
+const pim = (m: number) => `${Math.floor(m)}:${String(Math.round((m % 1) * 60)).padStart(2, "0")}`;
+type Key = "points" | "goals" | "assists" | "stars" | "pim" | "games";
+const boards: { id: string; label: string; key: Key; fmt?: (v: number) => string; color?: "blue" | "grey"; max?: number }[] = [
+  { id: "body", label: "Kanadské body", key: "points" },
+  { id: "goly", label: "Góly", key: "goals" },
+  { id: "asistence", label: "Asistence", key: "assists" },
+  { id: "hvezdy", label: "Hvězdy zápasu", key: "stars" },
+  { id: "trestne-minuty", label: "Trestné minuty", key: "pim", fmt: pim, color: "grey" },
+  { id: "zapasy", label: "Odehrané zápasy", key: "games", color: "grey", max: reportCount },
+];
+const ranked = (key: Key) =>
+  players
+    .filter((p) => p[key] > 0)
+    .sort((a, b) => b[key] - a[key] || b.points - a.points || a.name.localeCompare(b.name, "cs"));
+---
+
+<RadarShell tab="hraci" title="Hráči – Dračí radar – PHT Dragons" description="Body, góly, asistence, hvězdy zápasu, nahrávací dvojice a brankáři PHT Dragons.">
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Card class="lg:col-span-2 lg:row-span-2" title="Žebříček hráčů" subtitle="Vyber, co chceš porovnat.">
+      <div data-tabs="local" class="flex flex-col gap-6">
+        <PillTabs tabs={boards.map((b) => ({ id: b.id, label: b.label }))} label="Žebříček hráčů podle" />
+        {
+          boards.map((b) => (
+            <div role="tabpanel" id={b.id} aria-labelledby={`tab-${b.id}`} tabindex="0" class="flex flex-col gap-4">
+              <h3 data-tab-title class="font-display text-xl font-black text-grey-950 uppercase">
+                {b.label}
+              </h3>
+              <BarList
+                color={b.color}
+                max={b.max}
+                items={ranked(b.key).map((p) => ({
+                  label: p.name,
+                  value: p[b.key],
+                  display: b.fmt ? b.fmt(p[b.key]) : String(p[b.key]),
+                  note: p.number != null ? `#${p.number}` : undefined,
+                }))}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </Card>
+    <Insight tone="blue" insight={insights.scorers} />
+    <Insight tone="white" insight={insights.assisted} />
+  </div>
+
+  <SectionHead title="Spolupráce a brankáři" sub="Kdo komu přihrává a jak chytáme" />
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <Card title="Nahrávací dvojice" subtitle="Přihrávka → gól, nejčastější dvojice">
+      <BarList items={assistPairs.slice(0, 6).map((p) => ({ label: `${p.from} → ${p.to}`, value: p.count }))} />
+    </Card>
+    <Card title="Brankáři" subtitle="Úspěšnost zákroků">
+      {
+        goalies.length ? (
+          <div class="grid grid-cols-2 gap-4">
+            {goalies.map((gk) => (
+              <Ring
+                value={gk.svPct}
+                label={gk.name}
+                sub={`${gk.games} ${plural(gk.games, "zápas", "zápasy", "zápasů")}, ${num(gk.gaa)} gólu na zápas${gk.shutouts ? `, ${gk.shutouts}× čisté konto` : ""}`}
+              />
+            ))}
+          </div>
+        ) : (
+          <p class="text-grey-600">Zatím žádná data.</p>
+        )
+      }
+    </Card>
+    <Insight tone="grey" class="md:col-span-2 lg:col-span-1" insight={insights.stars} />
+  </div>
+</RadarShell>
+
+<script>
+  import "../../scripts/tabs.ts";
+</script>

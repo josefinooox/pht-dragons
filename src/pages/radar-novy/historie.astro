@@ -1,0 +1,106 @@
+---
+// Dračí radar v2 – Historie: all our seasons in the PHM Cup. Totals, season by season (results
+// as one bar split into wins / draws / losses), records, and every opponent with each result.
+import RadarShell from "../../components/radar/RadarShell.astro";
+import ResultDots from "../../components/radar/ResultDots.astro";
+import Card from "../../components/brain/Card.astro";
+import Insight from "../../components/brain/Insight.astro";
+import Stat from "../../components/brain/Stat.astro";
+import SectionHead from "../../components/brain/SectionHead.astro";
+import { allTime, headToHead, insights, recordText } from "../../lib/brain";
+import { fullDate, plural } from "../../lib/format";
+
+const winPct = allTime.games ? Math.round((100 * allTime.wins) / allTime.games) : 0;
+const tile = "rounded-lg bg-surface p-6";
+const split = (s: { wins: number; draws: number; losses: number }) => [
+  { n: s.wins, c: "bg-success", t: "výhry" },
+  { n: s.draws, c: "bg-grey-400", t: "remízy" },
+  { n: s.losses, c: "bg-red-600", t: "prohry" },
+];
+---
+
+<RadarShell tab="historie" title="Historie – Dračí radar – PHT Dragons" description="PHT Dragons ve všech sezónách PHM Cupu: bilance, rekordy a vzájemné zápasy se soupeři.">
+  <!-- totals -->
+  <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div class={tile}><Stat size="xl" label="Sezóny" value={String(allTime.seasons)} /></div>
+    <div class={tile}><Stat size="xl" label="Zápasy" value={String(allTime.games)} /></div>
+    <div class={tile}><Stat size="xl" label="Podíl výher" value={`${winPct} %`} tone="green" sub={recordText({ V: allTime.wins, R: allTime.draws, P: allTime.losses })} /></div>
+    <div class={tile}><Stat size="xl" label="Skóre" value={`${allTime.gf}:${allTime.ga}`} sub={`${allTime.gf} vstřelených, ${allTime.ga} obdržených gólů`} /></div>
+  </div>
+
+  <!-- season by season -->
+  <SectionHead title="Sezóna po sezóně" sub="Každý pruh je jedna sezóna rozdělená na výhry, remízy a prohry" />
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Insight tone="blue" class="max-lg:order-1" insight={insights.trend} />
+    <Card class="lg:col-span-2" title="Bilance sezón">
+      <ul class="flex flex-col gap-6">
+        {
+          allTime.bySeason.map((s) => (
+            <li class="flex flex-col gap-2">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+                <span class="font-display text-xl font-extrabold text-grey-950">{s.name}</span>
+                <span class="font-display text-xl font-extrabold text-success">
+                  {Math.round(s.winPct)} %<span class="pl-1 text-base font-bold text-grey-500 uppercase">výher</span>
+                </span>
+              </div>
+              <div class="flex h-3 gap-0.5" data-tip={`${s.name}\n${recordText({ V: s.wins, R: s.draws, P: s.losses })}\nSkóre ${s.gf}:${s.ga}`} tabindex="0">
+                {split(s).filter((p) => p.n).map((p) => <span class:list={["h-full rounded-full", p.c]} style={`flex:${p.n}`} />)}
+              </div>
+              <span class="text-sm text-grey-600">
+                {s.games} {plural(s.games, "zápas", "zápasy", "zápasů")}: {recordText({ V: s.wins, R: s.draws, P: s.losses })}, skóre {s.gf}:{s.ga}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="flex flex-wrap gap-x-5 gap-y-1 text-sm text-grey-600">
+        <span class="flex items-center gap-2"><span class="h-2 w-4 rounded-full bg-success"></span>Výhry</span>
+        <span class="flex items-center gap-2"><span class="h-2 w-4 rounded-full bg-grey-400"></span>Remízy</span>
+        <span class="flex items-center gap-2"><span class="h-2 w-4 rounded-full bg-red-600"></span>Prohry</span>
+      </p>
+    </Card>
+  </div>
+
+  <!-- opponents -->
+  <SectionHead title="Proti komu nám to jde" sub="Všichni soupeři ze všech sezón, nejúspěšnější nahoře" />
+  <div class="grid gap-4 lg:grid-cols-3">
+    <Card class="lg:col-span-2" title="Vzájemné zápasy" subtitle="Každé kolečko je jeden zápas, nejstarší vlevo. Najeď na něj pro výsledek.">
+      <ul class="flex flex-col divide-y divide-grey-200">
+        {
+          headToHead.map((h) => (
+            <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-3 md:grid-cols-[minmax(0,14rem)_minmax(0,1fr)_auto]">
+              <span class="min-w-0">
+                <span class="block truncate text-base font-semibold text-grey-950">{h.name}</span>
+                <span class="block text-sm text-grey-600">{recordText(h)}</span>
+              </span>
+              <span class="col-span-2 row-start-2 md:col-span-1 md:row-start-auto">
+                <ResultDots results={h.results} />
+              </span>
+              <span class="row-start-1 text-right font-display text-lg leading-none font-extrabold text-grey-950 md:row-start-auto" title="Skóre">
+                {h.gf}:{h.ga}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </Card>
+    <div class="flex flex-col gap-4 lg:sticky lg:top-6 lg:self-start">
+      <Insight tone="white" insight={insights.fav} />
+      <Insight tone="grey" insight={insights.nemesis} />
+      {
+        allTime.biggestWin && (
+          <div class={tile}>
+            <Stat label="Nejvyšší výhra" value={allTime.biggestWin.score} tone="green" sub={`${allTime.biggestWin.opponent}, ${fullDate(allTime.biggestWin.date)}`} />
+          </div>
+        )
+      }
+      {
+        allTime.biggestLoss && (
+          <div class={tile}>
+            <Stat label="Nejvyšší prohra" value={allTime.biggestLoss.score} tone="red" sub={`${allTime.biggestLoss.opponent}, ${fullDate(allTime.biggestLoss.date)}`} />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</RadarShell>
