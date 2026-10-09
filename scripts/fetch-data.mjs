@@ -314,9 +314,11 @@ async function syncNarratives(games, teams, reports, ctx) {
       }
     }
   }
-  const next = Object.fromEntries(Object.keys(cache).filter((id) => keep.has(id)).sort().map((id) => [id, cache[id]]));
+  // Keep texts of our current games and the weekly summaries ("round:<monday>", written by the
+  // morning routine via scripts/narratives.mjs); drop texts of games that are no longer ours.
+  const next = Object.fromEntries(Object.keys(cache).filter((id) => keep.has(id) || id.startsWith("round:")).sort().map((id) => [id, cache[id]]));
   if (prevText !== toJson(next)) await writeFile(file, toJson(next));
-  return { written, pending: todo.length - written, total: keep.size, have: Object.keys(next).length, usage, enabled: !!client };
+  return { written, pending: todo.length - written, total: keep.size, have: Object.keys(next).filter((id) => keep.has(id)).length, usage, enabled: !!client };
 }
 
 async function main() {
