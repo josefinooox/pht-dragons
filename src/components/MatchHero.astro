@@ -22,7 +22,7 @@ const shareText = `${home.name} vs ${away.name}, ${longDate(g.date)} ${g.time}${
 const upcoming = s === "upcoming" || s === "live";
 const date = longDate(g.date);
 // Mobile: date, relative label and venue share one line (short date, venue truncated).
-const pill = "flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-sm leading-[1.4] whitespace-nowrap text-grey-950 md:text-base";
+const pill = "flex h-8 items-center gap-1.5 rounded-full bg-surface px-3 text-sm leading-[1.4] whitespace-nowrap text-grey-950 md:text-base";
 const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 md:text-[10rem]";
 ---
 
@@ -41,7 +41,7 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
           href={mapUrl(g.venue)}
           target="_blank"
           rel="noopener"
-          class:list={[pill, "btn-fill min-w-0 shrink hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)]"]}
+          class:list={[pill, "btn-fill min-w-0 shrink hover:text-on-ink focus-visible:text-on-ink active:[--btn-fill:var(--color-grey-800)]"]}
         >
           <MapPin size={14} class="shrink-0" aria-hidden="true" />
           <span class="min-w-0 truncate">{g.venue}</span>
@@ -86,7 +86,7 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
     final && g.stars.length > 0 && (
       <ul class="flex flex-wrap justify-center gap-2" aria-label="Hvězdy zápasu">
         {g.stars.map((st) => (
-          <li class="flex h-8 items-center gap-1.5 rounded-full bg-white px-3 text-sm leading-5">
+          <li class="flex h-8 items-center gap-1.5 rounded-full bg-surface px-3 text-sm leading-5">
             <Star size={14} class="fill-red-600 text-red-600" aria-hidden="true" />
             <span class="font-semibold text-grey-950">
               {st.firstName} {st.lastName}

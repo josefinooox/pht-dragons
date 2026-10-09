@@ -21,7 +21,7 @@ const rows = standings.slice(from, from + 5).map((row) => {
 const grid = "grid grid-cols-[56px_56px_minmax(0,1fr)_56px_56px] items-center";
 ---
 
-<aside class="table-panel relative hidden shrink-0 overflow-x-clip border-l border-grey-200 bg-white lg:block" aria-label="Tabulka">
+<aside class="table-panel relative hidden shrink-0 overflow-x-clip border-l border-grey-200 bg-surface lg:block" aria-label="Tabulka">
   <!-- collapsed: the whole rail (full height) is the button; its content stays in view -->
   <button
     type="button"
@@ -45,7 +45,7 @@ const grid = "grid grid-cols-[56px_56px_minmax(0,1fr)_56px_56px] items-center";
       <button
         type="button"
         data-table-toggle="close"
-        class="btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] grid size-10 place-items-center rounded-full border border-grey-300 bg-white text-grey-950 hover:border-grey-950"
+        class="btn-fill hover:text-on-ink focus-visible:text-on-ink active:[--btn-fill:var(--color-grey-800)] grid size-10 place-items-center rounded-full border border-grey-300 bg-surface text-grey-950 hover:border-grey-950"
         aria-label="Zavřít tabulku"
         aria-controls="table-panel"
       >

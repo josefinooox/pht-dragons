@@ -49,7 +49,7 @@ const last = points.at(-1);
     {
       points.map((p) => (
         <g>
-          <circle cx={x(p.i)} cy={y(p.total)} r="7" fill={dot[p.result]} stroke="var(--color-white, #fff)" stroke-width="2" />
+          <circle cx={x(p.i)} cy={y(p.total)} r="7" fill={dot[p.result]} stroke="var(--color-surface)" stroke-width="2" />
           <circle cx={x(p.i)} cy={y(p.total)} r="12" fill="transparent">
             <title>{`${p.i}. zápas: ${p.opponent} ${p.score} (${resultName[p.result]}), ${p.total} b.`}</title>
           </circle>

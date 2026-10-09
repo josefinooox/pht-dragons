@@ -114,7 +114,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
     }
     <a
       href={url(`zapas/${slug}`)}
-      class:list={[inner, "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-white px-3 py-2 whitespace-nowrap text-grey-950 @min-[60rem]:ml-0 @min-[60rem]:p-3"]}
+      class:list={[inner, "btn-fill hover:text-on-ink focus-visible:text-on-ink active:[--btn-fill:var(--color-grey-800)] ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-surface px-3 py-2 whitespace-nowrap text-grey-950 @min-[60rem]:ml-0 @min-[60rem]:p-3"]}
     >
       <span class="px-1 font-display text-base leading-6 font-bold uppercase @min-[60rem]:text-lg">Detail zápasu</span>
       <span class="sr-only">: {team(g.homeTeamId).name} – {team(g.awayTeamId).name}</span>

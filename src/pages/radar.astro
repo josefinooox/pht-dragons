@@ -33,7 +33,7 @@ const top = (list: { name: string; value: number; number: number | null }[], n =
   list.slice(0, n).map((p) => ({ label: p.name, value: p.value, display: fmt ? fmt(p.value) : String(p.value), note: p.number != null ? `#${p.number}` : undefined }));
 const pim = (m: number) => `${Math.floor(m)}:${String(Math.round((m % 1) * 60)).padStart(2, "0")}`;
 const wdl = (t: { V: number; R: number; P: number }) => `${t.V}–${t.R}–${t.P}`;
-const tile = "rounded-lg bg-white p-5";
+const tile = "rounded-lg bg-surface p-5";
 const ourWinPct = allTime.games ? (100 * allTime.wins) / allTime.games : 0;
 ---
 

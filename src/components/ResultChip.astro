@@ -8,7 +8,7 @@ interface Props {
   size?: "sm" | "md";
 }
 const { result, size = "md" } = Astro.props;
-const colors = { V: "bg-win text-grey-50", R: "bg-draw text-grey-600", P: "bg-loss text-grey-50" }[result];
+const colors = { V: "bg-win text-white", R: "bg-draw text-grey-600", P: "bg-loss text-white" }[result];
 ---
 
 <abbr

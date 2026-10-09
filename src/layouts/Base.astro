@@ -1,5 +1,5 @@
 ---
-import { ChevronLeft, Menu, X } from "@lucide/astro";
+import { ChevronLeft, Menu, Moon, Sun, X } from "@lucide/astro";
 import { OUR, meta, team } from "../lib/data";
 import { url } from "../lib/url";
 import CalendarMenu from "../components/CalendarMenu.astro";
@@ -59,11 +59,13 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
       // Standings panel state before first paint (collapsed by default), see TablePanel.astro.
       try {
         if (localStorage.getItem("pht-table") === "open") document.documentElement.dataset.table = "open";
+        // Theme before first paint (light by default), see the floating toggle below.
+        if (localStorage.getItem("pht-theme") === "dark") document.documentElement.dataset.theme = "dark";
       } catch (e) {}
     </script>
   </head>
-  <body class="bg-white text-grey-950 antialiased">
-    <header class="bg-grey-900">
+  <body class="bg-background text-grey-950 antialiased">
+    <header class="bg-night-900">
       <!-- header, main column and footer share the page grid (--gutter in global.css) -->
       <div class="flex h-[72px] items-center justify-between gap-4 px-(--gutter)">
         <!-- the logo is a mask over colour layers, so hover can sweep white, then red, across it -->
@@ -78,7 +80,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
                   <a
                     href={l.href}
                     aria-current={nav === l.key ? "page" : undefined}
-                    class="font-sans text-base font-semibold text-grey-500 transition-colors hover:text-white aria-[current=page]:text-white"
+                    class="font-sans text-base font-semibold text-night-500 transition-colors hover:text-white aria-[current=page]:text-white"
                   >
                     {l.label}
                   </a>
@@ -92,7 +94,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
           data-menu-toggle
           aria-expanded="false"
           aria-controls="mobile-menu"
-          class="group flex h-10 items-center gap-2 rounded-md bg-grey-800 pr-3 pl-4 font-display text-base leading-none font-bold text-white uppercase transition-colors hover:bg-grey-700 active:bg-grey-600 md:hidden"
+          class="group flex h-10 items-center gap-2 rounded-md bg-night-800 pr-3 pl-4 font-display text-base leading-none font-bold text-white uppercase transition-colors hover:bg-night-700 active:bg-night-600 md:hidden"
         >
           Menu
           <span class="relative size-5" aria-hidden="true">
@@ -120,7 +122,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
                   <a
                     href={l.href}
                     aria-current={nav === l.key ? "page" : undefined}
-                    class="block py-3 font-display text-[2rem] leading-tight font-black text-grey-500 uppercase transition-colors hover:text-white aria-[current=page]:text-white"
+                    class="block py-3 font-display text-[2rem] leading-tight font-black text-night-500 uppercase transition-colors hover:text-white aria-[current=page]:text-white"
                   >
                     {l.label}
                   </a>
@@ -176,7 +178,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
           <CalendarMenu variant="solid" up align="left" />
         </div>
       </div>
-      <div class="flex flex-col gap-6 px-(--gutter) pt-4 pb-8 font-sans text-base leading-[1.4] text-grey-50 md:gap-0 md:pb-0">
+      <div class="flex flex-col gap-6 px-(--gutter) pt-4 pb-8 font-sans text-base leading-[1.4] text-white md:gap-0 md:pb-0">
         <div class="flex flex-wrap items-center justify-between gap-6 md:h-[72px]">
           <a href={url()} class="shrink-0" aria-label="PHT Dragons – rozpis">
             <img src={logoWhite.src} alt="PHT Dragons" width="138" height="34" class="h-[34px] w-auto" />
@@ -200,6 +202,36 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     </footer>
     <script>
       import "../scripts/live.ts";
+    </script>
+    <!-- Temporary theme switch (floating), until dark mode gets a place in the design. -->
+    <button
+      type="button"
+      data-theme-toggle
+      aria-pressed="false"
+      class="fixed right-4 bottom-4 z-40 grid size-12 place-items-center rounded-full bg-grey-950 text-on-ink shadow-lg transition-transform hover:scale-105 active:scale-95 md:right-6 md:bottom-6"
+    >
+      <Moon size={20} class="in-data-[theme=dark]:hidden" aria-hidden="true" />
+      <Sun size={20} class="hidden in-data-[theme=dark]:block" aria-hidden="true" />
+      <span class="sr-only">Tmavý režim</span>
+    </button>
+
+    <script>
+      // Theme toggle: html[data-theme="dark"] + localStorage "pht-theme".
+      const themeButton = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+      if (themeButton) {
+        const root = document.documentElement;
+        const sync = () => themeButton.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
+        sync();
+        themeButton.addEventListener("click", () => {
+          const dark = root.dataset.theme !== "dark";
+          if (dark) root.dataset.theme = "dark";
+          else delete root.dataset.theme;
+          try {
+            localStorage.setItem("pht-theme", dark ? "dark" : "light");
+          } catch {}
+          sync();
+        });
+      }
     </script>
     <script>
       // Mobile menu: toggle the panel under the header; close on Esc or when the viewport grows.

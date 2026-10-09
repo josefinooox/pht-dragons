@@ -107,3 +107,11 @@ per-game stats, match states). Ignore its visual design entirely.
 Stats dashboard computed in `src/lib/brain.ts` from games, standings, reports and
 `data/history.json`. History holds our games from past seasons; each finished season is
 fetched once (at most `HISTORY_PER_RUN` per build) and never refetched.
+
+## Dark mode
+`html[data-theme="dark"]`, switched by a temporary floating button (Base.astro), remembered in
+localStorage `pht-theme`, light by default. The grey-* ramp flips in dark mode, so:
+- raised white elements use `bg-surface` (not `bg-white`); team logos stay `bg-white`;
+- text on a `grey-950` fill (button hover, selected pill) uses `text-on-ink` (not `text-white`);
+- things dark in both themes (header, mobile menu) use the fixed `night-*` greys;
+- `text-white` only on brand colors (blue/red/results), which don't change.

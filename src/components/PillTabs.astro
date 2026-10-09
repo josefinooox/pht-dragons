@@ -26,7 +26,7 @@ const { tabs, label } = Astro.props;
         aria-controls={t.id}
         aria-selected={k === 0 ? "true" : "false"}
         tabindex={k === 0 ? 0 : -1}
-        class="pill btn-fill shrink-0 rounded-full bg-white px-4 py-2 font-sans text-base leading-6 font-semibold whitespace-nowrap text-grey-600 [--btn-fill:var(--color-grey-200)] hover:text-grey-950 aria-selected:bg-grey-950 aria-selected:text-white"
+        class="pill btn-fill shrink-0 rounded-full bg-surface px-4 py-2 font-sans text-base leading-6 font-semibold whitespace-nowrap text-grey-600 [--btn-fill:var(--color-grey-200)] hover:text-grey-950 aria-selected:bg-grey-950 aria-selected:text-on-ink"
       >
         {t.label}
       </button>

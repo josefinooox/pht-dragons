@@ -252,7 +252,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
                   <h3 data-tab-title class={h3}>
                     {earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy"}
                   </h3>
-                  <ul class="flex flex-col gap-4 [&>li]:bg-white [&>li:hover]:bg-grey-50">
+                  <ul class="flex flex-col gap-4 [&>li]:bg-surface [&>li:hover]:bg-grey-50">
                     {earlier.map((x) => (
                       <GameCard game={x} />
                     ))}

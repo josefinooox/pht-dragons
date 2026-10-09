@@ -33,7 +33,7 @@ const options = [
     aria-expanded="false"
     aria-controls={id}
     class:list={[
-      "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] flex min-w-20 cursor-pointer items-center justify-center gap-1 rounded-md bg-white p-3 text-grey-950 aria-expanded:text-white",
+      "btn-fill hover:text-on-ink focus-visible:text-on-ink active:[--btn-fill:var(--color-grey-800)] flex min-w-20 cursor-pointer items-center justify-center gap-1 rounded-md bg-surface p-3 text-grey-950 aria-expanded:text-on-ink",
       variant === "outline" && "border border-grey-300 hover:border-grey-950 aria-expanded:border-grey-950",
     ]}
   >
@@ -45,7 +45,7 @@ const options = [
     hidden
     data-menu-panel
     class:list={[
-      "absolute z-20 w-80 rounded-lg border border-grey-300 bg-white p-2 text-grey-950 shadow-lg",
+      "absolute z-20 w-80 rounded-lg border border-grey-300 bg-surface p-2 text-grey-950 shadow-lg",
       up ? "bottom-full mb-2 [--from:8px]" : "top-full mt-2",
       up ? (align === "right" ? "origin-bottom-right" : "origin-bottom-left") : align === "right" ? "origin-top-right" : "origin-top-left",
       align === "right" ? "right-0" : "left-0",
