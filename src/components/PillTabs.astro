@@ -1,5 +1,6 @@
 ---
-// In-page content tabs as pills (Figma "Tablist"): active black, inactive white.
+// In-page content tabs as pills (Figma "Tablist"): active black, inactive white; hover just
+// darkens the background a little, gradually (buttons keep the sliding fill).
 // Renders only the tablist; the page writes the matching role="tabpanel" elements
 // (id = tab id) inside the same [data-tabs] root. Behaviour: src/scripts/tabs.ts.
 // Not to be confused with the homepage "Nadcházející / Minulé" links, which navigate between pages.
@@ -26,7 +27,7 @@ const { tabs, label } = Astro.props;
         aria-controls={t.id}
         aria-selected={k === 0 ? "true" : "false"}
         tabindex={k === 0 ? 0 : -1}
-        class="pill btn-fill shrink-0 rounded-full bg-surface px-4 py-2 font-sans text-base leading-6 font-semibold whitespace-nowrap text-grey-600 [--btn-fill:var(--color-grey-200)] hover:text-grey-950 aria-selected:bg-grey-950 aria-selected:text-on-ink"
+        class="pill shrink-0 rounded-full bg-surface px-4 py-2 font-sans text-base leading-6 font-semibold whitespace-nowrap text-grey-600 transition-colors duration-300 ease-out hover:text-grey-950 not-aria-selected:hover:bg-grey-200 in-data-[theme=dark]:not-aria-selected:hover:bg-grey-300 aria-selected:bg-grey-950 aria-selected:text-on-ink"
       >
         {t.label}
       </button>
@@ -35,8 +36,6 @@ const { tabs, label } = Astro.props;
 </div>
 
 <style>
-  /* The selected pill is already filled; don't run the hover fill over it. */
-  .pill[aria-selected="true"]::before { display: none; }
   /* Pills cut off on the right fade out (a mask, so it works on any background);
      the fade goes away once the row is scrolled to its end or everything fits. */
   .fade-x[data-fade="on"] {

@@ -97,8 +97,13 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
         <div class="flex flex-col gap-3">
           <!-- Context back link, only when the visitor came here from Dračí radar (the breadcrumb
                stays the match's place in the site; this just offers the way back). -->
-          <a data-back-radar hidden href={url("radar")} class="flex w-fit items-center gap-1 font-display text-lg leading-6 font-bold text-blue-600 uppercase transition-colors hover:text-blue-700">
-            <ChevronLeft size={18} strokeWidth={3} aria-hidden="true" />
+          <a
+            data-back-radar
+            hidden
+            href={url("radar")}
+            class="flex w-fit items-center gap-1 rounded-full bg-grey-100 py-2 pr-4 pl-3 font-sans text-base leading-6 font-semibold text-grey-600 transition-colors duration-300 ease-out hover:bg-grey-200 hover:text-grey-950"
+          >
+            <ChevronLeft size={18} aria-hidden="true" />
             Zpět na Dračí radar
           </a>
           <nav aria-label="Drobečková navigace">
