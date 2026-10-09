@@ -89,30 +89,44 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
           data-menu-toggle
           aria-expanded="false"
           aria-controls="mobile-menu"
-          class="group -mr-2 grid size-10 place-items-center rounded-md text-white transition-colors hover:bg-white/10 md:hidden"
+          class="group flex h-10 items-center gap-2 rounded-md bg-grey-800 pr-3 pl-4 font-display text-base leading-none font-bold text-white uppercase transition-colors hover:bg-grey-700 active:bg-grey-600 md:hidden"
         >
-          <Menu size={24} class="group-aria-expanded:hidden" aria-hidden="true" />
-          <X size={24} class="hidden group-aria-expanded:block" aria-hidden="true" />
-          <span class="sr-only">Menu</span>
+          Menu
+          <span class="relative size-5" aria-hidden="true">
+            <Menu size={20} class="absolute inset-0 transition duration-300 group-aria-expanded:rotate-90 group-aria-expanded:opacity-0" />
+            <X size={20} class="absolute inset-0 -rotate-90 opacity-0 transition duration-300 group-aria-expanded:rotate-0 group-aria-expanded:opacity-100" />
+          </span>
         </button>
       </div>
-      <nav id="mobile-menu" aria-label="Hlavní" hidden class="border-t border-white/10 px-(--gutter) pt-2 pb-6 md:hidden">
-        <ul class="flex flex-col">
-          {
-            links.map((l) => (
-              <li>
-                <a
-                  href={l.href}
-                  aria-current={nav === l.key ? "page" : undefined}
-                  class="block py-3 font-display text-[2rem] leading-tight font-black text-grey-500 uppercase transition-colors hover:text-white aria-[current=page]:text-white"
+      <!-- Mobile menu: the height opens with the same easing as the standings panel (0fr -> 1fr
+           grid row), links fade and slide in. Closed = inert, so nothing in it is focusable. -->
+      <div
+        id="mobile-menu"
+        data-open="false"
+        inert
+        class="group/menu grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] data-[open=true]:grid-rows-[1fr] motion-reduce:transition-none md:hidden"
+      >
+        <nav aria-label="Hlavní" class="min-h-0 overflow-hidden">
+          <ul class="flex flex-col border-t border-white/10 px-(--gutter) pt-2 pb-6">
+            {
+              links.map((l, i) => (
+                <li
+                  class="-translate-y-2 opacity-0 transition duration-300 ease-out group-data-[open=true]/menu:translate-y-0 group-data-[open=true]/menu:opacity-100 motion-reduce:transition-none"
+                  style={`transition-delay:${60 + i * 40}ms`}
                 >
-                  {l.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+                  <a
+                    href={l.href}
+                    aria-current={nav === l.key ? "page" : undefined}
+                    class="block py-3 font-display text-[2rem] leading-tight font-black text-grey-500 uppercase transition-colors hover:text-white aria-[current=page]:text-white"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
     </header>
 
     {
@@ -189,13 +203,15 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
       const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
       const menu = document.getElementById("mobile-menu");
       if (toggle && menu) {
+        const isOpen = () => menu.dataset.open === "true";
         const set = (open: boolean) => {
           toggle.setAttribute("aria-expanded", String(open));
-          menu.hidden = !open;
+          menu.dataset.open = String(open);
+          menu.inert = !open;
         };
-        toggle.addEventListener("click", () => set(menu.hidden));
+        toggle.addEventListener("click", () => set(!isOpen()));
         document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && !menu.hidden) {
+          if (e.key === "Escape" && isOpen()) {
             set(false);
             toggle.focus();
           }
