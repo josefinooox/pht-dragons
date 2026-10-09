@@ -1,6 +1,6 @@
 ---
-// Team profile (every team of the group except us): who they are, all our games with them
-// (this season as cards, every season as a result run) and the opponent analysis.
+// Team profile (every team of the group except us): who they are, the opponent analysis, then
+// all our games with them (every season as a result run, this season as cards).
 import type { GetStaticPaths } from "astro";
 import { ChevronLeft } from "@lucide/astro";
 import Base from "../../layouts/Base.astro";
@@ -84,6 +84,9 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
           </div>
         </section>
 
+
+        <OpponentCard o={id} />
+
         <!-- our games with them -->
         <section aria-labelledby="nase-zapasy" class="flex flex-col gap-4">
           <h2 id="nase-zapasy" class={h2}>Naše zápasy s nimi</h2>
@@ -109,8 +112,6 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
             )
           }
         </section>
-
-        <OpponentCard o={id} />
       </div>
     </div>
 

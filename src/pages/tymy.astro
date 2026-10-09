@@ -1,5 +1,5 @@
 ---
-// Týmy: every team of our group as a tile (logo, place, points, form, our next game with them),
+// Týmy: every team of our group as a centred tile (logo, name, place, points, our next game, form),
 // in table order; each leads to its profile (/tym/{slug}).
 import Base from "../layouts/Base.astro";
 import Logo from "../components/Logo.astro";
@@ -46,9 +46,10 @@ const tiles = standings
       {
         tiles.map(({ row, form, note }) => (
           <li>
-            <a href={url(`tym/${teamSlug(row.teamId)}`)} class="group flex h-full items-center gap-4 rounded-lg bg-grey-100 p-5 transition-colors duration-300 hover:bg-grey-200">
-              <Logo id={row.teamId} round class="size-16 shrink-0" />
-              <span class="flex min-w-0 flex-col gap-1.5">
+            <!-- logo on top, then name, info and form, all centred -->
+            <a href={url(`tym/${teamSlug(row.teamId)}`)} class="group flex h-full flex-col items-center gap-4 rounded-lg bg-grey-100 px-5 py-6 text-center transition-colors duration-300 hover:bg-grey-200">
+              <Logo id={row.teamId} round class="size-24 shrink-0" />
+              <span class="flex min-w-0 flex-col items-center gap-2">
                 <span class="font-display text-xl leading-tight font-black text-grey-950 uppercase">
                   <span class="link-hover group-hover:[background-size:100%_1px]">{team(row.teamId).name}</span>
                 </span>
@@ -57,7 +58,7 @@ const tiles = standings
                   {note && <> · {note}</>}
                 </span>
                 {form.length > 0 && (
-                  <span class="flex gap-1" aria-label={`Forma, posledních ${form.length} zápasů`}>
+                  <span class="flex justify-center gap-1" aria-label={`Forma, posledních ${form.length} zápasů`}>
                     {form.map((r) => (
                       <ResultChip result={r} size="sm" />
                     ))}
