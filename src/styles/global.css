@@ -285,7 +285,14 @@
     transform-origin: left;
     transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), background-color 150ms ease;
   }
-  .btn-fill:hover::before,
+  /* Hover only where hover exists: on touch screens :hover sticks after a tap, and the white
+     hover text (hover:text-white, which Tailwind already limits to hover devices) would not
+     follow, leaving a black button with black text. */
+  @media (hover: hover) {
+    .btn-fill:hover::before {
+      transform: scaleX(1);
+    }
+  }
   .btn-fill:focus-visible::before,
   details[open] > .btn-fill::before {
     transform: scaleX(1);
@@ -321,35 +328,4 @@
   @media (prefers-reduced-motion: reduce) {
     [data-when][data-kind="live"]::before { animation: none; }
   }
-}
-
-/* Entrance of list items (game cards, standings rows): they rise into place out of a slight
-   blur, one after another (--i = position, capped so long lists don't wait). Same easing as
-   the table panel and the mobile menu. */
-@keyframes enter {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-    filter: blur(6px);
-  }
-}
-.enter {
-  animation: enter 700ms cubic-bezier(0.32, 0.72, 0, 1) both;
-  animation-delay: calc(min(var(--i, 0), 10) * 45ms);
-}
-@media (prefers-reduced-motion: reduce) {
-  .enter { animation: none; }
-}
-
-/* Page to page: the header stays put (no white flash), the new content just appears and its
-   cards run the entrance above. Browsers without cross-document view transitions ignore it. */
-@view-transition {
-  navigation: auto;
-}
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-header {
-  view-transition-name: site-header;
 }

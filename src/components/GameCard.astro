@@ -14,38 +14,36 @@ import When from "./When.astro";
 
 interface Props {
   game: Game;
-  /** Position in the list for the staggered entrance animation (.enter in global.css). */
-  enter?: number;
 }
-const { game: g, enter } = Astro.props;
+const { game: g } = Astro.props;
 const o = opp(g);
 const r = isFinal(g) ? forT(g, OUR) : null;
 const slug = gameSlug(g);
 const inner = "relative z-10"; // links that must stay clickable above the stretched detail link
 ---
 
-<!-- Mobile: one left edge, top to bottom: small logos + opponent, date/time (or score) as the
-     main line, venue as quiet meta, then the actions under a hairline. Desktop: one row. -->
-<li
-  style={enter != null ? `--i:${enter}` : undefined}
-  class:list={[enter != null && "enter", "relative flex flex-col gap-4 rounded-lg bg-grey-100 p-4 transition-colors hover:bg-grey-200 sm:px-6 md:flex-row md:items-center md:justify-between md:py-4"]}
->
+<!-- Layout follows the card's own width (container query, 60rem), not the viewport: the
+     table panel can make the column narrow on desktop too.
+     Narrow: one left edge, top to bottom: small logos + opponent, date/time (or score) as the
+     main line, venue as quiet meta, then the actions under a hairline. Wide: one row. -->
+<li class="@container relative rounded-lg bg-grey-100 transition-colors hover:bg-grey-200">
   <a href={url(`zapas/${slug}`)} class="absolute inset-0 rounded-lg" tabindex="-1" aria-hidden="true"></a>
-  <div class="flex min-w-0 items-center gap-4 md:gap-10">
-    <div class="hidden shrink-0 items-center gap-2 md:flex" aria-hidden="true">
+  <div class="flex flex-col gap-4 p-4 sm:px-6 @min-[60rem]:flex-row @min-[60rem]:items-center @min-[60rem]:justify-between @min-[60rem]:py-4">
+  <div class="flex min-w-0 items-center gap-4 @min-[60rem]:gap-10">
+    <div class="hidden shrink-0 items-center gap-2 @min-[60rem]:flex" aria-hidden="true">
       <Logo id={g.homeTeamId} round class="size-16" />
       <Logo id={g.awayTeamId} round class="size-16" />
     </div>
-    <div class="flex min-w-0 flex-col gap-1 md:gap-0">
-      <p class="flex items-center gap-2 font-display text-lg leading-[1.4] font-bold text-grey-950 uppercase md:text-base">
-        <span class="flex shrink-0 gap-1 md:hidden" aria-hidden="true">
+    <div class="flex min-w-0 flex-col gap-1 @min-[60rem]:gap-0">
+      <p class="flex items-center gap-2 font-display text-lg leading-[1.4] font-bold text-grey-950 uppercase @min-[60rem]:text-base">
+        <span class="flex shrink-0 gap-1 @min-[60rem]:hidden" aria-hidden="true">
           <Logo id={g.homeTeamId} round class="size-8" />
           <Logo id={g.awayTeamId} round class="size-8" />
         </span>
         <span class="truncate">{team(o).name}</span>
         <When game={g} stateOnly class="text-sm" />
       </p>
-      <p class="flex items-center gap-3 font-display text-[2rem] leading-tight font-extrabold md:gap-4 md:text-[2.375rem] md:leading-normal">
+      <p class="flex items-center gap-3 font-display text-[2rem] leading-tight font-extrabold @min-[60rem]:gap-4 @min-[60rem]:text-[2.375rem] @min-[60rem]:leading-normal">
         {
           r ? (
             <span class="flex items-center gap-2 text-grey-950">
@@ -71,7 +69,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
               rel="noopener"
               class:list={[
                 inner,
-                "link-underline flex w-fit items-center gap-1 text-base leading-[1.4] text-grey-950 max-md:border-b-0 max-md:pb-0 max-md:text-grey-600",
+                "link-underline flex w-fit items-center gap-1 text-base leading-[1.4] text-grey-950 @max-[60rem]:border-b-0 @max-[60rem]:pb-0 @max-[60rem]:text-grey-600",
               ]}
             >
               <MapPin size={14} class="shrink-0" aria-hidden="true" />
@@ -82,7 +80,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
         }
         {
           r && (
-            <time datetime={g.start} class="text-base leading-[1.4] text-grey-950 max-md:hidden">
+            <time datetime={g.start} class="text-base leading-[1.4] text-grey-950 @max-[60rem]:hidden">
               {weekdayName(g.date)} {dayMonthDot(g.date)}
             </time>
           )
@@ -91,10 +89,10 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
     </div>
   </div>
 
-  <div class="flex items-center justify-between gap-4 border-t border-grey-300 pt-3 md:justify-end md:gap-8 md:border-0 md:pt-0">
+  <div class="flex items-center justify-between gap-4 border-t border-grey-300 pt-3 @min-[60rem]:justify-end @min-[60rem]:gap-8 @min-[60rem]:border-0 @min-[60rem]:pt-0">
     {
       r && (
-        <time datetime={g.start} class="text-base leading-[1.4] text-grey-600 md:hidden">
+        <time datetime={g.start} class="text-base leading-[1.4] text-grey-600 @min-[60rem]:hidden">
           {weekdayName(g.date)} {dayMonthDot(g.date)}
         </time>
       )
@@ -106,7 +104,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
           download={`dragons-${slug}.ics`}
           class:list={[
             inner,
-            "link-underline flex shrink-0 items-center gap-1 font-display text-base leading-6 font-bold whitespace-nowrap text-grey-600 uppercase hover:text-grey-950 focus-visible:text-grey-950 max-md:border-b-0 max-md:pb-0 md:text-lg",
+            "link-underline flex shrink-0 items-center gap-1 font-display text-base leading-6 font-bold whitespace-nowrap text-grey-600 uppercase hover:text-grey-950 focus-visible:text-grey-950 @max-[60rem]:border-b-0 @max-[60rem]:pb-0 @min-[60rem]:text-lg",
           ]}
         >
           <CalendarPlus size={16} aria-hidden="true" />
@@ -116,10 +114,11 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
     }
     <a
       href={url(`zapas/${slug}`)}
-      class:list={[inner, "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-white px-3 py-2 whitespace-nowrap text-grey-950 md:ml-0 md:p-3"]}
+      class:list={[inner, "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] ml-auto flex min-w-20 shrink-0 items-center justify-center rounded-md bg-white px-3 py-2 whitespace-nowrap text-grey-950 @min-[60rem]:ml-0 @min-[60rem]:p-3"]}
     >
-      <span class="px-1 font-display text-base leading-6 font-bold uppercase md:text-lg">Detail zápasu</span>
+      <span class="px-1 font-display text-base leading-6 font-bold uppercase @min-[60rem]:text-lg">Detail zápasu</span>
       <span class="sr-only">: {team(g.homeTeamId).name} – {team(g.awayTeamId).name}</span>
     </a>
+  </div>
   </div>
 </li>

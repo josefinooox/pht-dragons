@@ -72,8 +72,8 @@ const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 
                   )}
                 </div>
                 <ul class="flex flex-col gap-4">
-                  {top.map((g, k) => (
-                    <GameCard game={g} enter={k} />
+                  {top.map((g) => (
+                    <GameCard game={g} />
                   ))}
                 </ul>
               </section>
@@ -82,7 +82,7 @@ const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 
               <h2 id="dalsi" class={h2}>
                 Další zápasy
               </h2>
-              <GameList games={ahead.slice(1)} enter={top.length} empty="Žádné další zápasy." />
+              <GameList games={ahead.slice(1)} empty="Žádné další zápasy." />
             </section>
           </div>
         ) : (

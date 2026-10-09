@@ -9,11 +9,6 @@ import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 
-interface Props {
-  /** Staggered entrance animation of the rows (.enter in global.css). */
-  animate?: boolean;
-}
-const { animate = false } = Astro.props;
 const rows = standings.map((row) => {
   const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
   return { row, href: target ? url(`zapas/${gameSlug(target)}`) : null };
@@ -34,11 +29,11 @@ const wide = "hidden md:block";
   </div>
   <ol>
     {
-      rows.map(({ row, href }, k) => {
+      rows.map(({ row, href }) => {
         const us = row.teamId === OUR;
         const Tag = href ? "a" : "div";
         return (
-          <li class:list={[animate && "enter"]} style={animate ? `--i:${k}` : undefined}>
+          <li>
             <Tag
               href={href ?? undefined}
               aria-current={us ? "true" : undefined}
