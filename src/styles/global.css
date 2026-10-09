@@ -304,6 +304,20 @@
   @media (prefers-reduced-motion: reduce) {
     .link-underline::after { transition: none; }
   }
+  /* Text link with NO resting rule (team names): on hover an underline in the text color draws
+     from left to right, same easing as .link-underline. Works across wrapped lines. */
+  .link-hover {
+    background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .link-hover:hover,
+  .link-hover:focus-visible {
+    background-size: 100% 1px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .link-hover { transition: none; }
+  }
   /* Button hover: a grey-950 fill slides in from the left with the same easing as .link-underline.
      The resting colors and the hover text color (hover:text-white) are utilities on the element.
      An open <details> / an open dropdown button ([data-menu-button]) stays filled; other

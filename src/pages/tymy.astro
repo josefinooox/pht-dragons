@@ -1,0 +1,73 @@
+---
+// Týmy: every team of our group as a tile (logo, place, points, form, our next game with them),
+// in table order; each leads to its profile (/tym/{slug}).
+import Base from "../layouts/Base.astro";
+import Logo from "../components/Logo.astro";
+import ResultChip from "../components/ResultChip.astro";
+import SubBar from "../components/SubBar.astro";
+import { OUR, forT, isFinal, meta, mine, opp, played, standings, team, teamSlug } from "../lib/data";
+import { dayMonthDot, plural, weekdayShort } from "../lib/format";
+import { url } from "../lib/url";
+
+const tiles = standings
+  .filter((r) => r.teamId !== OUR)
+  .map((r) => {
+    const vs = mine.filter((g) => opp(g) === r.teamId);
+    const next = vs.find((g) => !isFinal(g));
+    const last = [...vs].reverse().find(isFinal);
+    return {
+      row: r,
+      form: played(r.teamId)
+        .slice(-5)
+        .map((x) => forT(x, r.teamId).r),
+      note: next
+        ? `Hrajeme ${weekdayShort(next.date).toLowerCase()} ${dayMonthDot(next.date)}`
+        : last
+          ? `Naposledy ${forT(last, OUR).f}:${forT(last, OUR).a}`
+          : null,
+    };
+  });
+---
+
+<Base title="Týmy – PHT Dragons" description={`Všechny týmy skupiny ${meta.group.name}: pořadí, forma a naše zápasy s nimi.`} nav="tymy" bare>
+  <div class="mr-4 ml-(--gutter) max-w-7xl md:mr-20">
+    <SubBar />
+  </div>
+
+  <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-10 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+    <div class="flex flex-col gap-4">
+      <h1 class="font-display text-[2.75rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem] md:leading-[56px]">Týmy</h1>
+      <p class="font-sans text-xl font-semibold text-grey-500">
+        Skupina {meta.group.name}, sezóna {meta.season.name.replace("-", "/")}. Seřazeno podle tabulky.
+      </p>
+    </div>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        tiles.map(({ row, form, note }) => (
+          <li>
+            <a href={url(`tym/${teamSlug(row.teamId)}`)} class="group flex h-full items-center gap-4 rounded-lg bg-grey-100 p-5 transition-colors duration-300 hover:bg-grey-200">
+              <Logo id={row.teamId} round class="size-16 shrink-0" />
+              <span class="flex min-w-0 flex-col gap-1.5">
+                <span class="font-display text-xl leading-tight font-black text-grey-950 uppercase">
+                  <span class="link-hover group-hover:[background-size:100%_1px]">{team(row.teamId).name}</span>
+                </span>
+                <span class="text-sm text-grey-600">
+                  {row.rank}. místo · {row.points} {plural(row.points, "bod", "body", "bodů")}
+                  {note && <> · {note}</>}
+                </span>
+                {form.length > 0 && (
+                  <span class="flex gap-1" aria-label={`Forma, posledních ${form.length} zápasů`}>
+                    {form.map((r) => (
+                      <ResultChip result={r} size="sm" />
+                    ))}
+                  </span>
+                )}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>

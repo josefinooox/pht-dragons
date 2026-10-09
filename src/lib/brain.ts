@@ -1,4 +1,4 @@
-// Dračí radar, all seasons together: totals, season by season, head-to-head with every opponent
+// Dragons Intelligence, all seasons together: totals, season by season, head-to-head with every opponent
 // and the insights about them. One season in depth lives in src/lib/season.ts.
 import historyJson from "../../data/history.json";
 import { OUR, finals, meta, team, type Result } from "./data";

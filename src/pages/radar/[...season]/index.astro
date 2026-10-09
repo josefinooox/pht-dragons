@@ -1,5 +1,5 @@
 ---
-// Dračí radar – Přehled: "how are we doing?" in ten seconds (rank, record, score), then the
+// Dragons Intelligence – Přehled: "how are we doing?" in ten seconds (rank, record, score), then the
 // season game by game, our place in the league, and doors to the deeper sub-pages.
 import { ArrowRight } from "@lucide/astro";
 import RadarShell from "../../../components/radar/RadarShell.astro";
@@ -52,7 +52,7 @@ const doors = [
 <RadarShell
   tab="prehled"
   season={s}
-  title={`Dračí radar${when} – PHT Dragons`}
+  title={`Dragons Intelligence${when} – PHT Dragons`}
   description={`PHT Dragons v číslech: ${season.rank ?? "–"}. místo, ${season.points} bodů, ${recordText(tally)}.`}
 >
   <!-- 1. the answer: rank, record, score -->

@@ -11,7 +11,7 @@ interface Props {
   title: string;
   description: string;
   /** Which header nav item is current. */
-  nav?: "rozpis" | "tabulka" | "radar";
+  nav?: "rozpis" | "tabulka" | "tymy" | "radar";
   /** Back link in a grey bar under the header (detail pages). */
   back?: { href: string; label: string };
   /** Full-bleed main area: the page lays out its own columns (homepage with the table panel). */
@@ -25,7 +25,8 @@ const me = team(OUR);
 const links = [
   { key: "rozpis", href: url(), label: "Rozpis" },
   { key: "tabulka", href: url("tabulka"), label: "Tabulka" },
-  { key: "radar", href: url("radar"), label: "Dračí radar" },
+  { key: "tymy", href: url("tymy"), label: "Týmy" },
+  { key: "radar", href: url("radar"), label: "Dragons Intelligence" },
 ] as const;
 const updated = new Intl.DateTimeFormat("cs-CZ", {
   timeZone: "Europe/Prague",

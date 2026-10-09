@@ -4,15 +4,15 @@
 // State lives on <html data-table="open">, set before first paint by the inline script in Base,
 // so a restored state doesn't animate; toggling animates the width and cross-fades the content.
 import { TableProperties, X } from "@lucide/astro";
-import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
+import { OUR, standings, team, teamSlug } from "../lib/data";
 import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 
 // Every team; the list scrolls inside the panel and starts scrolled to our row.
 const rows = standings.map((row) => {
-  const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
-  return { row, href: target ? url(`zapas/${gameSlug(target)}`) : null };
+  // every team links to its profile (our next game with them is the first thing there)
+  return { row, href: row.teamId === OUR ? null : url(`tym/${teamSlug(row.teamId)}`) };
 });
 // Each row is a plain block (a link when it leads to our game against that team): a real
 // element instead of a stretched ::after, which can't be scoped to a table row reliably.

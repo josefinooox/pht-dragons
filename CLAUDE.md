@@ -82,7 +82,11 @@ Only re-download logos that are not already present.
   form (last 5), per-game comparison (points, goals for/against, penalty minutes),
   their recent results with each opponent's rank, common opponents, the other
   meeting this season, table excerpt with both teams highlighted.
-- `/tabulka` – full standings; each team links to our nearest match against it.
+- `/tabulka` – full standings; each team links to its profile.
+- `/tymy` – every team of the group as a tile, in table order; `/tym/[slug]` – team profile:
+  place, form, our games with them (this season + all seasons) and the opponent analysis
+  (src/components/OpponentCard.astro, shared with the match page). Team names on game cards and
+  in the match header link here (hover-only underline, `.link-hover`).
 - `/dragons.ics` – season calendar feed, TZID Europe/Prague, stable UIDs per game
   so subscribed calendars update instead of duplicating.
 - Open Graph tags on every page for link previews (WhatsApp). Match pages get their own image
@@ -115,7 +119,7 @@ Only re-download logos that are not already present.
 Use it ONLY for behavior and calculations (summary rules, common opponents,
 per-game stats, match states). Ignore its visual design entirely.
 
-## Dračí radar (/radar)
+## Dragons Intelligence (/radar)
 Stats in four sub-pages (Přehled → Hra → Hráči → Historie, from overview to detail), computed in
 `src/lib/brain.ts` and `src/lib/radar.ts` from games, standings, reports and
 `data/history.json`. One season in depth = `src/lib/season.ts` (same code for every season):

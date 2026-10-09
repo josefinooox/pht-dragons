@@ -1,5 +1,5 @@
 ---
-// Dračí radar – Hráči: one leaderboard with a metric switch (points, goals, assists, stars,
+// Dragons Intelligence – Hráči: one leaderboard with a metric switch (points, goals, assists, stars,
 // penalty minutes, games) instead of six separate lists; assist pairs and goalies next to it.
 import RadarShell from "../../../components/radar/RadarShell.astro";
 import Ring from "../../../components/radar/Ring.astro";
@@ -35,7 +35,7 @@ const ranked = (key: Key) =>
     .sort((a, b) => b[key] - a[key] || b.points - a.points || a.name.localeCompare(b.name, "cs"));
 ---
 
-<RadarShell tab="hraci" season={s} title={`Hráči – Dračí radar${when} – PHT Dragons`} description="Body, góly, asistence, hvězdy zápasu, nahrávací dvojice a brankáři PHT Dragons.">
+<RadarShell tab="hraci" season={s} title={`Hráči – Dragons Intelligence${when} – PHT Dragons`} description="Body, góly, asistence, hvězdy zápasu, nahrávací dvojice a brankáři PHT Dragons.">
   <div class="grid gap-4 lg:grid-cols-3">
     <Card class="lg:col-span-2 lg:row-span-2" title="Žebříček hráčů" subtitle="Vyber, co chceš porovnat.">
       <div data-tabs="local" class="flex flex-col gap-6">

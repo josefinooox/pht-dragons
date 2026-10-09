@@ -4,14 +4,14 @@
 // The numbers sit close to the team names with generous spacing between them (the free space
 // is left at the end of the row). Rows are grid links (not <tr>), so the whole row is one link.
 // Narrow screens drop V–R–P.
-import { OUR, gameSlug, standings, team, teamTarget } from "../lib/data";
+import { OUR, standings, team, teamSlug } from "../lib/data";
 import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 
 const rows = standings.map((row) => {
-  const target = row.teamId === OUR ? undefined : teamTarget(row.teamId);
-  return { row, href: target ? url(`zapas/${gameSlug(target)}`) : null };
+  // every team links to its profile (our next game with them is the first thing there)
+  return { row, href: row.teamId === OUR ? null : url(`tym/${teamSlug(row.teamId)}`) };
 });
 const grid =
   "grid grid-cols-[36px_48px_minmax(0,1fr)_36px_64px_44px] items-center md:grid-cols-[64px_56px_minmax(0,280px)_96px_120px_120px_96px]";

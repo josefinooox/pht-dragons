@@ -5,7 +5,7 @@
 // "Detail zápasu" button is the real one), so hovering the card doesn't put the button in its
 // hover state. Buttons and links inside sit above the overlay.
 import { CalendarPlus, MapPin } from "@lucide/astro";
-import { OUR, forT, gameSlug, isFinal, opp, team, type Game } from "../lib/data";
+import { OUR, forT, gameSlug, isFinal, opp, team, teamSlug, type Game } from "../lib/data";
 import { dayMonthDot, mapUrl, weekdayName, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -40,7 +40,7 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
           <Logo id={g.homeTeamId} round class="size-8" />
           <Logo id={g.awayTeamId} round class="size-8" />
         </span>
-        <span class="truncate">{team(o).name}</span>
+        <a href={url(`tym/${teamSlug(o)}`)} class:list={[inner, "link-hover truncate"]}>{team(o).name}</a>
         <When game={g} stateOnly class="text-sm" />
       </p>
       <p class="flex items-center gap-3 font-display text-[2rem] leading-tight font-extrabold @min-[60rem]:gap-4 @min-[60rem]:text-[2.375rem] @min-[60rem]:leading-normal">

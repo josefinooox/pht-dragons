@@ -3,7 +3,7 @@
 // big score (played) or start time + meeting time (upcoming), game stars; the default slot
 // (Dračí oko) sits inside the same card. Upcoming games get add-to-calendar and share instead.
 import { CalendarPlus, MapPin, Share2, Star } from "@lucide/astro";
-import { SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, type Game } from "../lib/data";
+import { OUR, SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, teamSlug, type Game } from "../lib/data";
 import { dayMonthDot, longDate, mapUrl, minusMinutes, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -57,7 +57,9 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
         <div class:list={["flex min-w-0 flex-col items-center gap-3 text-center", i === 1 && "order-3"]}>
           <Logo id={id} round class="size-16 md:size-24" />
           <div class="min-w-0">
-            <p class="font-display text-xl leading-[1.2] font-bold text-grey-950 uppercase md:text-[2.5rem] md:leading-[1.4]">{team(id).name}</p>
+            <p class="font-display text-xl leading-[1.2] font-bold text-grey-950 uppercase md:text-[2.5rem] md:leading-[1.4]">
+              {id === OUR ? team(id).name : <a href={url(`tym/${teamSlug(id)}`)} class="link-hover">{team(id).name}</a>}
+            </p>
             {rankOf(id) && <p class="text-sm leading-5 text-grey-600 md:text-base">{rankOf(id)}. místo</p>}
           </div>
         </div>

@@ -1,4 +1,4 @@
-// One season of Dračí radar, computed the same way for the current season (data/games.json,
+// One season of Dragons Intelligence, computed the same way for the current season (data/games.json,
 // reports.json, standings.json) and for past ones (data/history.json, history-reports.json).
 // Everything is build time; pages pick a season and render its numbers.
 import historyJson from "../../data/history.json";

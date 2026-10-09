@@ -1,5 +1,5 @@
 ---
-// Dračí radar – Hra: how our games go. Points over the season, when goals fall (minute by
+// Dragons Intelligence – Hra: how our games go. Points over the season, when goals fall (minute by
 // minute, split into the three periods), what the first goal means, shots, special teams.
 import RadarShell from "../../../components/radar/RadarShell.astro";
 import UpDown from "../../../components/radar/UpDown.astro";
@@ -36,7 +36,7 @@ const { powerPlay: pp, penaltyKill: pk, shooting, faceoffs } = specialTeams;
 const goals = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
 ---
 
-<RadarShell tab="hra" season={s} title={`Hra – Dračí radar${when} – PHT Dragons`} description="Jak hrajeme: body v sezóně, kdy padají góly, první gól, střely a speciální situace.">
+<RadarShell tab="hra" season={s} title={`Hra – Dragons Intelligence${when} – PHT Dragons`} description="Jak hrajeme: body v sezóně, kdy padají góly, první gól, střely a speciální situace.">
   <!-- points over the season -->
   <div class="grid gap-4 lg:grid-cols-3">
     <Card class="lg:col-span-2" title="Body v průběhu sezóny" subtitle="Za výhru 2 body, za remízu 1. Najeď na tečku pro detail zápasu.">

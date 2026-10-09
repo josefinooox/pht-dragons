@@ -188,6 +188,9 @@ for (const g of mine) {
 }
 export const gameSlug = (g: Game) => slugByGameId.get(g.gameId)!;
 
+/** Team profile page: /tym/{slug of the name}. */
+export const teamSlug = (id: string) => slugify(team(id).name);
+
 /** Our nearest unfinished game against a team, else the last one played. */
 export function teamTarget(t: string): Game | undefined {
   const vs = mine.filter((g) => opp(g) === t);

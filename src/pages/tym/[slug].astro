@@ -1,0 +1,119 @@
+---
+// Team profile (every team of the group except us): who they are, all our games with them
+// (this season as cards, every season as a result run) and the opponent analysis.
+import type { GetStaticPaths } from "astro";
+import { ChevronLeft } from "@lucide/astro";
+import Base from "../../layouts/Base.astro";
+import GameCard from "../../components/GameCard.astro";
+import Logo from "../../components/Logo.astro";
+import OpponentCard from "../../components/OpponentCard.astro";
+import ResultChip from "../../components/ResultChip.astro";
+import TablePanel from "../../components/TablePanel.astro";
+import ResultDots from "../../components/radar/ResultDots.astro";
+import { OUR, forT, mine, opp, played, standingOf, standings, team, teamSlug } from "../../lib/data";
+import { headToHead, recordText } from "../../lib/brain";
+import { plural } from "../../lib/format";
+import { url } from "../../lib/url";
+
+export const getStaticPaths = (() =>
+  standings.filter((r) => r.teamId !== OUR).map((r) => ({ params: { slug: teamSlug(r.teamId) }, props: { id: r.teamId } }))) satisfies GetStaticPaths;
+
+const id = Astro.props.id as string;
+const t = team(id);
+const row = standingOf(id);
+const form = played(id)
+  .slice(-5)
+  .map((x) => forT(x, id).r);
+const ours = mine.filter((g) => opp(g) === id);
+const h2h = headToHead.find((h) => h.teamId === id);
+const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase";
+const label = "font-display text-sm font-bold text-grey-500 uppercase";
+---
+
+<Base
+  title={`${t.name} – PHT Dragons`}
+  description={`${t.name}: ${row ? `${row.rank}. místo, ${row.points} bodů. ` : ""}Naše zápasy s nimi, jejich forma a nejproduktivnější hráči.`}
+  nav="tymy"
+  bare
+>
+  <div class="flex items-stretch">
+    <div class="min-w-0 flex-1">
+      <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
+        <nav aria-label="Drobečková navigace">
+          <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
+            <li>
+              <a href={url("tymy")} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
+                <ChevronLeft size={18} aria-hidden="true" />
+                Týmy
+              </a>
+            </li>
+            <li aria-hidden="true" class="text-grey-400">/</li>
+            <li aria-current="page" class="font-semibold text-grey-950">{t.name}</li>
+          </ol>
+        </nav>
+
+        <!-- who they are -->
+        <section class="flex flex-col gap-6 rounded-lg bg-grey-100 px-5 py-6 md:flex-row md:items-center md:gap-10 md:p-10">
+          <Logo id={id} round class="size-24 md:size-32" />
+          <div class="flex min-w-0 flex-col gap-4">
+            <h1 class="font-display text-[2.5rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem]">{t.name}</h1>
+            <dl class="flex flex-wrap gap-x-10 gap-y-4">
+              {
+                row && (
+                  <>
+                    <div>
+                      <dt class={label}>Tabulka</dt>
+                      <dd class="font-display text-3xl font-extrabold text-grey-950">{row.rank}. místo</dd>
+                    </div>
+                    <div>
+                      <dt class={label}>Body</dt>
+                      <dd class="font-display text-3xl font-extrabold text-grey-950">
+                        {row.points} <span class="text-lg text-grey-500">po {row.played} {plural(row.played, "zápase", "zápasech", "zápasech")}</span>
+                      </dd>
+                    </div>
+                  </>
+                )
+              }
+              <div>
+                <dt class={label}>Forma</dt>
+                <dd class="flex h-9 items-center gap-1">
+                  {form.length ? form.map((r) => <ResultChip result={r} />) : <span class="text-grey-600">zatím bez zápasu</span>}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <!-- our games with them -->
+        <section aria-labelledby="nase-zapasy" class="flex flex-col gap-4">
+          <h2 id="nase-zapasy" class={h2}>Naše zápasy s nimi</h2>
+          {
+            h2h && (
+              <div class="flex flex-col gap-3 rounded-lg bg-grey-100 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+                <p class="text-lg text-grey-950">
+                  Ve všech sezónách: <strong class="font-semibold">{recordText(h2h)}</strong>, skóre {h2h.gf}:{h2h.ga}
+                </p>
+                <ResultDots results={h2h.results} />
+              </div>
+            )
+          }
+          {
+            ours.length ? (
+              <ul class="flex flex-col gap-4">
+                {ours.map((g) => (
+                  <GameCard game={g} />
+                ))}
+              </ul>
+            ) : (
+              <p class="text-grey-600">V této sezóně spolu nehrajeme.</p>
+            )
+          }
+        </section>
+
+        <OpponentCard o={id} />
+      </div>
+    </div>
+
+    <TablePanel />
+  </div>
+</Base>
