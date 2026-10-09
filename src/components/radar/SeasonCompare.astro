@@ -1,0 +1,99 @@
+---
+// Seasons side by side, one row per metric, oldest season on the left. Each cell has the value
+// and a thin bar scaled within its row; the best season in a row is green (for "lower is better"
+// metrics the smallest value wins). The running season is marked as unfinished.
+import type { Season } from "../../lib/season";
+import { num } from "../../lib/format";
+import { url } from "../../lib/url";
+
+interface Props {
+  seasons: Season[];
+}
+const list = [...Astro.props.seasons].reverse(); // oldest first
+const pct = (v: number | null) => (v == null ? null : v);
+type Row = { label: string; hint?: string; higher: boolean | null; values: (number | null)[]; fmt: (v: number) => string; text?: string[] };
+const rows: Row[] = [
+  {
+    label: "Umístění v tabulce",
+    hint: "nižší je lepší",
+    higher: false,
+    values: list.map((s) => s.summary.rank),
+    fmt: (v) => `${v}.`,
+    text: list.map((s) => (s.summary.teams ? `z ${s.summary.teams} (${s.group})` : s.group)),
+  },
+  { label: "Body na zápas", hint: "základní část", higher: true, values: list.map((s) => (s.summary.tableGames ? s.summary.points / s.summary.tableGames : null)), fmt: (v) => num(v, 2) },
+  { label: "Podíl výher", higher: true, values: list.map((s) => (s.summary.games ? (100 * s.summary.wins) / s.summary.games : null)), fmt: (v) => `${Math.round(v)} %` },
+  { label: "Vstřelené góly na zápas", higher: true, values: list.map((s) => s.summary.gfPerGame), fmt: (v) => num(v) },
+  { label: "Obdržené góly na zápas", higher: false, values: list.map((s) => s.summary.gaPerGame), fmt: (v) => num(v) },
+  { label: "Střely na zápas", higher: true, values: list.map((s) => (s.reportCount ? s.specialTeams.shotsPerGame : null)), fmt: (v) => num(v) },
+  { label: "Proměněné střely", higher: true, values: list.map((s) => pct(s.specialTeams.shooting.pct)), fmt: (v) => `${num(v)} %` },
+  { label: "Přesilovky", hint: "góly z vyloučení soupeře", higher: true, values: list.map((s) => pct(s.specialTeams.powerPlay.pct)), fmt: (v) => `${Math.round(v)} %` },
+  { label: "Ubráněná oslabení", higher: true, values: list.map((s) => pct(s.specialTeams.penaltyKill.pct)), fmt: (v) => `${Math.round(v)} %` },
+  { label: "Trestné minuty na zápas", higher: false, values: list.map((s) => (s.reportCount ? s.specialTeams.pimPerGame : null)), fmt: (v) => num(v) },
+  { label: "Hráčů v sestavách", higher: null, values: list.map((s) => (s.reportCount ? s.rosterSize : null)), fmt: (v) => String(Math.round(v)) },
+  {
+    label: "Nejlepší střelec",
+    higher: true,
+    values: list.map((s) => s.leaders.goals[0]?.value ?? null),
+    fmt: (v) => String(v),
+    text: list.map((s) => s.leaders.goals[0]?.name ?? ""),
+  },
+];
+const cols = `grid-template-columns: repeat(${list.length}, minmax(0, 1fr))`;
+const link = (s: Season) => url(s.current ? "radar" : `radar/${s.key}`);
+---
+
+<div class="flex flex-col">
+  <!-- season heads -->
+  <div class="grid gap-x-4 border-b border-grey-300 pb-3 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]">
+    <span class="hidden md:block" aria-hidden="true"></span>
+    <div class="grid gap-x-4" style={cols}>
+      {
+        list.map((s) => (
+          <a href={link(s)} class="flex flex-col font-display uppercase hover:text-blue-600">
+            <span class="text-xl leading-tight font-extrabold text-grey-950">{s.name}</span>
+            <span class="text-xs font-bold text-grey-500">{s.current ? `rozehraná, ${s.summary.games} záp.` : `${s.summary.games} zápasů`}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+  {
+    rows.map((r) => {
+      const known = r.values.filter((v): v is number => v != null);
+      const hi = Math.max(...known, 0);
+      const lo = Math.min(...known);
+      const best = r.higher == null || known.length < 2 ? null : r.higher ? hi : lo;
+      // bar length: share of the row maximum; "lower is better" rows invert it so longer = better
+      const len = (v: number) => (r.higher === false ? (hi ? (hi - v + lo) / hi : 0) : hi ? v / hi : 0);
+      return (
+        <div class="grid gap-x-4 gap-y-2 border-b border-grey-200 py-4 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] md:items-center">
+          <span class="text-base text-grey-950">
+            {r.label}
+            {r.hint && <span class="block text-sm text-grey-500">{r.hint}</span>}
+          </span>
+          <div class="grid gap-x-4" style={cols}>
+            {r.values.map((v, k) => (
+              <span class="flex min-w-0 flex-col gap-1.5">
+                <span
+                  class:list={[
+                    "font-display text-xl leading-none font-extrabold",
+                    v == null ? "text-grey-400" : v === best ? "text-success" : "text-grey-950",
+                  ]}
+                >
+                  {v == null ? "–" : r.fmt(v)}
+                </span>
+                {r.text?.[k] && <span class="truncate text-xs text-grey-500">{r.text[k]}</span>}
+                {v != null && r.higher != null && (
+                  <span class="h-1.5 rounded-full bg-grey-200">
+                    <span class:list={["block h-full min-w-1.5 rounded-full", v === best ? "bg-success" : "bg-grey-500"]} style={`width:${Math.max(4, 100 * len(v))}%`} />
+                  </span>
+                )}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    })
+  }
+</div>

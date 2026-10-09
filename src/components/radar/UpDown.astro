@@ -17,7 +17,8 @@ interface Props {
 const { items, aLabel, bLabel, half = 96, groups } = Astro.props;
 const max = Math.max(1, ...items.flatMap((i) => [i.a, i.b]));
 const h = (v: number) => (v ? Math.max(8, (half * v) / max) : 0);
-const cols = `repeat(${items.length}, minmax(2.75rem, 1fr))`;
+// long seasons (30+ games) get narrower columns; the strip scrolls sideways on phones
+const cols = `repeat(${items.length}, minmax(${items.length > 14 ? "2rem" : "2.75rem"}, 1fr))`;
 ---
 
 <figure class="flex flex-col gap-4">

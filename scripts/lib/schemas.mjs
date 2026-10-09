@@ -103,7 +103,8 @@ export const GameDetailSchema = z.object({
       z.object({
         entity: z.string(),
         period: z.string(),
-        gameTime: clock,
+        // some old reports have events without a time; normalizeReport skips those
+        gameTime: clock.nullable(),
         // goal
         scoredByTeamId: z.string().nullish(),
         ScoredByPlayer: PlayerRef.nullish(),

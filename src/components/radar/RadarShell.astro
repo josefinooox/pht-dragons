@@ -1,34 +1,83 @@
 ---
-// Dračí radar frame: title with the season on the right, sub-page links (same pattern as the
-// homepage "Nadcházející / Minulé"), grey page with white cards. Sub-pages go from the quick
-// overview to the details: Přehled → Hra → Hráči → Historie.
+// Dračí radar frame: title with a season switch on the right, sub-page links (same pattern as
+// the homepage "Nadcházející / Minulé"), grey page with white cards. Sub-pages go from the quick
+// overview to the details: Přehled → Hra → Hráči → Historie. The running season lives at /radar/,
+// finished ones at /radar/{2025-2026}/; Historie covers all seasons at /radar/historie/.
+import { Check, ChevronDown } from "@lucide/astro";
 import Base from "../../layouts/Base.astro";
-import { season } from "../../lib/brain";
-import { RADAR_ROOT } from "../../lib/radar";
+import { seasons, type Season } from "../../lib/season";
 import { url } from "../../lib/url";
 
+type Tab = "prehled" | "hra" | "hraci" | "historie";
 interface Props {
-  tab: "prehled" | "hra" | "hraci" | "historie";
+  tab: Tab;
+  /** The season shown; none on Historie (all seasons). */
+  season?: Season;
   title: string;
   description: string;
 }
-const { tab, title, description } = Astro.props;
-const ROOT = RADAR_ROOT;
+const { tab, season, title, description } = Astro.props;
+const sub = { prehled: "", hra: "hra", hraci: "hraci", historie: "historie" } as const;
+const base = (s?: Season) => (s && !s.current ? `radar/${s.key}` : "radar");
+const href = (t: Tab, s = season) => (t === "historie" ? url("radar/historie") : url([base(s), sub[t]].filter(Boolean).join("/")));
 const tabs = [
-  { key: "prehled", href: url(`${ROOT}`), label: "Přehled" },
-  { key: "hra", href: url(`${ROOT}/hra`), label: "Hra" },
-  { key: "hraci", href: url(`${ROOT}/hraci`), label: "Hráči" },
-  { key: "historie", href: url(`${ROOT}/historie`), label: "Historie" },
-];
+  { key: "prehled", label: "Přehled" },
+  { key: "hra", label: "Hra" },
+  { key: "hraci", label: "Hráči" },
+  { key: "historie", label: "Historie" },
+] as const;
+// On Historie the switch leads to the overview of the picked season.
+const target = tab === "historie" ? "prehled" : tab;
+const gamesWord = (n: number) => (n === 1 ? "zápas" : n < 5 ? "zápasy" : "zápasů");
 ---
 
 <Base title={title} description={description} nav="radar" bare>
   <div class="bg-grey-100">
     <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-4 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
       <div class="flex flex-col gap-6 pb-4 md:gap-8">
-        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
           <h1 class="font-display text-[2.75rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem] md:leading-[56px]">Dračí radar</h1>
-          <p class="font-sans text-base font-semibold text-grey-500 md:text-xl">Sezóna {season.name}</p>
+          <div class="group relative" data-menu>
+            <button
+              type="button"
+              data-menu-button
+              aria-expanded="false"
+              aria-controls="season-menu"
+              class="btn-fill flex items-center gap-2 rounded-md border border-grey-300 bg-surface py-2.5 pr-3 pl-4 text-grey-950 hover:border-grey-950 hover:text-on-ink focus-visible:text-on-ink active:[--btn-fill:var(--color-grey-800)] aria-expanded:border-grey-950 aria-expanded:text-on-ink"
+            >
+              <span class="font-display text-sm font-bold opacity-60">Sezóna</span>
+              <span class="font-display text-lg leading-6 font-bold uppercase">{season ? season.name : "Všechny"}</span>
+              <ChevronDown size={16} class="transition-transform group-has-[[aria-expanded=true]]:rotate-180" aria-hidden="true" />
+            </button>
+            <div
+              id="season-menu"
+              hidden
+              data-menu-panel
+              class="absolute top-full left-0 z-20 mt-2 w-72 origin-top-left rounded-lg sm:right-0 sm:left-auto sm:origin-top-right border border-grey-300 bg-surface p-2 text-grey-950 shadow-lg"
+            >
+              <p class="px-3 pt-2 pb-1 font-display text-sm font-bold text-grey-500 uppercase">Vyber sezónu</p>
+              {
+                seasons.map((s) => {
+                  const on = season?.key === s.key;
+                  return (
+                    <a
+                      href={href(target, s)}
+                      aria-current={on ? "page" : undefined}
+                      class="flex items-center justify-between gap-3 rounded-md p-3 transition-colors hover:bg-grey-100 active:bg-grey-200"
+                    >
+                      <span>
+                        <span class="block font-semibold">{s.name}</span>
+                        <span class="text-sm text-grey-600">
+                          {s.current ? "Aktuální sezóna" : `Skupina ${s.group}`}, {s.summary.games} {gamesWord(s.summary.games)}
+                        </span>
+                      </span>
+                      {on && <Check size={18} class="shrink-0 text-blue-600" aria-hidden="true" />}
+                    </a>
+                  );
+                })
+              }
+            </div>
+          </div>
         </div>
         <nav aria-label="Části radaru">
           <ul class="flex gap-6">
@@ -36,7 +85,7 @@ const tabs = [
               tabs.map((t) => (
                 <li>
                   <a
-                    href={t.href}
+                    href={href(t.key)}
                     aria-current={tab === t.key ? "page" : undefined}
                     class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600"
                   >
@@ -47,6 +96,17 @@ const tabs = [
             }
           </ul>
         </nav>
+        {
+          season && !season.current && (
+            <p class="rounded-lg bg-surface px-5 py-4 text-base text-grey-600">
+              Prohlížíš uzavřenou sezónu <strong class="font-semibold text-grey-950">{season.name}</strong>
+              {season.summary.rank ? `: skupina ${season.group}, konečné ${season.summary.rank}. místo z ${season.summary.teams}` : ""}.{" "}
+              <a href={href(target, seasons[0])} class="font-semibold text-blue-600 underline-offset-4 hover:underline">
+                Zpět na aktuální sezónu
+              </a>
+            </p>
+          )
+        }
       </div>
       <slot />
     </div>
@@ -55,4 +115,36 @@ const tabs = [
 
 <script>
   import "../../scripts/tip.ts";
+  import "../../scripts/menus.ts";
 </script>
+
+<style>
+  /* same opening motion as the calendar menu */
+  [data-menu-panel]:not([hidden]) {
+    animation: season-panel 500ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+  }
+  [data-menu-panel]:not([hidden]) > a {
+    animation: season-item 300ms ease-out backwards;
+  }
+  [data-menu-panel]:not([hidden]) > a:nth-of-type(2) { animation-delay: 40ms; }
+  [data-menu-panel]:not([hidden]) > a:nth-of-type(3) { animation-delay: 80ms; }
+  [data-menu-panel]:not([hidden]) > a:nth-of-type(4) { animation-delay: 120ms; }
+  @keyframes season-panel {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+  }
+  @keyframes season-item {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-menu-panel],
+    [data-menu-panel] > a {
+      animation: none;
+    }
+  }
+</style>

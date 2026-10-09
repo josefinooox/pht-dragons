@@ -2,15 +2,28 @@
 // Dračí radar – Přehled: "how are we doing?" in ten seconds (rank, record, score), then the
 // season game by game, our place in the league, and doors to the deeper sub-pages.
 import { ArrowRight } from "@lucide/astro";
-import RadarShell from "../../components/radar/RadarShell.astro";
-import UpDown from "../../components/radar/UpDown.astro";
-import LeagueDots from "../../components/radar/LeagueDots.astro";
-import Card from "../../components/brain/Card.astro";
-import Insight from "../../components/brain/Insight.astro";
-import { allTime, insights, leaders, recordText, season } from "../../lib/brain";
-import { RADAR_ROOT, league, leagueInsight, perGame, tally, teamCount } from "../../lib/radar";
-import { num, plural, resultName, shortDate } from "../../lib/format";
-import { url } from "../../lib/url";
+import RadarShell from "../../../components/radar/RadarShell.astro";
+import UpDown from "../../../components/radar/UpDown.astro";
+import LeagueDots from "../../../components/radar/LeagueDots.astro";
+import Card from "../../../components/brain/Card.astro";
+import Insight from "../../../components/brain/Insight.astro";
+import { allTime, insights as allInsights, recordText } from "../../../lib/brain";
+import { fullDate, num, plural, resultName } from "../../../lib/format";
+import { url } from "../../../lib/url";
+import { seasons, type Season } from "../../../lib/season";
+
+export function getStaticPaths() {
+  return seasons.map((s) => ({ params: { season: s.current ? undefined : s.key }, props: { s } }));
+}
+const { s } = Astro.props as { s: Season };
+const root = s.current ? "radar" : `radar/${s.key}`;
+const when = s.current ? "" : ` ${s.name}`;
+const season = { ...s.summary, name: s.name };
+const insights = { ...s.insights, trend: allInsights.trend };
+const { leaders, league, perGame, tally } = s;
+const teamCount = s.summary.teams;
+const leagueInsight = s.insights.league;
+
 
 const diff = season.gf - season.ga;
 const total = Math.max(1, tally.V + tally.R + tally.P);
@@ -22,14 +35,14 @@ const parts = [
   { k: "P", n: tally.P, word: plural(tally.P, "prohra", "prohry", "proher"), bar: "bg-red-600", ink: "text-red-600" },
 ] as const;
 const doors = [
-  { href: url(`${RADAR_ROOT}/hra`), title: "Hra", text: insights.period?.text ?? "Kdy dáváme a kdy dostáváme góly." },
+  { href: url(`${root}/hra`), title: "Hra", text: insights.period?.text ?? "Kdy dáváme a kdy dostáváme góly." },
   {
-    href: url(`${RADAR_ROOT}/hraci`),
+    href: url(`${root}/hraci`),
     title: "Hráči",
     text: topScorer ? `Nejvíc kanadských bodů: ${topScorer.name} (${topScorer.value}).` : "Body, góly a asistence hráčů.",
   },
   {
-    href: url(`${RADAR_ROOT}/historie`),
+    href: url("radar/historie"),
     title: "Historie",
     text: insights.trend?.text ?? `${allTime.seasons} ${plural(allTime.seasons, "sezóna", "sezóny", "sezón")}, ${allTime.games} zápasů.`,
   },
@@ -38,21 +51,23 @@ const doors = [
 
 <RadarShell
   tab="prehled"
-  title="Dračí radar – PHT Dragons"
+  season={s}
+  title={`Dračí radar${when} – PHT Dragons`}
   description={`PHT Dragons v číslech: ${season.rank ?? "–"}. místo, ${season.points} bodů, ${recordText(tally)}.`}
 >
   <!-- 1. the answer: rank, record, score -->
   <!-- three equal columns, so every row below lines up with this one -->
   <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
     <section aria-label="Pozice v tabulce" class="flex flex-col justify-between gap-4 rounded-lg bg-blue-600 p-6 text-white md:row-span-2 lg:row-span-1">
-      <span class="font-display text-base font-bold text-blue-100 uppercase">Pozice v tabulce</span>
+      <span class="font-display text-base font-bold text-blue-100 uppercase">{s.current ? "Pozice v tabulce" : "Konečné umístění"}</span>
       <div>
         <p class="flex items-baseline gap-3 font-display leading-[0.8] font-extrabold">
           <span class="text-[8rem] md:text-[9rem]">{season.rank ?? "–"}.</span>
           {teamCount > 0 && <span class="text-3xl font-bold text-blue-200">z {teamCount}</span>}
         </p>
         <p class="pt-3 font-display text-lg font-bold text-blue-100 uppercase">
-          {season.points} {plural(season.points, "bod", "body", "bodů")} po {season.games} {plural(season.games, "zápase", "zápasech", "zápasech")}
+          {season.points} {plural(season.points, "bod", "body", "bodů")} po {season.tableGames} {plural(season.tableGames, "zápase", "zápasech", "zápasech")}
+          {season.tableGames < season.games && <span class="block text-base text-blue-200 normal-case">v základní části, celkem {season.games} zápasů</span>}
         </p>
       </div>
     </section>
@@ -88,7 +103,7 @@ const doors = [
 
   <!-- 2. the season game by game -->
   <div class="grid gap-4 lg:grid-cols-3">
-    <Card class="lg:col-span-2" title="Zápas po zápase" subtitle="Nahoru naše góly, dolů obdržené. Klikni na zápas pro detail.">
+    <Card class="lg:col-span-2" title="Zápas po zápase" subtitle={`Nahoru naše góly, dolů obdržené.${s.current ? " Klikni na zápas pro detail." : ""}`}>
       <UpDown
         aLabel="Vstřelené"
         bLabel="Obdržené"
@@ -98,8 +113,8 @@ const doors = [
           b: g.ga,
           label: g.short,
           result: g.result,
-          href: url(`zapas/${g.slug}`),
-          tip: `${shortDate(g.date)} · ${g.opponent}\n${resultName[g.result]} ${g.gf}:${g.ga}`,
+          href: g.slug ? url(`zapas/${g.slug}`) : undefined,
+          tip: `${fullDate(g.date)} · ${g.opponent}\n${resultName[g.result]} ${g.gf}:${g.ga}`,
         }))}
       />
     </Card>

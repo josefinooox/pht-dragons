@@ -66,6 +66,26 @@ function parsePenaltyMinutes(mmss) {
   return m + s / 60;
 }
 
+/** Standings rows in API order with rank (also used for past seasons). */
+export function normalizeStandings(rawStandings, { names = false } = {}) {
+  return rawStandings.map((r, i) => {
+    const [goalsFor, goalsAgainst] = r.Score.split(":").map(Number);
+    return {
+      rank: i + 1,
+      teamId: r.TeamId,
+      ...(names ? { name: r["Team Name"].replace(/\s+/g, " ").trim(), shortName: r["Team Name Short"] ?? null } : {}),
+      played: r["Total Games"],
+      wins: r.Wins,
+      draws: r.Draws,
+      losses: r.Losses,
+      points: r["Total Points"],
+      goalsFor,
+      goalsAgainst,
+      penaltyMinutes: Math.round(parsePenaltyMinutes(r["Total Penalty Minutes"]) * 100) / 100,
+    };
+  });
+}
+
 /**
  * @returns {{ teams, games, standings, skippedGames }}
  *   teams:     [{ teamId, name, shortName, logoSource }] sorted by name
@@ -117,21 +137,7 @@ export function normalize({ rawGames, rawStandings }) {
     })
     .sort((a, b) => a.start.localeCompare(b.start) || a.gameId.localeCompare(b.gameId));
 
-  const standings = rawStandings.map((r, i) => {
-    const [goalsFor, goalsAgainst] = r.Score.split(":").map(Number);
-    return {
-      rank: i + 1,
-      teamId: r.TeamId,
-      played: r["Total Games"],
-      wins: r.Wins,
-      draws: r.Draws,
-      losses: r.Losses,
-      points: r["Total Points"],
-      goalsFor,
-      goalsAgainst,
-      penaltyMinutes: Math.round(parsePenaltyMinutes(r["Total Penalty Minutes"]) * 100) / 100,
-    };
-  });
+  const standings = normalizeStandings(rawStandings);
 
   return {
     teams: [...teams.values()].sort((a, b) => a.name.localeCompare(b.name, "cs")),
@@ -196,6 +202,7 @@ export function normalizeReport(raw) {
 
   const events = [];
   for (const e of raw.GameEvents ?? []) {
+    if (!e.gameTime) continue; // no time (old reports): the report then counts as incomplete
     const base = { period: periodKey(e.period), time: e.gameTime, sec: toSec(e.gameTime) };
     if (e.entity === "GameEventGoal" && e.scoredByTeamId) {
       events.push({

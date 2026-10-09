@@ -3,6 +3,8 @@
 // as one bar split into wins / draws / losses), records, and every opponent with each result.
 import RadarShell from "../../components/radar/RadarShell.astro";
 import ResultDots from "../../components/radar/ResultDots.astro";
+import SeasonCompare from "../../components/radar/SeasonCompare.astro";
+import { seasons } from "../../lib/season";
 import Card from "../../components/brain/Card.astro";
 import Insight from "../../components/brain/Insight.astro";
 import Stat from "../../components/brain/Stat.astro";
@@ -60,6 +62,12 @@ const split = (s: { wins: number; draws: number; losses: number }) => [
       </p>
     </Card>
   </div>
+
+  <!-- seasons compared -->
+  <SectionHead title="Porovnání sezón" sub={`Klíčová čísla vedle sebe, zeleně nejlepší sezóna v řádku. Skupiny: ${[...seasons].reverse().map((x) => `${x.name} ${x.group}`).join(", ")}.`} />
+  <Card title="Sezóny vedle sebe">
+    <SeasonCompare seasons={seasons} />
+  </Card>
 
   <!-- opponents -->
   <SectionHead title="Proti komu nám to jde" sub="Všichni soupeři ze všech sezón, nejúspěšnější nahoře" />

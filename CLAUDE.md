@@ -106,7 +106,13 @@ per-game stats, match states). Ignore its visual design entirely.
 ## Dračí radar (/radar)
 Stats in four sub-pages (Přehled → Hra → Hráči → Historie, from overview to detail), computed in
 `src/lib/brain.ts` and `src/lib/radar.ts` from games, standings, reports and
-`data/history.json`. Records are written in words or as V/R/P chips, never "3–0–1" (with three
+`data/history.json`. One season in depth = `src/lib/season.ts` (same code for every season):
+the running season at /radar/, finished ones at /radar/{2025-2026}/ (season switch in the
+header), Historie (/radar/historie/) covers all seasons incl. a season comparison.
+Past seasons in depth come from a one-time fetch: the regular-season standings of the group we
+played in (stored with the season in history.json) and our match reports in
+data/history-reports.json, at most `HISTORY_REPORTS_PER_RUN` per run, never refetched unless the
+report version changes. Records are written in words or as V/R/P chips, never "3–0–1" (with three
 periods that reads like a score). History holds our games from past seasons; each finished season is
 fetched once (at most `HISTORY_PER_RUN` per build) and never refetched.
 

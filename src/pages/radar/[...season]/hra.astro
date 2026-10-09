@@ -1,26 +1,34 @@
 ---
 // Dračí radar – Hra: how our games go. Points over the season, when goals fall (minute by
 // minute, split into the three periods), what the first goal means, shots, special teams.
-import RadarShell from "../../components/radar/RadarShell.astro";
-import UpDown from "../../components/radar/UpDown.astro";
-import Ring from "../../components/radar/Ring.astro";
-import ResultDots from "../../components/radar/ResultDots.astro";
-import PointsChart from "../../components/brain/PointsChart.astro";
-import Card from "../../components/brain/Card.astro";
-import Insight from "../../components/brain/Insight.astro";
-import Stat from "../../components/brain/Stat.astro";
-import SectionHead from "../../components/brain/SectionHead.astro";
-import { insights, periods, pointsTimeline, season, specialTeams } from "../../lib/brain";
-import { firstGoalGames, goalTimeline, league, perGame } from "../../lib/radar";
-import { num, plural, shortDate } from "../../lib/format";
-import { url } from "../../lib/url";
+import RadarShell from "../../../components/radar/RadarShell.astro";
+import UpDown from "../../../components/radar/UpDown.astro";
+import Ring from "../../../components/radar/Ring.astro";
+import ResultDots from "../../../components/radar/ResultDots.astro";
+import PointsChart from "../../../components/brain/PointsChart.astro";
+import Card from "../../../components/brain/Card.astro";
+import Insight from "../../../components/brain/Insight.astro";
+import Stat from "../../../components/brain/Stat.astro";
+import SectionHead from "../../../components/brain/SectionHead.astro";
+import { fullDate, num, plural } from "../../../lib/format";
+import { url } from "../../../lib/url";
+import { seasons, type Season } from "../../../lib/season";
 
-const ppg = league.find((m) => m.key === "ppg")!;
+export function getStaticPaths() {
+  return seasons.map((s) => ({ params: { season: s.current ? undefined : s.key }, props: { s } }));
+}
+const { s } = Astro.props as { s: Season };
+const when = s.current ? "" : ` ${s.name}`;
+const season = { ...s.summary, name: s.name };
+const { insights, periods, pointsTimeline, specialTeams, firstGoalGames, goalTimeline, league, perGame } = s;
+
+
+const ppg = league.find((m) => m.key === "ppg");
 const won = (list: { r: string }[]) => list.filter((x) => x.r === "V").length;
 const z = (n: number) => `${(n >= 10 && n < 20 ? [12, 13, 14, 17].includes(n) : "2347".includes(String(n)[0])) ? "ze" : "z"} ${n}`;
 const firstCards = [
-  { title: "Když dáme první gól", list: firstGoalGames.us, tone: "text-blue-600" },
-  { title: "Když první skóruje soupeř", list: firstGoalGames.them, tone: "text-red-600" },
+  { title: s.current ? "Když dáme první gól" : "Když jsme dali první gól", list: firstGoalGames.us, tone: "text-blue-600" },
+  { title: s.current ? "Když první skóruje soupeř" : "Když první skóroval soupeř", list: firstGoalGames.them, tone: "text-red-600" },
 ];
 const periodNames = ["1. třetina", "2. třetina", "3. třetina"];
 const withShots = perGame.filter((g) => g.shotsFor != null);
@@ -28,7 +36,7 @@ const { powerPlay: pp, penaltyKill: pk, shooting, faceoffs } = specialTeams;
 const goals = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
 ---
 
-<RadarShell tab="hra" title="Hra – Dračí radar – PHT Dragons" description="Jak hrajeme: body v sezóně, kdy padají góly, první gól, střely a speciální situace.">
+<RadarShell tab="hra" season={s} title={`Hra – Dračí radar${when} – PHT Dragons`} description="Jak hrajeme: body v sezóně, kdy padají góly, první gól, střely a speciální situace.">
   <!-- points over the season -->
   <div class="grid gap-4 lg:grid-cols-3">
     <Card class="lg:col-span-2" title="Body v průběhu sezóny" subtitle="Za výhru 2 body, za remízu 1. Najeď na tečku pro detail zápasu.">
@@ -36,7 +44,7 @@ const goals = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
     </Card>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
       <div class="rounded-lg bg-surface p-6">
-        <Stat size="xl" label="Body na zápas" value={num(ppg.ours, 2)} sub={`Průměr ligy ${num(ppg.avg, 2)}`} />
+        <Stat size="xl" label="Body na zápas" value={num(ppg?.ours ?? season.points / Math.max(1, season.tableGames), 2)} sub={ppg ? `Průměr ligy ${num(ppg.avg, 2)}` : undefined} />
       </div>
       <div class="rounded-lg bg-surface p-6">
         <Stat
@@ -93,7 +101,7 @@ const goals = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
   <!-- shots -->
   <SectionHead title="Střely" sub="Kolik střílíme a kolik to stojí gólů" />
   <div class="grid gap-4 lg:grid-cols-3">
-    <Card class="lg:col-span-2" title="Střely na branku" subtitle="Nahoru naše střely, dolů střely soupeře. Klikni na zápas pro detail.">
+    <Card class="lg:col-span-2" title="Střely na branku" subtitle={`Nahoru naše střely, dolů střely soupeře.${s.current ? " Klikni na zápas pro detail." : ""}`}>
       <UpDown
         aLabel="Naše střely"
         bLabel="Střely soupeře"
@@ -103,8 +111,8 @@ const goals = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
           b: g.shotsAgainst ?? 0,
           label: g.short,
           result: g.result,
-          href: url(`zapas/${g.slug}`),
-          tip: `${shortDate(g.date)} · ${g.opponent}\nStřely ${g.shotsFor}:${g.shotsAgainst}, góly ${g.gf}:${g.ga}`,
+          href: g.slug ? url(`zapas/${g.slug}`) : undefined,
+          tip: `${fullDate(g.date)} · ${g.opponent}\nStřely ${g.shotsFor}:${g.shotsAgainst}, góly ${g.gf}:${g.ga}`,
         }))}
       />
     </Card>

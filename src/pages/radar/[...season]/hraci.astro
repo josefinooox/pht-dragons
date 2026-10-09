@@ -1,16 +1,23 @@
 ---
 // Dračí radar – Hráči: one leaderboard with a metric switch (points, goals, assists, stars,
 // penalty minutes, games) instead of six separate lists; assist pairs and goalies next to it.
-import RadarShell from "../../components/radar/RadarShell.astro";
-import Ring from "../../components/radar/Ring.astro";
-import PillTabs from "../../components/PillTabs.astro";
-import BarList from "../../components/brain/BarList.astro";
-import Card from "../../components/brain/Card.astro";
-import Insight from "../../components/brain/Insight.astro";
-import SectionHead from "../../components/brain/SectionHead.astro";
-import { assistPairs, goalies, insights, reportCount } from "../../lib/brain";
-import { players } from "../../lib/radar";
-import { num, plural } from "../../lib/format";
+import RadarShell from "../../../components/radar/RadarShell.astro";
+import Ring from "../../../components/radar/Ring.astro";
+import PillTabs from "../../../components/PillTabs.astro";
+import BarList from "../../../components/brain/BarList.astro";
+import Card from "../../../components/brain/Card.astro";
+import Insight from "../../../components/brain/Insight.astro";
+import SectionHead from "../../../components/brain/SectionHead.astro";
+import { num, plural } from "../../../lib/format";
+import { seasons, type Season } from "../../../lib/season";
+
+export function getStaticPaths() {
+  return seasons.map((s) => ({ params: { season: s.current ? undefined : s.key }, props: { s } }));
+}
+const { s } = Astro.props as { s: Season };
+const when = s.current ? "" : ` ${s.name}`;
+const { assistPairs, goalies, insights, reportCount, players } = s;
+
 
 const pim = (m: number) => `${Math.floor(m)}:${String(Math.round((m % 1) * 60)).padStart(2, "0")}`;
 type Key = "points" | "goals" | "assists" | "stars" | "pim" | "games";
@@ -28,7 +35,7 @@ const ranked = (key: Key) =>
     .sort((a, b) => b[key] - a[key] || b.points - a.points || a.name.localeCompare(b.name, "cs"));
 ---
 
-<RadarShell tab="hraci" title="Hráči – Dračí radar – PHT Dragons" description="Body, góly, asistence, hvězdy zápasu, nahrávací dvojice a brankáři PHT Dragons.">
+<RadarShell tab="hraci" season={s} title={`Hráči – Dračí radar${when} – PHT Dragons`} description="Body, góly, asistence, hvězdy zápasu, nahrávací dvojice a brankáři PHT Dragons.">
   <div class="grid gap-4 lg:grid-cols-3">
     <Card class="lg:col-span-2 lg:row-span-2" title="Žebříček hráčů" subtitle="Vyber, co chceš porovnat.">
       <div data-tabs="local" class="flex flex-col gap-6">
@@ -85,5 +92,5 @@ const ranked = (key: Key) =>
 </RadarShell>
 
 <script>
-  import "../../scripts/tabs.ts";
+  import "../../../scripts/tabs.ts";
 </script>

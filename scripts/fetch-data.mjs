@@ -8,7 +8,7 @@ import path from "node:path";
 import sharp from "sharp";
 import { z } from "zod";
 import { CompetitionInfoSchema, GameDetailSchema, GameMultimediaSchema, GameSchema, GamesSchema, StandingsSchema } from "./lib/schemas.mjs";
-import { checkConsistency, discoverSeason, normalize, normalizeMedia, normalizeReport, pragueDate } from "./lib/normalize.mjs";
+import { checkConsistency, discoverSeason, normalize, normalizeMedia, normalizeReport, normalizeStandings, pragueDate } from "./lib/normalize.mjs";
 import { MODEL, createClient, narrativeKey, writeNarrative } from "./lib/narrate.mjs";
 import { matchFacts } from "../src/lib/recap.ts";
 import { longDate } from "../src/lib/format.ts";
@@ -170,6 +170,68 @@ async function syncHistory(info, ctx) {
   return { fetched, seasons: withUs.length, games: withUs.reduce((n, s) => n + s.games.length, 0), pending: past.length - Object.keys(sorted.seasons).length };
 }
 
+// Past seasons in depth, for the season switch on the radar: the regular-season standings of the
+// group we played in (one call per season, stored with the season in history.json) and the match
+// reports of our games (data/history-reports.json). Finished seasons don't change, so everything
+// is fetched once; reports at most HISTORY_REPORTS_PER_RUN per run to keep the API load low.
+const HISTORY_REPORTS_PER_RUN = 10;
+const REPORT_VERSION = 3;
+const REGULAR_PHASE = "Základní část";
+
+async function syncHistoryDetail(info) {
+  const file = path.join(DATA_DIR, "history.json");
+  const prevText = await readFile(file, "utf8").catch(() => null);
+  if (!prevText) return { standings: 0, reports: 0, fetched: 0, pending: 0 };
+  const history = JSON.parse(prevText);
+  const comp = info.Competitions.find((c) => c.competitionId === COMPETITION_ID);
+
+  // standings, one per season we played in
+  for (const [seasonId, season] of Object.entries(history.seasons)) {
+    if (!season.games.length || season.standings) continue;
+    const groupName = season.games.find((g) => g.phase === REGULAR_PHASE)?.group ?? season.games[0].group;
+    const phase = comp.Seasons.find((x) => x.seasonId === seasonId)
+      ?.Groups.find((g) => g.name === groupName)
+      ?.Phases.find((p) => p.name === REGULAR_PHASE);
+    if (!phase) {
+      warn(`history standings ${season.name}: no "${REGULAR_PHASE}" phase in ${groupName}`);
+      continue;
+    }
+    try {
+      const raw = await getJson("standings", { phaseId: phase.phaseId }, StandingsSchema);
+      season.standings = { group: groupName, phase: REGULAR_PHASE, rows: normalizeStandings(raw, { names: true }) };
+    } catch (err) {
+      warn(`history standings ${season.name}: ${err.message}`);
+    }
+  }
+  if (prevText !== toJson(history)) await writeFile(file, toJson(history));
+
+  // match reports of our past games
+  const rFile = path.join(DATA_DIR, "history-reports.json");
+  const rPrev = await readFile(rFile, "utf8").catch(() => null);
+  const cache = rPrev ? JSON.parse(rPrev) : {};
+  const games = Object.values(history.seasons).flatMap((x) => x.games);
+  let fetched = 0;
+  for (const g of games) {
+    if (cache[g.gameId]?.version === REPORT_VERSION) continue;
+    if (fetched >= HISTORY_REPORTS_PER_RUN) break;
+    fetched++;
+    try {
+      cache[g.gameId] = { version: REPORT_VERSION, ...normalizeReport(await getJson("game", { gameId: g.gameId }, GameDetailSchema)) };
+    } catch (err) {
+      warn(`history report ${g.date} ${g.gameId}: ${err.message}`);
+    }
+  }
+  const next = Object.fromEntries(Object.keys(cache).sort().map((id) => [id, cache[id]]));
+  if (rPrev !== toJson(next)) await writeFile(rFile, toJson(next));
+  const have = games.filter((g) => next[g.gameId]).length;
+  return {
+    standings: Object.values(history.seasons).filter((x) => x.standings).length,
+    reports: have,
+    fetched,
+    pending: games.length - have,
+  };
+}
+
 // Upper bound on model calls per run, so a bug can't run up a bill.
 const MAX_NARRATIVES_PER_RUN = 8;
 
@@ -284,6 +346,7 @@ async function main() {
   });
   const narratives = await syncNarratives(result.games, teams, reports.entries, ctx);
   const hist = await syncHistory(info, ctx);
+  const histDetail = await syncHistoryDetail(info);
   const withPhotos = Object.values(media.entries).filter((m) => m.photos.length).length;
   const complete = Object.values(reports.entries).filter((r) => r.complete).length;
 
@@ -310,6 +373,7 @@ async function main() {
             ? ` (${narratives.pending} waiting: write them with npm run narratives:pending / narratives:save)`
             : " (all written)"),
       `  history:   ${hist.games} games in ${hist.seasons} earlier seasons (${hist.fetched} fetched now${hist.pending ? `, ${hist.pending} pending` : ""})`,
+      `  history+:  ${histDetail.standings} past standings, ${histDetail.reports} past match reports (${histDetail.fetched} fetched now${histDetail.pending ? `, ${histDetail.pending} pending` : ""})`,
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),
   );
