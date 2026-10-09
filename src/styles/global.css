@@ -306,7 +306,8 @@
   }
   /* Button hover: a grey-950 fill slides in from the left with the same easing as .link-underline.
      The resting colors and the hover text color (hover:text-white) are utilities on the element.
-     An open <details> / an expanded menu button stays filled. --btn-fill can be overridden (e.g. on :active). */
+     An open <details> / an open dropdown button ([data-menu-button]) stays filled; other
+     aria-expanded buttons (e.g. "Řekni víc") don't, their text isn't white when expanded. --btn-fill can be overridden (e.g. on :active). */
   .btn-fill {
     position: relative;
     isolation: isolate;
@@ -333,16 +334,16 @@
   }
   .btn-fill:focus-visible::before,
   details[open] > .btn-fill::before,
-  .btn-fill[aria-expanded="true"]::before {
+  [data-menu-button].btn-fill[aria-expanded="true"]::before {
     transform: scaleX(1);
   }
   @media (prefers-reduced-motion: reduce) {
     .btn-fill, .btn-fill::before { transition: none; }
   }
-  /* Header logo hover: white, red and blue layers sweep in from the left, each one starting
-     when the previous has finished (::before, the .logo-wipe-mid child, ::after paint in that
-     order); the letters end blue while hovered. The logo SVG is the mask.
-     Leaving resets at once (transitions only on the hover state), so it never plays backwards. */
+  /* Header logo hover: white, red, blue and red again sweep in from the left, each layer starting
+     when the previous one has finished (::before, the two children, ::after paint in that order),
+     so the letters end red. The logo SVG is the mask. Leaving resets at once (transitions only on
+     the hover state), so it never plays backwards. */
   .logo-wipe-fill {
     position: relative;
     display: block;
@@ -354,39 +355,45 @@
   }
   .logo-wipe-fill::before,
   .logo-wipe-mid,
+  .logo-wipe-mid2,
   .logo-wipe-fill::after {
     content: "";
     position: absolute;
     inset: 0;
     transform: scaleX(0);
     transform-origin: left;
+    --wipe: 280ms;
   }
   .logo-wipe-fill::before { background: #fff; }
   .logo-wipe-mid { background: var(--color-red-600); }
-  .logo-wipe-fill::after { background: var(--color-blue-600); }
+  .logo-wipe-mid2 { background: var(--color-blue-600); }
+  .logo-wipe-fill::after { background: var(--color-red-600); }
   @media (hover: hover) {
     .logo-wipe:hover .logo-wipe-fill::before,
     .logo-wipe:hover .logo-wipe-mid,
+    .logo-wipe:hover .logo-wipe-mid2,
     .logo-wipe:hover .logo-wipe-fill::after {
       transform: scaleX(1);
+      transition: transform var(--wipe) cubic-bezier(0.32, 0.72, 0, 1);
     }
+    .logo-wipe:hover .logo-wipe-mid { transition-delay: calc(var(--wipe) * 1); }
+    .logo-wipe:hover .logo-wipe-mid2 { transition-delay: calc(var(--wipe) * 2); }
+    .logo-wipe:hover .logo-wipe-fill::after { transition-delay: calc(var(--wipe) * 3); }
   }
   .logo-wipe:focus-visible .logo-wipe-fill::before,
   .logo-wipe:focus-visible .logo-wipe-mid,
+  .logo-wipe:focus-visible .logo-wipe-mid2,
   .logo-wipe:focus-visible .logo-wipe-fill::after {
     transform: scaleX(1);
+    transition: transform var(--wipe) cubic-bezier(0.32, 0.72, 0, 1);
   }
-  @media (hover: hover) {
-    .logo-wipe:hover .logo-wipe-fill::before { transition: transform 360ms cubic-bezier(0.32, 0.72, 0, 1); }
-    .logo-wipe:hover .logo-wipe-mid { transition: transform 360ms cubic-bezier(0.32, 0.72, 0, 1) 360ms; }
-    .logo-wipe:hover .logo-wipe-fill::after { transition: transform 360ms cubic-bezier(0.32, 0.72, 0, 1) 720ms; }
-  }
-  .logo-wipe:focus-visible .logo-wipe-fill::before { transition: transform 360ms cubic-bezier(0.32, 0.72, 0, 1); }
-  .logo-wipe:focus-visible .logo-wipe-mid { transition: transform 360ms cubic-bezier(0.32, 0.72, 0, 1) 360ms; }
-  .logo-wipe:focus-visible .logo-wipe-fill::after { transition: transform 360ms cubic-bezier(0.32, 0.72, 0, 1) 720ms; }
+  .logo-wipe:focus-visible .logo-wipe-mid { transition-delay: calc(var(--wipe) * 1); }
+  .logo-wipe:focus-visible .logo-wipe-mid2 { transition-delay: calc(var(--wipe) * 2); }
+  .logo-wipe:focus-visible .logo-wipe-fill::after { transition-delay: calc(var(--wipe) * 3); }
   @media (prefers-reduced-motion: reduce) {
     .logo-wipe .logo-wipe-fill::before,
     .logo-wipe .logo-wipe-mid,
+    .logo-wipe .logo-wipe-mid2,
     .logo-wipe .logo-wipe-fill::after { transition: none !important; transform: scaleX(0) !important; }
   }
   /* Relative/state label filled in by src/scripts/live.ts. */
