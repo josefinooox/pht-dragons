@@ -1,5 +1,5 @@
 ---
-// Dračí radar v2 – Historie: all our seasons in the PHM Cup. Totals, season by season (results
+// Dračí radar – Historie: all our seasons in the PHM Cup. Totals, season by season (results
 // as one bar split into wins / draws / losses), records, and every opponent with each result.
 import RadarShell from "../../components/radar/RadarShell.astro";
 import ResultDots from "../../components/radar/ResultDots.astro";
@@ -21,9 +21,9 @@ const split = (s: { wins: number; draws: number; losses: number }) => [
 
 <RadarShell tab="historie" title="Historie – Dračí radar – PHT Dragons" description="PHT Dragons ve všech sezónách PHM Cupu: bilance, rekordy a vzájemné zápasy se soupeři.">
   <!-- totals -->
-  <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-    <div class={tile}><Stat size="xl" label="Sezóny" value={String(allTime.seasons)} /></div>
-    <div class={tile}><Stat size="xl" label="Zápasy" value={String(allTime.games)} /></div>
+  <!-- three columns like the rows below (the number of seasons is in the season bars) -->
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div class={tile}><Stat size="xl" label="Zápasy" value={String(allTime.games)} sub={`${allTime.seasons} ${plural(allTime.seasons, "sezóna", "sezóny", "sezón")} v PHM Cupu`} /></div>
     <div class={tile}><Stat size="xl" label="Podíl výher" value={`${winPct} %`} tone="green" sub={recordText({ V: allTime.wins, R: allTime.draws, P: allTime.losses })} /></div>
     <div class={tile}><Stat size="xl" label="Skóre" value={`${allTime.gf}:${allTime.ga}`} sub={`${allTime.gf} vstřelených, ${allTime.ga} obdržených gólů`} /></div>
   </div>

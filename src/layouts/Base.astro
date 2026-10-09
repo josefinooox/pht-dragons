@@ -72,7 +72,8 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
         <a href={url()} class="logo-wipe shrink-0 rounded-sm" aria-label="PHT Dragons – rozpis">
           <span class="logo-wipe-fill" style={`--logo: url("${logo.src}")`} role="img" aria-label="PHT Dragons"></span>
         </a>
-        <nav aria-label="Hlavní" class="hidden md:block">
+        <div class="hidden items-center gap-8 md:flex">
+        <nav aria-label="Hlavní">
           <ul class="flex gap-10">
             {
               links.map((l) => (
@@ -89,6 +90,23 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
             }
           </ul>
         </nav>
+        <!-- theme switch (desktop): icon after the links, behind a hairline; it shows the mode
+             you switch TO (moon in light, sun in dark) -->
+        <span class="h-6 w-px bg-white/15" aria-hidden="true"></span>
+        <button
+          type="button"
+          data-theme-toggle
+          aria-pressed="false"
+          title="Přepnout tmavý režim"
+          class="group -mx-2 grid size-10 place-items-center rounded-full text-night-500 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <span class="relative size-5" aria-hidden="true">
+            <Moon size={20} class="absolute inset-0 transition duration-300 in-data-[theme=dark]:rotate-90 in-data-[theme=dark]:opacity-0" />
+            <Sun size={20} class="absolute inset-0 -rotate-90 opacity-0 transition duration-300 in-data-[theme=dark]:rotate-0 in-data-[theme=dark]:opacity-100" />
+          </span>
+          <span class="sr-only">Tmavý režim</span>
+        </button>
+        </div>
         <button
           type="button"
           data-menu-toggle
@@ -129,6 +147,27 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
                 </li>
               ))
             }
+            <!-- theme switch (mobile): a labelled switch at the end of the menu -->
+            <li
+              class="mt-4 -translate-y-2 border-t border-white/10 pt-4 opacity-0 transition duration-300 ease-out group-data-[open=true]/menu:translate-y-0 group-data-[open=true]/menu:opacity-100 motion-reduce:transition-none"
+              style={`transition-delay:${60 + links.length * 40}ms`}
+            >
+              <button
+                type="button"
+                role="switch"
+                data-theme-toggle
+                aria-checked="false"
+                class="group flex w-full items-center justify-between py-2 font-display text-xl font-bold text-night-500 uppercase transition-colors hover:text-white"
+              >
+                <span class="flex items-center gap-3">
+                  <Moon size={20} aria-hidden="true" />
+                  Tmavý režim
+                </span>
+                <span class="relative h-7 w-12 rounded-full bg-night-700 transition-colors group-aria-checked:bg-blue-600" aria-hidden="true">
+                  <span class="absolute top-1 left-1 size-5 rounded-full bg-white shadow transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-aria-checked:translate-x-5" />
+                </span>
+              </button>
+            </li>
           </ul>
         </nav>
       </div>
@@ -203,35 +242,27 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     <script>
       import "../scripts/live.ts";
     </script>
-    <!-- Temporary theme switch (floating), until dark mode gets a place in the design. -->
-    <button
-      type="button"
-      data-theme-toggle
-      aria-pressed="false"
-      class="fixed right-4 bottom-4 z-40 grid size-12 place-items-center rounded-full bg-grey-950 text-on-ink shadow-lg transition-transform hover:scale-105 active:scale-95 md:right-6 md:bottom-6"
-    >
-      <Moon size={20} class="in-data-[theme=dark]:hidden" aria-hidden="true" />
-      <Sun size={20} class="hidden in-data-[theme=dark]:block" aria-hidden="true" />
-      <span class="sr-only">Tmavý režim</span>
-    </button>
 
     <script>
-      // Theme toggle: html[data-theme="dark"] + localStorage "pht-theme".
-      const themeButton = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
-      if (themeButton) {
-        const root = document.documentElement;
-        const sync = () => themeButton.setAttribute("aria-pressed", String(root.dataset.theme === "dark"));
-        sync();
-        themeButton.addEventListener("click", () => {
+      // Theme switches (header icon on desktop, switch in the mobile menu):
+      // html[data-theme="dark"] + localStorage "pht-theme".
+      const root = document.documentElement;
+      const themeButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]")];
+      const syncTheme = () => {
+        const dark = String(root.dataset.theme === "dark");
+        for (const b of themeButtons) b.setAttribute(b.getAttribute("role") === "switch" ? "aria-checked" : "aria-pressed", dark);
+      };
+      syncTheme();
+      for (const b of themeButtons)
+        b.addEventListener("click", () => {
           const dark = root.dataset.theme !== "dark";
           if (dark) root.dataset.theme = "dark";
           else delete root.dataset.theme;
           try {
             localStorage.setItem("pht-theme", dark ? "dark" : "light");
           } catch {}
-          sync();
+          syncTheme();
         });
-      }
     </script>
     <script>
       // Mobile menu: toggle the panel under the header; close on Esc or when the viewport grows.

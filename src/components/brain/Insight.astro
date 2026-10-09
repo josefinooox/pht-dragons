@@ -13,7 +13,8 @@ const { insight, tone = "blue", class: cls } = Astro.props;
 const look = {
   blue: { box: "bg-blue-600 text-white", label: "text-blue-200" },
   white: { box: "bg-surface text-blue-600", label: "text-grey-500" },
-  grey: { box: "bg-grey-200 text-blue-600", label: "text-grey-500" },
+  // light mode: a touch darker than grey-200 so it reads as a cell on the grey-100 page
+  grey: { box: "bg-[#e5e5e5] text-blue-600 in-data-[theme=dark]:bg-grey-200", label: "text-grey-500" },
 }[tone];
 ---
 

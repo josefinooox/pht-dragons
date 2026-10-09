@@ -104,12 +104,14 @@ Use it ONLY for behavior and calculations (summary rules, common opponents,
 per-game stats, match states). Ignore its visual design entirely.
 
 ## Dračí radar (/radar)
-Stats dashboard computed in `src/lib/brain.ts` from games, standings, reports and
-`data/history.json`. History holds our games from past seasons; each finished season is
+Stats in four sub-pages (Přehled → Hra → Hráči → Historie, from overview to detail), computed in
+`src/lib/brain.ts` and `src/lib/radar.ts` from games, standings, reports and
+`data/history.json`. Records are written in words or as V/R/P chips, never "3–0–1" (with three
+periods that reads like a score). History holds our games from past seasons; each finished season is
 fetched once (at most `HISTORY_PER_RUN` per build) and never refetched.
 
 ## Dark mode
-`html[data-theme="dark"]`, switched by a temporary floating button (Base.astro), remembered in
+`html[data-theme="dark"]`, switched in the header (icon on desktop, switch in the mobile menu), remembered in
 localStorage `pht-theme`, light by default. The grey-* ramp flips in dark mode, so:
 - raised white elements use `bg-surface` (not `bg-white`); team logos stay `bg-white`;
 - text on a `grey-950` fill (button hover, selected pill) uses `text-on-ink` (not `text-white`);

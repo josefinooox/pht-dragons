@@ -1,10 +1,10 @@
-// Dračí radar v2 (/radar-novy): extra numbers on top of src/lib/brain.ts, all at build time.
+// Dračí radar (/radar): extra numbers on top of src/lib/brain.ts, all at build time.
 // Game by game, the league around us, when goals fall, and one row per player.
 import { leaders } from "./brain";
 import { OUR, active, finals, forT, gameSlug, opp, reportFor, standings, team, type Result } from "./data";
 
-/** Where v2 lives while it is tried out next to v1 (/radar). */
-export const RADAR_ROOT = "radar-novy";
+/** Base path of the radar sub-pages. */
+export const RADAR_ROOT = "radar";
 
 /** Our finished games in order, with shots when the match report has them. */
 export const perGame = finals.map((g, k) => {

@@ -1,5 +1,5 @@
 ---
-// Dračí radar v2 – Přehled: "how are we doing?" in ten seconds (rank, record, score), then the
+// Dračí radar – Přehled: "how are we doing?" in ten seconds (rank, record, score), then the
 // season game by game, our place in the league, and doors to the deeper sub-pages.
 import { ArrowRight } from "@lucide/astro";
 import RadarShell from "../../components/radar/RadarShell.astro";
@@ -42,7 +42,8 @@ const doors = [
   description={`PHT Dragons v číslech: ${season.rank ?? "–"}. místo, ${season.points} bodů, ${recordText(tally)}.`}
 >
   <!-- 1. the answer: rank, record, score -->
-  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)_minmax(0,1fr)]">
+  <!-- three equal columns, so every row below lines up with this one -->
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
     <section aria-label="Pozice v tabulce" class="flex flex-col justify-between gap-4 rounded-lg bg-blue-600 p-6 text-white md:row-span-2 lg:row-span-1">
       <span class="font-display text-base font-bold text-blue-100 uppercase">Pozice v tabulce</span>
       <div>
