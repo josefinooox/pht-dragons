@@ -340,9 +340,9 @@
   @media (prefers-reduced-motion: reduce) {
     .btn-fill, .btn-fill::before { transition: none; }
   }
-  /* Header logo hover: white, red, blue and red again sweep in from the left in quick, overlapping
-     succession (::before, the two children, ::after paint in that order), so the letters end red. The logo SVG is the mask. Leaving resets at once (transitions only on
-     the hover state), so it never plays backwards. */
+  /* Header logo hover: a white layer sweeps in from the left, a red one right behind it, so a
+     white flash runs across the letters and they end red again. The logo SVG is the mask.
+     Leaving resets at once (transitions only on the hover state), so it never plays backwards. */
   .logo-wipe-fill {
     position: relative;
     display: block;
@@ -353,47 +353,31 @@
     mask: var(--logo) left center / contain no-repeat;
   }
   .logo-wipe-fill::before,
-  .logo-wipe-mid,
-  .logo-wipe-mid2,
   .logo-wipe-fill::after {
     content: "";
     position: absolute;
     inset: 0;
     transform: scaleX(0);
     transform-origin: left;
-    --wipe: 300ms;
-    --stagger: 90ms; /* layers overlap: each starts 90 ms after the previous one */
   }
   .logo-wipe-fill::before { background: #fff; }
-  .logo-wipe-mid { background: var(--color-red-600); }
-  .logo-wipe-mid2 { background: var(--color-blue-600); }
   .logo-wipe-fill::after { background: var(--color-red-600); }
   @media (hover: hover) {
     .logo-wipe:hover .logo-wipe-fill::before,
-    .logo-wipe:hover .logo-wipe-mid,
-    .logo-wipe:hover .logo-wipe-mid2,
     .logo-wipe:hover .logo-wipe-fill::after {
       transform: scaleX(1);
-      transition: transform var(--wipe) cubic-bezier(0.32, 0.72, 0, 1);
+      transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
     }
-    .logo-wipe:hover .logo-wipe-mid { transition-delay: calc(var(--stagger) * 1); }
-    .logo-wipe:hover .logo-wipe-mid2 { transition-delay: calc(var(--stagger) * 2); }
-    .logo-wipe:hover .logo-wipe-fill::after { transition-delay: calc(var(--stagger) * 3); }
+    .logo-wipe:hover .logo-wipe-fill::after { transition-delay: 180ms; }
   }
   .logo-wipe:focus-visible .logo-wipe-fill::before,
-  .logo-wipe:focus-visible .logo-wipe-mid,
-  .logo-wipe:focus-visible .logo-wipe-mid2,
   .logo-wipe:focus-visible .logo-wipe-fill::after {
     transform: scaleX(1);
-    transition: transform var(--wipe) cubic-bezier(0.32, 0.72, 0, 1);
+    transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
   }
-  .logo-wipe:focus-visible .logo-wipe-mid { transition-delay: calc(var(--stagger) * 1); }
-  .logo-wipe:focus-visible .logo-wipe-mid2 { transition-delay: calc(var(--stagger) * 2); }
-  .logo-wipe:focus-visible .logo-wipe-fill::after { transition-delay: calc(var(--stagger) * 3); }
+  .logo-wipe:focus-visible .logo-wipe-fill::after { transition-delay: 180ms; }
   @media (prefers-reduced-motion: reduce) {
     .logo-wipe .logo-wipe-fill::before,
-    .logo-wipe .logo-wipe-mid,
-    .logo-wipe .logo-wipe-mid2,
     .logo-wipe .logo-wipe-fill::after { transition: none !important; transform: scaleX(0) !important; }
   }
   /* Relative/state label filled in by src/scripts/live.ts. */

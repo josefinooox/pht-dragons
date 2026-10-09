@@ -87,9 +87,9 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     <header class="bg-night-900">
       <!-- header, main column and footer share the page grid (--gutter in global.css) -->
       <div class="flex h-[72px] items-center justify-between gap-4 px-(--gutter)">
-        <!-- the logo is a mask over colour layers, so hover can sweep white, red, blue and red across it -->
+        <!-- the logo is a mask over colour layers, so hover can sweep white, then red, across it -->
         <a href={url()} class="logo-wipe shrink-0 rounded-sm" aria-label="PHT Dragons – rozpis">
-          <span class="logo-wipe-fill" style={`--logo: url("${logo.src}")`} role="img" aria-label="PHT Dragons"><span class="logo-wipe-mid"></span><span class="logo-wipe-mid2"></span></span>
+          <span class="logo-wipe-fill" style={`--logo: url("${logo.src}")`} role="img" aria-label="PHT Dragons"></span>
         </a>
         <div class="hidden items-center gap-8 md:flex">
         <nav aria-label="Hlavní">
