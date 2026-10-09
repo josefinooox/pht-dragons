@@ -52,11 +52,14 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
           </ol>
         </nav>
 
-        <!-- who they are -->
-        <section class="flex flex-col gap-6 rounded-lg bg-grey-100 px-5 py-6 md:flex-row md:items-center md:gap-10 md:p-10">
+
+
+        <!-- one card: who they are (header) + the analysis tabs -->
+        <OpponentCard o={id}>
+          <div slot="header" class="flex flex-col gap-6 md:flex-row md:items-center md:gap-10">
           <Logo id={id} round class="size-24 md:size-32" />
           <div class="flex min-w-0 flex-col gap-4">
-            <h1 class="font-display text-[2.5rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem]">{t.name}</h1>
+            <h1 id="souper" class="font-display text-[2.5rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem]">{t.name}</h1>
             <dl class="flex flex-wrap gap-x-10 gap-y-4">
               {
                 row && (
@@ -82,10 +85,8 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
               </div>
             </dl>
           </div>
-        </section>
-
-
-        <OpponentCard o={id} />
+          </div>
+        </OpponentCard>
 
         <!-- our games with them -->
         <section aria-labelledby="nase-zapasy" class="flex flex-col gap-4">

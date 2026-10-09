@@ -1,6 +1,7 @@
 ---
 // Opponent analysis card (match detail and team profile): name, form and tabs Shrnutí, Srovnání,
 // Jejich hráči, Jejich poslední zápasy, Společní soupeři, plus optional earlier meetings.
+// The team profile replaces the name/form row with its bigger header (slot "header").
 import { ArrowRight } from "@lucide/astro";
 import PillTabs from "./PillTabs.astro";
 import CompareTable from "./CompareTable.astro";
@@ -62,6 +63,8 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
 ---
 
 <section aria-labelledby="souper" class="flex flex-col gap-8 rounded-lg bg-grey-100 px-5 py-6 md:p-10">
+  <!-- the team profile puts its own header here (slot "header", with id="souper" on its heading) -->
+  {Astro.slots.has("header") ? <slot name="header" /> : (
   <div class="flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center gap-4">
       <Logo id={o} round class="size-12" />
@@ -85,6 +88,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
       }
     </div>
   </div>
+  )}
 
   <div data-tabs class="flex flex-col gap-6">
     <PillTabs tabs={tabs} label={`Rozbor soupeře ${them.name}`} />
