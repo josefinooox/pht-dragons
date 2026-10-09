@@ -12,6 +12,7 @@ const dayNumber = (ymd: string) => {
   return Date.UTC(y, m - 1, d) / 864e5;
 };
 const today = dayNumber(pragueDay(now));
+const loadedAt = performance.now(); // with ?now=…, the test clock keeps running from that moment
 const plural = (n: number, one: string, few: string, many: string) =>
   n === 1 ? one : n >= 2 && n <= 4 ? few : many;
 
@@ -85,7 +86,25 @@ for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
     if (short) short.textContent = brief;
     value.textContent = v;
   };
-  if (state) set("Další zápas:", "Zápas:", state[1]);
+  // Under 24 hours to the start: a live HH:MM:SS countdown, ticking every second.
+  const startMs = Date.parse(start);
+  const left = () => startMs - (now.getTime() + (performance.now() - loadedAt));
+  if (!state && left() > 0 && left() < 864e5) {
+    value.classList.add("tabular-nums");
+    const tick = () => {
+      const ms = left();
+      if (ms <= 0) {
+        clearInterval(timer);
+        set("Další zápas:", "Zápas:", "právě začíná");
+        return;
+      }
+      const t = Math.floor(ms / 1000);
+      const pad = (x: number) => String(x).padStart(2, "0");
+      set("Do zápasu zbývá:", "Zápas za", `${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:${pad(t % 60)}`);
+    };
+    const timer = setInterval(tick, 1000);
+    tick();
+  } else if (state) set("Další zápas:", "Zápas:", state[1]);
   else if (n === 0) set("Další zápas:", "Zápas:", "dnes");
   else if (n > 0) set("Do dalšího zápasu zbývá:", "Zápas za", `${n} ${plural(n, "den", "dny", "dní")}`);
 }

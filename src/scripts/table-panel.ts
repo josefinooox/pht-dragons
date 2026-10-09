@@ -22,3 +22,13 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-table-togg
     for (const b of document.querySelectorAll("[data-table-toggle='open']")) b.setAttribute("aria-expanded", String(open));
   });
 }
+
+// The panel lists every team: keep our row in view (roughly centred) inside the scrolling list.
+const list = document.querySelector<HTMLElement>("[data-table-list]");
+const centreOurs = () => {
+  const ours = list?.querySelector<HTMLElement>("[aria-current]");
+  if (!list || !ours) return;
+  list.scrollTop = ours.offsetTop - list.offsetTop - (list.clientHeight - ours.offsetHeight) / 2;
+};
+centreOurs();
+for (const btn of document.querySelectorAll("[data-table-toggle='open']")) btn.addEventListener("click", () => requestAnimationFrame(centreOurs));
