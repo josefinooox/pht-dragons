@@ -1,7 +1,8 @@
 ---
 // "Přidat do kalendáře" dropdown: subscribe to the season feed in Google Calendar (by URL) or
 // Apple Calendar (webcal), or download the .ics. Each option says what it does.
-// <details> keeps it working without JS; src/scripts/menus.ts closes it on outside click / Esc.
+// A button + panel[hidden] driven by src/scripts/menus.ts (toggle, outside click, Esc). Not a
+// <details>: Safari can leave the closed, animated panel painted on screen.
 // Opening plays the same motion as the mobile menu (panel eases in, options follow one by one).
 import { ChevronDown, Download } from "@lucide/astro";
 import { url } from "../lib/url";
@@ -14,6 +15,7 @@ interface Props {
   align?: "left" | "right";
 }
 const { variant = "outline", up = false, align = "right" } = Astro.props;
+const id = `cal-${Math.random().toString(36).slice(2, 8)}`;
 const feedHttp = new URL(url("dragons.ics"), Astro.site);
 const feedWebcal = feedHttp.href.replace(/^https?:/, "webcal:");
 const google = `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(feedWebcal)}`;
@@ -24,17 +26,23 @@ const options = [
 ];
 ---
 
-<details class="group relative" data-menu>
-  <summary
+<div class="group relative" data-menu>
+  <button
+    type="button"
+    data-menu-button
+    aria-expanded="false"
+    aria-controls={id}
     class:list={[
-      "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] flex min-w-20 cursor-pointer list-none items-center justify-center gap-1 rounded-md bg-white p-3 text-grey-950 group-open:text-white [&::-webkit-details-marker]:hidden",
-      variant === "outline" && "border border-grey-300 hover:border-grey-950 group-open:border-grey-950",
+      "btn-fill hover:text-white focus-visible:text-white active:[--btn-fill:var(--color-grey-800)] flex min-w-20 cursor-pointer items-center justify-center gap-1 rounded-md bg-white p-3 text-grey-950 aria-expanded:text-white",
+      variant === "outline" && "border border-grey-300 hover:border-grey-950 aria-expanded:border-grey-950",
     ]}
   >
     <span class="px-1 font-display text-lg leading-6 font-bold uppercase">Přidat do kalendáře</span>
-    <ChevronDown size={16} class="transition-transform group-open:rotate-180" aria-hidden="true" />
-  </summary>
+    <ChevronDown size={16} class="transition-transform group-has-[[aria-expanded=true]]:rotate-180" aria-hidden="true" />
+  </button>
   <div
+    id={id}
+    hidden
     data-menu-panel
     class:list={[
       "absolute z-20 w-80 rounded-lg border border-grey-300 bg-white p-2 text-grey-950 shadow-lg",
@@ -83,21 +91,17 @@ const options = [
       ))
     }
   </div>
-</details>
+</div>
 
 <style>
   /* Same motion as the mobile menu: the panel eases in (500ms, cubic-bezier(.32,.72,0,1)),
      the options fade and slide in one after another (--d). Opening only; closing is instant. */
-  /* A closed <details> may only hide its content, and Chrome can leave the animated panel's
-     layer painted on screen; take it out of rendering explicitly. */
-  details:not([open]) > [data-menu-panel] {
-    display: none;
-  }
-  /* "backwards", not "both": once finished, nothing keeps the panel on its own layer. */
-  details[open] > [data-menu-panel] {
+  /* Showing the panel (hidden removed) starts the animation from scratch every time.
+     "backwards", not "both": once finished, nothing keeps the panel on its own layer. */
+  [data-menu-panel]:not([hidden]) {
     animation: menu-panel 500ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
   }
-  details[open] > [data-menu-panel] > a {
+  [data-menu-panel]:not([hidden]) > a {
     animation: menu-item 300ms ease-out backwards;
     animation-delay: var(--d, 0ms);
   }
@@ -114,8 +118,8 @@ const options = [
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    details[open] > [data-menu-panel],
-    details[open] > [data-menu-panel] > a {
+    [data-menu-panel],
+    [data-menu-panel] > a {
       animation: none;
     }
   }

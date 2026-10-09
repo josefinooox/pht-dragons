@@ -268,7 +268,7 @@
   }
   /* Button hover: a grey-950 fill slides in from the left with the same easing as .link-underline.
      The resting colors and the hover text color (hover:text-white) are utilities on the element.
-     An open <details> keeps its summary filled. --btn-fill can be overridden (e.g. on :active). */
+     An open <details> / an expanded menu button stays filled. --btn-fill can be overridden (e.g. on :active). */
   .btn-fill {
     position: relative;
     isolation: isolate;
@@ -294,7 +294,8 @@
     }
   }
   .btn-fill:focus-visible::before,
-  details[open] > .btn-fill::before {
+  details[open] > .btn-fill::before,
+  .btn-fill[aria-expanded="true"]::before {
     transform: scaleX(1);
   }
   @media (prefers-reduced-motion: reduce) {

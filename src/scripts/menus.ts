@@ -1,24 +1,28 @@
-// Close <details data-menu> dropdowns on outside click and on Escape.
-const menus = () => document.querySelectorAll<HTMLDetailsElement>("details[data-menu][open]");
+// Dropdowns: <div data-menu> with a [data-menu-button] (aria-expanded) and a [data-menu-panel]
+// (hidden). Toggle on click, close on outside click and on Escape. See CalendarMenu.astro.
+const set = (menu: HTMLElement, open: boolean) => {
+  const button = menu.querySelector<HTMLElement>("[data-menu-button]");
+  const panel = menu.querySelector<HTMLElement>("[data-menu-panel]");
+  if (!button || !panel) return;
+  button.setAttribute("aria-expanded", String(open));
+  panel.hidden = !open;
+};
+const openMenus = () => [...document.querySelectorAll<HTMLElement>("[data-menu]")].filter((m) => m.querySelector("[aria-expanded=true]"));
 
+for (const menu of document.querySelectorAll<HTMLElement>("[data-menu]")) {
+  menu.querySelector("[data-menu-button]")?.addEventListener("click", () => {
+    const open = menu.querySelector("[data-menu-button]")?.getAttribute("aria-expanded") !== "true";
+    for (const m of openMenus()) if (m !== menu) set(m, false);
+    set(menu, open);
+  });
+}
 document.addEventListener("click", (e) => {
-  for (const m of menus()) if (!m.contains(e.target as Node)) m.open = false;
+  for (const m of openMenus()) if (!m.contains(e.target as Node)) set(m, false);
 });
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
-  for (const m of menus()) {
-    m.open = false;
-    m.querySelector("summary")?.focus();
+  for (const m of openMenus()) {
+    set(m, false);
+    m.querySelector<HTMLElement>("[data-menu-button]")?.focus();
   }
 });
-
-// Replay the opening animation (CalendarMenu.astro) on every open, drop it on close: a closed <details> may only
-// hide its content (content-visibility), so CSS animations would otherwise run just once.
-for (const m of document.querySelectorAll<HTMLDetailsElement>("details[data-menu]")) {
-  m.addEventListener("toggle", () => {
-    for (const a of m.getAnimations({ subtree: true })) {
-      a.cancel();
-      if (m.open) a.play();
-    }
-  });
-}
