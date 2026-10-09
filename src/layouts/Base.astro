@@ -51,7 +51,9 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     {me.logo && <meta property="og:image" content={new URL(url(me.logo), Astro.site).href} />}
-    {me.logo && <link rel="icon" href={url(me.logo)} type="image/webp" />}
+    <link rel="icon" href={url("favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={url("favicon-32.png")} type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href={url("apple-touch-icon.png")} />
     <link rel="alternate" type="text/calendar" title="Zápasy PHT Dragons" href={url("dragons.ics")} />
     <script is:inline>
       // Standings panel state before first paint (collapsed by default), see TablePanel.astro.
