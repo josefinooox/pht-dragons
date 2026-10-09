@@ -9,14 +9,25 @@ import { OUR, forT, isFinal, meta, mine, opp, played, standings, team, teamSlug 
 import { dayMonthDot, plural, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 
-const tiles = standings
-  .filter((r) => r.teamId !== OUR)
-  .map((r) => {
+// Us included, in our place: highlighted like our table row, leading to Dragons Intelligence.
+const tiles = standings.map((r) => {
+    if (r.teamId === OUR)
+      return {
+        row: r,
+        us: true,
+        href: url("radar"),
+        form: played(r.teamId)
+          .slice(-5)
+          .map((x) => forT(x, r.teamId).r),
+        note: "Naše statistiky",
+      };
     const vs = mine.filter((g) => opp(g) === r.teamId);
     const next = vs.find((g) => !isFinal(g));
     const last = [...vs].reverse().find(isFinal);
     return {
       row: r,
+      us: false,
+      href: url(`tym/${teamSlug(r.teamId)}`),
       form: played(r.teamId)
         .slice(-5)
         .map((x) => forT(x, r.teamId).r),
@@ -44,10 +55,17 @@ const tiles = standings
 
     <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {
-        tiles.map(({ row, form, note }) => (
+        tiles.map(({ row, us, href, form, note }) => (
           <li>
             <!-- logo on top, then name, info and form, all centred -->
-            <a href={url(`tym/${teamSlug(row.teamId)}`)} class="group flex h-full flex-col items-center gap-4 rounded-lg bg-grey-100 px-5 py-6 text-center transition-colors duration-300 hover:bg-grey-200">
+            <a
+              href={href}
+              aria-current={us ? "true" : undefined}
+              class:list={[
+                "group flex h-full flex-col items-center gap-4 rounded-lg px-5 py-6 text-center transition-colors duration-300",
+                us ? "bg-blue-600/10 hover:bg-blue-600/15" : "bg-grey-100 hover:bg-grey-200",
+              ]}
+            >
               <Logo id={row.teamId} round class="size-24 shrink-0" />
               <span class="flex min-w-0 flex-col items-center gap-2">
                 <span class="font-display text-xl leading-tight font-black text-grey-950 uppercase">
