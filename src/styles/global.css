@@ -339,8 +339,9 @@
   @media (prefers-reduced-motion: reduce) {
     .btn-fill, .btn-fill::before { transition: none; }
   }
-  /* Header logo hover: a white layer sweeps in from the left, a red one right behind it, so a
-     white flash runs across the letters and they end red again. The logo SVG is the mask.
+  /* Header logo hover: white, blue and red layers sweep in from the left one right after the
+     other (::before, the .logo-wipe-mid child, ::after paint in that order), so a white and a
+     blue flash run across the letters and they end red again. The logo SVG is the mask.
      Leaving resets at once (transitions only on the hover state), so it never plays backwards. */
   .logo-wipe-fill {
     position: relative;
@@ -352,6 +353,7 @@
     mask: var(--logo) left center / contain no-repeat;
   }
   .logo-wipe-fill::before,
+  .logo-wipe-mid,
   .logo-wipe-fill::after {
     content: "";
     position: absolute;
@@ -360,23 +362,31 @@
     transform-origin: left;
   }
   .logo-wipe-fill::before { background: #fff; }
+  .logo-wipe-mid { background: var(--color-blue-600); }
   .logo-wipe-fill::after { background: var(--color-red-600); }
   @media (hover: hover) {
     .logo-wipe:hover .logo-wipe-fill::before,
+    .logo-wipe:hover .logo-wipe-mid,
     .logo-wipe:hover .logo-wipe-fill::after {
       transform: scaleX(1);
-      transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
     }
-    .logo-wipe:hover .logo-wipe-fill::after { transition-delay: 180ms; }
   }
   .logo-wipe:focus-visible .logo-wipe-fill::before,
+  .logo-wipe:focus-visible .logo-wipe-mid,
   .logo-wipe:focus-visible .logo-wipe-fill::after {
     transform: scaleX(1);
-    transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
   }
-  .logo-wipe:focus-visible .logo-wipe-fill::after { transition-delay: 180ms; }
+  @media (hover: hover) {
+    .logo-wipe:hover .logo-wipe-fill::before { transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1); }
+    .logo-wipe:hover .logo-wipe-mid { transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1) 120ms; }
+    .logo-wipe:hover .logo-wipe-fill::after { transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1) 240ms; }
+  }
+  .logo-wipe:focus-visible .logo-wipe-fill::before { transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1); }
+  .logo-wipe:focus-visible .logo-wipe-mid { transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1) 120ms; }
+  .logo-wipe:focus-visible .logo-wipe-fill::after { transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1) 240ms; }
   @media (prefers-reduced-motion: reduce) {
     .logo-wipe .logo-wipe-fill::before,
+    .logo-wipe .logo-wipe-mid,
     .logo-wipe .logo-wipe-fill::after { transition: none !important; transform: scaleX(0) !important; }
   }
   /* Relative/state label filled in by src/scripts/live.ts. */
