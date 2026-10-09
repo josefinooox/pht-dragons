@@ -94,24 +94,32 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
   <div class="flex items-stretch">
     <div class="min-w-0 flex-1">
       <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
-        <nav aria-label="Drobečková navigace">
-          <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
-            <li>
-              <a href={url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
-                <ChevronLeft size={18} aria-hidden="true" />
-                Zápasy
-              </a>
-            </li>
-            <li aria-hidden="true" class="text-grey-400">/</li>
-            <li>
-              <a href={final ? url("odehrane") : url()} class="text-grey-500 transition-colors hover:text-grey-950">
-                {final ? "Minulé" : "Nadcházející"}
-              </a>
-            </li>
-            <li aria-hidden="true" class="text-grey-400">/</li>
-            <li aria-current="page" class="font-semibold text-grey-950">{home} vs {away}</li>
-          </ol>
-        </nav>
+        <div class="flex flex-col gap-3">
+          <!-- Context back link, only when the visitor came here from Dračí radar (the breadcrumb
+               stays the match's place in the site; this just offers the way back). -->
+          <a data-back-radar hidden href={url("radar")} class="flex w-fit items-center gap-1 font-display text-lg leading-6 font-bold text-blue-600 uppercase transition-colors hover:text-blue-700">
+            <ChevronLeft size={18} strokeWidth={3} aria-hidden="true" />
+            Zpět na Dračí radar
+          </a>
+          <nav aria-label="Drobečková navigace">
+            <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
+              <li>
+                <a href={url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
+                  <ChevronLeft size={18} aria-hidden="true" />
+                  Zápasy
+                </a>
+              </li>
+              <li aria-hidden="true" class="text-grey-400">/</li>
+              <li>
+                <a href={final ? url("odehrane") : url()} class="text-grey-500 transition-colors hover:text-grey-950">
+                  {final ? "Minulé" : "Nadcházející"}
+                </a>
+              </li>
+              <li aria-hidden="true" class="text-grey-400">/</li>
+              <li aria-current="page" class="font-semibold text-grey-950">{home} vs {away}</li>
+            </ol>
+          </nav>
+        </div>
         <h1 class="sr-only">{home} vs {away}, {longDate(g.date)}</h1>
 
         <MatchHero game={g}>
@@ -288,4 +296,15 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
 
 <script>
   import "../../scripts/tabs.ts";
+
+  // Show "Zpět na Dračí radar" when the previous page was a radar page (same site), and lead
+  // back to exactly that page (season and sub-page included).
+  const back = document.querySelector<HTMLAnchorElement>("[data-back-radar]");
+  try {
+    const from = document.referrer ? new URL(document.referrer) : null;
+    if (back && from && from.origin === location.origin && from.pathname.startsWith(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/radar`)) {
+      back.href = from.pathname + from.search;
+      back.hidden = false;
+    }
+  } catch {}
 </script>
