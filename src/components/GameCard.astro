@@ -14,8 +14,10 @@ import When from "./When.astro";
 
 interface Props {
   game: Game;
+  /** Position in the list for the staggered entrance animation (.enter in global.css). */
+  enter?: number;
 }
-const { game: g } = Astro.props;
+const { game: g, enter } = Astro.props;
 const o = opp(g);
 const r = isFinal(g) ? forT(g, OUR) : null;
 const slug = gameSlug(g);
@@ -25,7 +27,8 @@ const inner = "relative z-10"; // links that must stay clickable above the stret
 <!-- Mobile: one left edge, top to bottom: small logos + opponent, date/time (or score) as the
      main line, venue as quiet meta, then the actions under a hairline. Desktop: one row. -->
 <li
-  class="relative flex flex-col gap-4 rounded-lg bg-grey-100 p-4 transition-colors hover:bg-grey-200 sm:px-6 md:flex-row md:items-center md:justify-between md:py-4"
+  style={enter != null ? `--i:${enter}` : undefined}
+  class:list={[enter != null && "enter", "relative flex flex-col gap-4 rounded-lg bg-grey-100 p-4 transition-colors hover:bg-grey-200 sm:px-6 md:flex-row md:items-center md:justify-between md:py-4"]}
 >
   <a href={url(`zapas/${slug}`)} class="absolute inset-0 rounded-lg" tabindex="-1" aria-hidden="true"></a>
   <div class="flex min-w-0 items-center gap-4 md:gap-10">

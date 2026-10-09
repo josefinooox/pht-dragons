@@ -7,8 +7,11 @@ import GameCard from "./GameCard.astro";
 interface Props {
   games: Game[];
   empty: string;
+  /** Index of the first card for the staggered entrance animation. */
+  enter?: number;
 }
-const { games, empty } = Astro.props;
+const { games, empty, enter = 0 } = Astro.props;
+const order = new Map(games.map((g, k) => [g.gameId, enter + k]));
 const groups: { label: string; games: Game[] }[] = [];
 for (const g of games) {
   const label = monthLabel(g.date);
@@ -25,7 +28,7 @@ for (const g of games) {
           <h3 class="font-display text-2xl leading-[1.4] font-semibold text-grey-500 uppercase">{m.label}</h3>
           <ul class="flex flex-col gap-4">
             {m.games.map((g) => (
-              <GameCard game={g} />
+              <GameCard game={g} enter={order.get(g.gameId)} />
             ))}
           </ul>
         </section>
