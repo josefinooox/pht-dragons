@@ -1,4 +1,6 @@
 ---
+import { topScorers } from "../../lib/opponent";
+import { z } from "../../lib/season";
 import type { GetStaticPaths } from "astro";
 import { ChevronLeft } from "@lucide/astro";
 import PillTabs from "../../components/PillTabs.astro";
@@ -29,7 +31,7 @@ import {
   team,
   type Game,
 } from "../../lib/data";
-import { longDate, num, shortDate } from "../../lib/format";
+import { longDate, num, plural, shortDate } from "../../lib/format";
 import { opponentSummary } from "../../lib/summary";
 import { buildRecap } from "../../lib/recap";
 import { url } from "../../lib/url";
@@ -50,6 +52,9 @@ const form = played(o)
 // Earlier meetings with this opponent this season that are already played.
 const earlier = mine.filter((x) => opp(x) === o && x !== g && isFinal(x) && x.start < g.start).reverse();
 const common = commonOpponents(o);
+const scorers = topScorers(o);
+const goalWord = (n: number) => `${n} ${plural(n, "gól", "góly", "gólů")}`;
+const assistWord = (n: number) => `${n} ${plural(n, "asistence", "asistence", "asistencí")}`;
 const final = isFinal(g);
 const media = final ? mediaFor(g) : undefined;
 const report = final ? reportFor(g) : undefined;
@@ -82,6 +87,7 @@ const description = narrative
 const tabs = [
   { id: "shrnuti", label: "Shrnutí" },
   { id: "srovnani", label: "Srovnání" },
+  ...(scorers.players.length ? [{ id: "jejich-hraci", label: "Jejich hráči" }] : []),
   { id: "posledni-zapasy", label: "Jejich poslední zápasy" },
   { id: "spolecni-souperi", label: "Společní soupeři" },
   ...(earlier.length ? [{ id: "predchozi-zapasy", label: earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy" }] : []),
@@ -171,6 +177,42 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
                 note="Barevně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů."
               />
             </div>
+
+            {
+              scorers.players.length > 0 && (
+                <div role="tabpanel" id="jejich-hraci" aria-labelledby="tab-jejich-hraci" tabindex="0" class="tab-panel flex flex-col gap-4">
+                  <h3 data-tab-title class={h3}>Jejich hráči</h3>
+                  <p class="max-w-3xl text-lg leading-[1.6] text-grey-950 md:text-xl">
+                    Nejproduktivnější je {scorers.players[0].name}: {goalWord(scorers.players[0].goals)} a {assistWord(scorers.players[0].assists)}
+                    {scorers.teamGoals > 0 && scorers.players[0].goals > 0 && <> (dal {scorers.players[0].goals} {z(scorers.teamGoals)} gólů týmu)</>}.
+                  </p>
+                  <ol class="flex max-w-3xl flex-col">
+                    {scorers.players.map((p, k) => (
+                      <li class="grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 border-b border-grey-300 py-3">
+                        <span class="font-display text-lg font-bold text-grey-500">{k + 1}</span>
+                        <span class="min-w-0">
+                          <span class="block truncate text-base font-semibold text-grey-950">
+                            {p.name}
+                            {p.number != null && <span class="font-normal text-grey-500"> #{p.number}</span>}
+                          </span>
+                          <span class="block text-sm text-grey-600">
+                            {goalWord(p.goals)}, {assistWord(p.assists)}
+                            {p.games > 0 && <>, {p.games} {plural(p.games, "zápas", "zápasy", "zápasů")}</>}
+                          </span>
+                        </span>
+                        <span class="text-right font-display text-2xl leading-none font-extrabold text-red-600">
+                          {p.points}
+                          <span class="block text-xs font-bold text-grey-500 uppercase">{plural(p.points, "bod", "body", "bodů")}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                  <p class="text-sm text-grey-500">
+                    Kanadské body (góly + asistence) podle protokolů {scorers.covered} z {scorers.games} jejich zápasů v této sezóně.
+                  </p>
+                </div>
+              )
+            }
 
             <div role="tabpanel" id="posledni-zapasy" aria-labelledby="tab-posledni-zapasy" tabindex="0" class="tab-panel flex flex-col gap-4">
               <h3 data-tab-title class={h3}>Jejich poslední zápasy</h3>

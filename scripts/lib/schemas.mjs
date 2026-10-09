@@ -113,7 +113,8 @@ export const GameDetailSchema = z.object({
         // penalty
         penalizedTeamId: z.string().nullish(),
         PenalizedPlayer: PlayerRef.nullish(),
-        duration: clock.nullish(),
+        // "" = unknown duration (seen in a league report); treated like a missing one
+        duration: z.union([clock, z.literal("")]).nullish(),
         ListPenaltySubtype: z.object({ name: z.string() }).nullish(),
         ListPenaltyType: z.object({ name: z.string() }).nullish(),
       }),

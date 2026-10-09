@@ -232,6 +232,44 @@ async function syncHistoryDetail(info) {
   };
 }
 
+// Other teams' games of our group, for the opponent analysis (their top scorers): only goals with
+// assists and who played, from each game's report. A finished game is fetched once (re-checked
+// while under MEDIA_RECHECK_DAYS old, like our own), at most LEAGUE_REPORTS_PER_RUN per run.
+const LEAGUE_REPORTS_PER_RUN = 10;
+const LEAGUE_REPORT_VERSION = 1;
+
+async function syncLeagueReports(games) {
+  const file = path.join(DATA_DIR, "league-reports.json");
+  const prevText = await readFile(file, "utf8").catch(() => null);
+  const cache = prevText ? JSON.parse(prevText) : {};
+  const recentSince = Date.now() - MEDIA_RECHECK_DAYS * 864e5;
+  const theirs = games.filter((g) => g.status === "finished" && g.homeTeamId !== OUR_TEAM_ID && g.awayTeamId !== OUR_TEAM_ID);
+  let fetched = 0;
+  for (const g of theirs) {
+    const cached = cache[g.gameId];
+    if (cached?.version === LEAGUE_REPORT_VERSION && (Date.parse(g.start) < recentSince || cached.checkedAt > Date.parse(g.start) + 864e5)) continue;
+    if (fetched >= LEAGUE_REPORTS_PER_RUN) break;
+    fetched++;
+    try {
+      const r = normalizeReport(await getJson("game", { gameId: g.gameId }, GameDetailSchema));
+      const slim = (p) => (p ? { playerId: p.playerId, name: p.name, number: p.number } : null);
+      cache[g.gameId] = {
+        version: LEAGUE_REPORT_VERSION,
+        checkedAt: Date.now(),
+        complete: r.complete,
+        goals: r.events.filter((e) => e.type === "goal").map((e) => ({ teamId: e.teamId, scorer: slim(e.scorer), assists: e.assists.map(slim) })),
+        lineup: (r.lineup ?? []).map((l) => ({ teamId: l.teamId, playerId: l.playerId, name: l.name, number: l.number, position: l.position })),
+      };
+    } catch (err) {
+      warn(`league report ${g.date} ${g.gameId}: ${err.message}`);
+    }
+  }
+  const keep = new Set(theirs.map((g) => g.gameId));
+  const next = Object.fromEntries(Object.keys(cache).filter((id) => keep.has(id)).sort().map((id) => [id, cache[id]]));
+  if (prevText !== toJson(next)) await writeFile(file, toJson(next));
+  return { have: Object.keys(next).length, total: theirs.length, fetched };
+}
+
 // Upper bound on model calls per run, so a bug can't run up a bill.
 const MAX_NARRATIVES_PER_RUN = 8;
 
@@ -347,6 +385,7 @@ async function main() {
   const narratives = await syncNarratives(result.games, teams, reports.entries, ctx);
   const hist = await syncHistory(info, ctx);
   const histDetail = await syncHistoryDetail(info);
+  const league = await syncLeagueReports(result.games);
   const withPhotos = Object.values(media.entries).filter((m) => m.photos.length).length;
   const complete = Object.values(reports.entries).filter((r) => r.complete).length;
 
@@ -373,6 +412,7 @@ async function main() {
             ? ` (${narratives.pending} waiting: write them with npm run narratives:pending / narratives:save)`
             : " (all written)"),
       `  history:   ${hist.games} games in ${hist.seasons} earlier seasons (${hist.fetched} fetched now${hist.pending ? `, ${hist.pending} pending` : ""})`,
+      `  league:    ${league.have}/${league.total} other games of the group with a report (${league.fetched} fetched now)`,
       `  history+:  ${histDetail.standings} past standings, ${histDetail.reports} past match reports (${histDetail.fetched} fetched now${histDetail.pending ? `, ${histDetail.pending} pending` : ""})`,
       `  /data:     ${changed || !prevMeta ? "updated" : "unchanged, files not rewritten"}`,
     ].join("\n"),

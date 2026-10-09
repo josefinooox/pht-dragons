@@ -218,7 +218,7 @@ export function normalizeReport(raw) {
         ...base,
         teamId: e.penalizedTeamId,
         player: person(e.PenalizedPlayer),
-        duration: e.duration ?? null,
+        duration: e.duration || null,
         reason: e.ListPenaltySubtype?.name ?? e.ListPenaltyType?.name ?? null,
       });
     }
