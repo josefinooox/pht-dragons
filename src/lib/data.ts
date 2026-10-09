@@ -89,6 +89,8 @@ export interface Narrative {
 const narrativeById = narrativesJson as unknown as Record<string, Narrative>;
 /** AI-written commentator text for a played game (scripts/lib/narrate.mjs), if generated. */
 export const narrativeFor = (g: Game): Narrative | undefined => narrativeById[g.gameId];
+/** Stored text by id (e.g. "round:2026-10-05" for the weekly summary). */
+export const textById = (id: string): (Narrative & { key?: string }) | undefined => narrativeById[id];
 
 const teamById = new Map(teams.map((t) => [t.teamId, t]));
 export const team = (id: string): Team =>

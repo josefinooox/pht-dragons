@@ -61,6 +61,12 @@ are per game, so they are cached in data/media.json and data/reports.json, fetch
 our finished games, and re-checked only while a game is less than 14 days old. Bump the
 `version` passed to syncPerGame when a normalizer changes, so cached games are refetched once.
 
+Opponent analysis ("Jejich hráči": top scorers by goals + assists) uses the reports of every
+finished game of the group: data/league-reports.json (other teams' games, slim: goals and lineups),
+at most `LEAGUE_REPORTS_PER_RUN` per run, re-checked only while a game is under 14 days old.
+Game stars are NOT a quality metric (the league rotates them on purpose); don't use them to rank
+opponents.
+
 ## Logos
 `logoUrl` contains "[size]". Try "cropped_md", then "md". Do not add query strings
 (S3 returns 403). Download during fetch, convert to webp (sharp), store as
@@ -79,7 +85,13 @@ Only re-download logos that are not already present.
 - `/tabulka` – full standings; each team links to our nearest match against it.
 - `/dragons.ics` – season calendar feed, TZID Europe/Prague, stable UIDs per game
   so subscribed calendars update instead of duplicating.
-- Open Graph tags on every page for link previews (WhatsApp).
+- Open Graph tags on every page for link previews (WhatsApp). Match pages get their own image
+  (/zapas/{slug}.png, 1200 × 630, src/lib/og.ts: satori + sharp at build time).
+- Web app manifest (/manifest.webmanifest) so the site can be added to a phone's home screen.
+- "Týden v lize" on /tabulka: the latest Monday–Sunday of the group (src/lib/round.ts facts,
+  template fallback); AI text written by the same morning routine (`rounds` in
+  `npm run narratives:pending`, saved as "round:<monday>" in data/narratives.json), shown only
+  while its key still matches the week's facts.
 - A 404 page.
 
 ## Opponent summary and match recap

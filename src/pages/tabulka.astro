@@ -4,6 +4,7 @@
 import Base from "../layouts/Base.astro";
 import Standings from "../components/Standings.astro";
 import SubBar from "../components/SubBar.astro";
+import RoundSummary from "../components/RoundSummary.astro";
 import { OUR, meta, rankOf } from "../lib/data";
 ---
 
@@ -24,6 +25,8 @@ import { OUR, meta, rankOf } from "../lib/data";
         Skupina {meta.group.name}, {meta.phase.name.toLowerCase()}, sezóna {meta.season.name.replace("-", "/")}
       </p>
     </div>
+
+    <RoundSummary />
 
     <section aria-label="Tabulka skupiny" class="rounded-lg bg-surface">
       <Standings />

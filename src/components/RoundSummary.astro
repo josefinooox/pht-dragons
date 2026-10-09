@@ -1,0 +1,79 @@
+---
+// "Týden v lize" on the Tabulka page: the latest week (Monday–Sunday) of our group in a few
+// sentences, in the style of Dračí oko. The AI text (written by the morning routine, see
+// scripts/narratives.mjs) is shown only while it matches the week's facts; otherwise the template
+// text from the same facts. "Řekni víc" adds the longer text and every result of the week.
+import { ChevronDown } from "@lucide/astro";
+import sparkles from "../assets/sparkles.svg";
+import { OUR, games, meta, standings, teams, textById } from "../lib/data";
+import { roundFacts, roundKey, roundTemplate } from "../lib/round";
+import { dayMonthDot, weekdayShort } from "../lib/format";
+
+const facts = roundFacts(games, teams, standings, OUR, meta.group.name);
+const saved = facts ? textById(`round:${facts.key}`) : undefined;
+const ai = facts && saved?.key === roundKey(facts) ? saved : undefined;
+const prose = "max-w-3xl text-lg leading-[1.6] text-grey-950 md:text-xl";
+---
+
+{
+  facts && (
+    <section data-expand aria-labelledby="tyden-v-lize" class="flex scroll-mt-6 flex-col gap-5 rounded-lg border border-[#ddb4bc] bg-surface p-5 md:p-6">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h2 id="tyden-v-lize" class="flex items-center gap-4 font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase">
+          <img src={sparkles.src} alt="" width="32" height="32" class="size-8" />
+          Týden v lize
+        </h2>
+        <span class="font-display text-lg font-bold text-grey-500 uppercase">{facts.week.label}</span>
+      </div>
+      <p class={prose}>{ai?.summary ?? roundTemplate(facts)}</p>
+
+      <div data-skeleton hidden class="flex max-w-3xl animate-pulse flex-col gap-3 motion-reduce:animate-none" aria-hidden="true">
+        {["w-full", "w-11/12", "w-full", "w-4/5"].map((w) => <div class:list={["h-4 rounded bg-grey-200", w]} />)}
+      </div>
+
+      <div data-expand-content id="tyden-v-lize-vic" class="flex flex-col gap-8">
+        {
+          ai && (
+            <div class:list={[prose, "flex flex-col gap-4"]}>
+              {ai.narrative.map((para) => <p>{para}</p>)}
+              <p class="text-sm text-grey-500">Text napsala AI podle výsledků skupiny.</p>
+            </div>
+          )
+        }
+        <div class="flex max-w-3xl flex-col gap-2">
+          <h3 class="font-display text-2xl leading-[1.4] font-black text-grey-950 uppercase">Výsledky týdne</h3>
+          <ul>
+            {
+              facts.games.map((x) => (
+                <li class:list={["grid grid-cols-[4.5rem_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-3 border-b border-grey-300 py-2.5", x.ours && "font-semibold"]}>
+                  <span class="font-display text-sm font-bold text-grey-500 uppercase">
+                    {weekdayShort(x.date)} {dayMonthDot(x.date)}
+                  </span>
+                  <span class="truncate text-right">{x.home}</span>
+                  <span class="font-display text-lg font-extrabold">{x.score}</span>
+                  <span class="truncate">{x.away}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        data-expand-toggle
+        hidden
+        aria-expanded="false"
+        aria-controls="tyden-v-lize-vic"
+        class="group btn-fill flex w-fit min-w-20 items-center justify-center gap-1 rounded-md border border-grey-300 bg-surface p-3 text-grey-950 hover:border-grey-950 hover:text-on-ink focus-visible:text-on-ink active:[--btn-fill:var(--color-grey-800)]"
+      >
+        <span data-expand-label class="px-1 font-display text-lg leading-6 font-bold uppercase">Řekni víc</span>
+        <ChevronDown size={16} class="transition-transform group-aria-expanded:rotate-180" aria-hidden="true" />
+      </button>
+    </section>
+  )
+}
+
+<script>
+  import "../scripts/expand.ts";
+</script>
