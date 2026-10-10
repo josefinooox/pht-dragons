@@ -88,3 +88,5 @@ function render(trail: Crumb[]) {
 
 // pageshow also fires when the page comes back from the back/forward cache
 addEventListener("pageshow", (e) => update(!e.persisted));
+
+export {}; // module scope (keeps the constants local to this file)

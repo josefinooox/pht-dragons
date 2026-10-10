@@ -92,7 +92,7 @@ const gamesWord = (n: number) => (n === 1 ? "zápas" : n < 5 ? "zápasy" : "záp
                   <a
                     href={href(t.key)}
                     aria-current={tab === t.key ? "page" : undefined}
-                    class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600"
+                    class="font-sans text-xl font-semibold text-grey-500 transition-colors hover:text-grey-700 aria-[current=page]:text-red-600 in-data-[theme=dark]:aria-[current=page]:text-red-400"
                   >
                     {t.label}
                   </a>

@@ -32,3 +32,5 @@ const centreOurs = () => {
 };
 centreOurs();
 for (const btn of document.querySelectorAll("[data-table-toggle='open']")) btn.addEventListener("click", () => requestAnimationFrame(centreOurs));
+
+export {}; // module scope (keeps the constants local to this file)

@@ -1,14 +1,15 @@
 ---
 // Bar under the header (Figma "Navigation" 11:6848): countdown to the next game + current form.
 import { OUR, finals, forT, heroGame, isRunning, team } from "../lib/data";
-import { shortDate } from "../lib/format";
+import { dayMonthDot, weekdayShort } from "../lib/format";
 import ResultChip from "./ResultChip.astro";
 
 const form = finals.slice(-5).map((g) => forT(g, OUR).r);
 const text = "font-sans text-sm leading-[1.4] font-extrabold uppercase";
 ---
 
-<!-- one line on phones: short countdown label, "Forma" instead of "Aktuální forma" -->
+<!-- one line on phones: the server fallback ("ne 11.10.") is as short as the live label, so the
+     bar doesn't change height (layout shift) when the script fills it in -->
 <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-2 md:gap-x-6">
   {
     heroGame ? (
@@ -22,7 +23,7 @@ const text = "font-sans text-sm leading-[1.4] font-extrabold uppercase";
           ? `${team(heroGame.homeTeamId).shortName ?? ""} ${heroGame.homeGoals}:${heroGame.awayGoals} ${team(heroGame.awayTeamId).shortName ?? ""}`.trim()
           : undefined}
       >
-        <span data-countdown-label>Další zápas</span> <span data-countdown-value class="text-grey-950">{shortDate(heroGame.date)} {heroGame.time}</span>
+        <span data-countdown-label>Další zápas</span> <span data-countdown-value class="text-grey-950">{weekdayShort(heroGame.date).toLowerCase()} {dayMonthDot(heroGame.date)}</span>
       </p>
     ) : (
       <p class:list={[text, "text-grey-500"]}>Sezóna skončila</p>

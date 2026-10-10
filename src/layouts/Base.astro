@@ -7,6 +7,11 @@ import Consent from "../components/Consent.astro";
 import logo from "../assets/dragons-logo.svg";
 import logoWhite from "../assets/dragons-logo-white.svg";
 import "../styles/global.css";
+// Fonts used above the fold, preloaded so headings don't reflow (layout shift) when they arrive.
+import fontBlack from "../fonts/BarlowCondensed-Black.woff2?url";
+import fontBold from "../fonts/BarlowCondensed-Bold.woff2?url";
+import fontRegular from "../fonts/Barlow-Regular.woff2?url";
+import fontSemiBold from "../fonts/Barlow-SemiBold.woff2?url";
 
 interface Props {
   title: string;
@@ -50,6 +55,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {[fontBlack, fontBold, fontRegular, fontSemiBold].map((f) => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
     <meta name="pht-crumb" content={crumb ?? title.split(" – ")[0]} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PHT Dragons" />
@@ -206,7 +212,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
               href={back.href}
               class="label flex items-center gap-1 text-sm text-grey-600 transition-colors hover:text-grey-950"
             >
-              <ChevronLeft size={16} strokeWidth={3} aria-hidden="true" />
+              <ChevronLeft size={16} stroke-width={3} aria-hidden="true" />
               {back.label}
             </a>
             <span class="label ml-auto text-sm">

@@ -46,7 +46,6 @@ const cols = `repeat(${items.length}, minmax(${items.length > 14 ? "2rem" : "2.7
               href={it.href}
               data-tip={it.tip}
               tabindex={it.href ? undefined : 0}
-              aria-label={it.tip.replace(/\n/g, ", ")}
               class:list={[
                 "group flex flex-col items-center rounded-md outline-offset-2 transition-colors",
                 it.href && "hover:bg-grey-100",
@@ -62,6 +61,7 @@ const cols = `repeat(${items.length}, minmax(${items.length > 14 ? "2rem" : "2.7
                 <span class="w-2.5 rounded-full bg-red-600 transition-[filter] group-hover:brightness-110" style={`height:${h(it.b)}px`} />
                 <span class:list={["pt-1 font-display text-base leading-none font-extrabold", it.b ? "text-red-600" : "text-grey-400"]}>{it.b}</span>
               </span>
+              <span class="sr-only">{it.tip.replace(/\n/g, ", ")}</span>
               <span class="flex flex-col items-center gap-1 pt-2 pb-1">
                 {it.result && <ResultChip result={it.result} size="sm" />}
                 <span class="font-display text-xs font-bold whitespace-nowrap text-grey-500 uppercase">{it.label}</span>
