@@ -10,8 +10,8 @@ import { url } from "../lib/url";
 import Logo from "./Logo.astro";
 
 const rows = standings.map((row) => {
-  // every team links to its profile (our next game with them is the first thing there)
-  return { row, href: row.teamId === OUR ? null : url(`tym/${teamSlug(row.teamId)}`) };
+  // every team links to its profile, ours included
+  return { row, href: url(`tym/${teamSlug(row.teamId)}`) };
 });
 const grid =
   "grid grid-cols-[36px_48px_minmax(0,1fr)_36px_64px_44px] items-center md:grid-cols-[64px_56px_minmax(0,280px)_96px_120px_120px_96px]";
@@ -40,7 +40,7 @@ const wide = "hidden md:block";
               class:list={[
                 grid,
                 "min-h-14 border-b border-grey-300 py-2",
-                us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50 active:bg-grey-100",
+                us ? "bg-blue-600/10 transition-colors hover:bg-blue-600/15" : "transition-colors hover:bg-grey-50 active:bg-grey-100",
               ]}
             >
               <span class="pl-2 font-bold md:pl-4">

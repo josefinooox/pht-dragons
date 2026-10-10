@@ -11,8 +11,8 @@ import Logo from "./Logo.astro";
 
 // Every team; the list scrolls inside the panel and starts scrolled to our row.
 const rows = standings.map((row) => {
-  // every team links to its profile (our next game with them is the first thing there)
-  return { row, href: row.teamId === OUR ? null : url(`tym/${teamSlug(row.teamId)}`) };
+  // every team links to its profile, ours included
+  return { row, href: url(`tym/${teamSlug(row.teamId)}`) };
 });
 // Each row is a plain block (a link when it leads to our game against that team): a real
 // element instead of a stretched ::after, which can't be scoped to a table row reliably.
@@ -72,7 +72,7 @@ const grid = "grid grid-cols-[56px_56px_minmax(0,1fr)_56px_56px] items-center";
                   class:list={[
                     grid,
                     "h-12 border-b border-grey-300",
-                    us ? "bg-blue-600/10" : href && "transition-colors hover:bg-grey-50 active:bg-grey-100",
+                    us ? "bg-blue-600/10 transition-colors hover:bg-blue-600/15" : "transition-colors hover:bg-grey-50 active:bg-grey-100",
                   ]}
                 >
                   <span class="pl-4 font-bold">
