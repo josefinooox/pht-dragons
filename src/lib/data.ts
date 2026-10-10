@@ -100,6 +100,8 @@ export const standingOf = (id: string) => rowById.get(id);
 export const rankOf = (id: string) => rowById.get(id)?.rank ?? null;
 
 export const isFinal = (g: Game) => g.status === "finished" && g.homeGoals !== null && g.awayGoals !== null;
+/** Being played and the league already shows a running score (updated by the live workflow). */
+export const isRunning = (g: Game) => g.status === "running" && g.homeGoals !== null && g.awayGoals !== null;
 export const involves = (g: Game, t: string) => g.homeTeamId === t || g.awayTeamId === t;
 export const opp = (g: Game, t: string = OUR) => (g.homeTeamId === t ? g.awayTeamId : g.homeTeamId);
 export function forT(g: Game, t: string) {

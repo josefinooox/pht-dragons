@@ -75,7 +75,7 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-share]")) 
 // "za 05:12:33" (under 24 hours, ticking every second) / "dnes" / the game state.
 // The server renders the date and time as a fallback.
 for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
-  const { date = "", start = "", status = "" } = el.dataset;
+  const { date = "", start = "", status = "", score = "" } = el.dataset;
   const state = stateLabel(start, status);
   const label = el.querySelector<HTMLElement>("[data-countdown-label]");
   const value = el.querySelector<HTMLElement>("[data-countdown-value]");
@@ -102,7 +102,7 @@ for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
     };
     const timer = setInterval(tick, 1000);
     tick();
-  } else if (state) set("Další zápas", state[1].toLowerCase());
+  } else if (state) set("Další zápas", `${state[1].toLowerCase()}${score ? `, ${score}` : ""}`);
   else if (n === 0) set("Další zápas", "dnes");
   else if (n === 1) set("Další zápas", "zítra");
   else if (n > 1) set("Další zápas", `za ${n} ${plural(n, "den", "dny", "dní")}`);

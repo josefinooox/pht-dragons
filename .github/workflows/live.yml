@@ -1,0 +1,29 @@
+name: Live score during our games
+
+# Every 5 minutes, but it only does something while one of our games is on: then it starts the
+# normal "Fetch data, build, deploy" run, so the running score reaches the site within minutes.
+# Outside our games each run ends after a few seconds.
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write   # start the deploy workflow
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            data
+            scripts/live-window.mjs
+      - id: window
+        run: node scripts/live-window.mjs
+      - if: steps.window.outputs.live == 'true'
+        run: gh workflow run deploy.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}

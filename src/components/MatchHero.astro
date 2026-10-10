@@ -3,7 +3,7 @@
 // big score (played) or start time + meeting time (upcoming), game stars; the default slot
 // (Dračí oko) sits inside the same card. Upcoming games get add-to-calendar and share instead.
 import { CalendarPlus, MapPin, Share2, Star } from "@lucide/astro";
-import { OUR, SRAZ_MIN, gameSlug, isFinal, rankOf, state, team, teamSlug, type Game } from "../lib/data";
+import { OUR, SRAZ_MIN, gameSlug, isFinal, isRunning, rankOf, state, team, teamSlug, type Game } from "../lib/data";
 import { dayMonthDot, longDate, mapUrl, minusMinutes, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -14,6 +14,7 @@ interface Props {
 }
 const { game: g } = Astro.props;
 const final = isFinal(g);
+const running = isRunning(g);
 const s = state(g);
 const slug = gameSlug(g);
 const home = team(g.homeTeamId);
@@ -66,9 +67,9 @@ const big = "font-display text-[5rem] leading-none font-extrabold text-grey-950 
       ))
     }
     <div class="order-2 flex flex-col items-center gap-2 text-center">
-      <span class="font-display text-sm leading-[1.4] font-bold text-grey-500 uppercase md:text-base">{final ? "Konečný výsledek" : "Začátek"}</span>
+      <span class="font-display text-sm leading-[1.4] font-bold text-grey-500 uppercase md:text-base">{final ? "Konečný výsledek" : running ? "Průběžné skóre" : "Začátek"}</span>
       {
-        final ? (
+        final || running ? (
           <span class:list={[big, "flex items-center"]} aria-label={`${g.homeGoals}:${g.awayGoals}`}>
             <span>{g.homeGoals}</span>
             <span class="px-1 md:px-4" aria-hidden="true">:</span>

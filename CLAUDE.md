@@ -10,7 +10,9 @@ Mobile-first.
   The one approved exception: match narratives written by Claude (Anthropic API, paid per
   call, ~30 games per season). Only when the ANTHROPIC_API_KEY secret exists, cached in
   data/narratives.json, at most 8 calls per run; without the key the site uses templates.
-- Data is fetched at BUILD TIME only, by `npm run fetch` (scripts/fetch-data.mjs).
+- Data is fetched at BUILD TIME only, by `npm run fetch` (scripts/fetch-data.mjs). During our
+  games `.github/workflows/live.yml` (every 5 min, scripts/live-window.mjs) starts the deploy
+  workflow, so the running score (status "running") reaches the site within minutes.
   The API blocks browser CORS, so the site must never call it from the client.
 - The workflow commits /data after each fetch. If the API fails or returns data that
   fails validation, keep the existing /data and exit 0, so the site still builds.

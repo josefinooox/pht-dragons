@@ -1,6 +1,6 @@
 ---
 // Bar under the header (Figma "Navigation" 11:6848): countdown to the next game + current form.
-import { OUR, finals, forT, heroGame } from "../lib/data";
+import { OUR, finals, forT, heroGame, isRunning, team } from "../lib/data";
 import { shortDate } from "../lib/format";
 import ResultChip from "./ResultChip.astro";
 
@@ -18,6 +18,9 @@ const text = "font-sans text-sm leading-[1.4] font-extrabold uppercase";
         data-date={heroGame.date}
         data-start={heroGame.start}
         data-status={heroGame.status}
+        data-score={isRunning(heroGame)
+          ? `${team(heroGame.homeTeamId).shortName ?? ""} ${heroGame.homeGoals}:${heroGame.awayGoals} ${team(heroGame.awayTeamId).shortName ?? ""}`.trim()
+          : undefined}
       >
         <span data-countdown-label>Další zápas</span> <span data-countdown-value class="text-grey-950">{shortDate(heroGame.date)} {heroGame.time}</span>
       </p>
