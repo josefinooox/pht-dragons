@@ -102,6 +102,9 @@ Only re-download logos that are not already present.
 - Breadcrumbs (match and team pages) show the visited path within the visit (src/scripts/trail.ts,
   sessionStorage; each page names itself via Base `crumb`); arriving from outside, the built-in
   path (place in the site) stays.
+- Analytics (src/components/Consent.astro): GoatCounter (cookie-less, always), Microsoft Clarity
+  and PostHog (only after consent; banner on the first visit, "Nastavení cookies" in the footer).
+  IDs come from GitHub repository variables GOATCOUNTER, CLARITY_ID, POSTHOG_KEY; unset = off.
 - A 404 page.
 
 ## Opponent summary and match recap
@@ -140,7 +143,7 @@ fetched once (at most `HISTORY_PER_RUN` per build) and never refetched.
 
 ## Dark mode
 `html[data-theme="dark"]`, switched in the header (icon on desktop, switch in the mobile menu), remembered in
-localStorage `pht-theme`, light by default. The grey-* ramp flips in dark mode, so:
+localStorage `pht-theme`; without a stored choice the device setting (prefers-color-scheme) decides. The grey-* ramp flips in dark mode, so:
 - raised white elements use `bg-surface` (not `bg-white`); team logos stay `bg-white`;
 - text on a `grey-950` fill (button hover, selected pill) uses `text-on-ink` (not `text-white`);
 - things dark in both themes (header, mobile menu) use the fixed `night-*` greys;

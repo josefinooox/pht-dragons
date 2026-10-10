@@ -3,6 +3,7 @@ import { ChevronLeft, Menu, Moon, Sun, X } from "@lucide/astro";
 import { OUR, meta, team } from "../lib/data";
 import { url } from "../lib/url";
 import CalendarMenu from "../components/CalendarMenu.astro";
+import Consent from "../components/Consent.astro";
 import logo from "../assets/dragons-logo.svg";
 import logoWhite from "../assets/dragons-logo-white.svg";
 import "../styles/global.css";
@@ -82,8 +83,9 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
       // Standings panel state before first paint (collapsed by default), see TablePanel.astro.
       try {
         if (localStorage.getItem("pht-table") === "open") document.documentElement.dataset.table = "open";
-        // Theme before first paint (light by default), see the floating toggle below.
-        if (localStorage.getItem("pht-theme") === "dark") document.documentElement.dataset.theme = "dark";
+        // Theme before first paint: the visitor's last choice, else the device setting.
+        var theme = localStorage.getItem("pht-theme");
+        if (theme === "dark" || (!theme && matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.dataset.theme = "dark";
       } catch (e) {}
     </script>
   </head>
@@ -259,9 +261,13 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
             </ul>
           </nav>
         </div>
-        <p class="opacity-50 md:flex md:h-[72px] md:items-center md:justify-end">Data aktualizována {updatedText}</p>
+        <p class="flex flex-wrap gap-x-6 gap-y-1 opacity-50 md:h-[72px] md:items-center md:justify-end">
+          <button type="button" data-consent-open hidden class="cursor-pointer hover:underline hover:underline-offset-4">Nastavení cookies</button>
+          <span>Data aktualizována {updatedText}</span>
+        </p>
       </div>
     </footer>
+    <Consent />
     <script>
       import "../scripts/live.ts";
     </script>

@@ -58,6 +58,10 @@ jobs:
           TZ: Europe/Prague
           SITE: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # Analytics (repository variables; a tool without its ID isn't loaded), see Consent.astro
+          PUBLIC_GOATCOUNTER: ${{ vars.GOATCOUNTER }}
+          PUBLIC_CLARITY_ID: ${{ vars.CLARITY_ID }}
+          PUBLIC_POSTHOG_KEY: ${{ vars.POSTHOG_KEY }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
