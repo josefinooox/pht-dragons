@@ -5,6 +5,8 @@
 //   PUBLIC_CLARITY_ID   – Microsoft Clarity project (heatmaps, recordings) – after consent
 // The banner shows once (first visit) when a consent-based tool is configured; the choice is kept
 // in localStorage "pht-consent" and can be changed via [data-consent-open] (footer link).
+import { Cookie } from "@lucide/astro";
+
 const umami = import.meta.env.PUBLIC_UMAMI_ID;
 const needsConsent = !!import.meta.env.PUBLIC_CLARITY_ID;
 ---
@@ -20,10 +22,13 @@ const needsConsent = !!import.meta.env.PUBLIC_CLARITY_ID;
       aria-labelledby="consent-title"
       class="fixed inset-x-4 bottom-4 z-50 flex flex-col gap-4 rounded-lg border border-grey-300 bg-surface p-5 text-grey-950 shadow-xl md:right-auto md:left-6 md:max-w-md"
     >
-      <p id="consent-title" class="font-display text-xl font-black uppercase">Pomůžeš nám vylepšit web?</p>
+      <p id="consent-title" class="flex items-center gap-3 font-display text-xl font-black uppercase">
+        <Cookie size={26} class="shrink-0 text-red-600" aria-hidden="true" />
+        Používáme cookies
+      </p>
       <p class="text-base text-grey-600">
-        S tvým souhlasem měříme, jak se web používá: kam se kliká, kam se roluje a anonymní záznamy návštěv. Slouží to jen k
-        tomu, abychom web dělali lepší.
+        Analytické cookies nám pomáhají zjistit, jak web používáš, abychom ho mohli vylepšovat. Volbu můžeš kdykoli změnit v
+        patičce webu.
       </p>
       <div class="flex flex-wrap gap-3">
         <button
@@ -31,14 +36,14 @@ const needsConsent = !!import.meta.env.PUBLIC_CLARITY_ID;
           data-consent-choice="yes"
           class="rounded-md bg-grey-950 px-4 py-3 font-display text-lg leading-6 font-bold text-on-ink uppercase transition-opacity hover:opacity-85"
         >
-          Povolit
+          Přijmout vše
         </button>
         <button
           type="button"
           data-consent-choice="no"
           class="btn-fill hover:text-on-ink focus-visible:text-on-ink rounded-md border border-grey-300 bg-surface px-4 py-3 font-display text-lg leading-6 font-bold text-grey-950 uppercase hover:border-grey-950"
         >
-          Jen nezbytné
+          Odmítnout
         </button>
       </div>
     </div>
