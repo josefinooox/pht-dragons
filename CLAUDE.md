@@ -19,8 +19,10 @@ Mobile-first.
 - All dates/times formatted in Europe/Prague.
 - Relative labels (Dnes, Zítra, právě se hraje, čeká se na výsledek) are computed
   client-side, because they go stale between builds.
-- Site is served under a base path on GitHub Pages: always build internal links and
-  asset URLs with `import.meta.env.BASE_URL`, never hardcode "/".
+- Live at https://drgns.eu (custom domain on GitHub Pages; DNS at Web4u: 4× A + 4× AAAA to
+  GitHub Pages, www CNAME josefinooox.github.io; the old josefinooox.github.io/pht-dragons URLs
+  redirect). Still always build internal links and asset URLs with `import.meta.env.BASE_URL`,
+  never hardcode "/" (local builds use BASE_PATH=/pht-dragons).
 - Visual design: do NOT invent a style. Keep markup semantic and minimally styled
   until the owner gives design direction.
 - Identify teams by teamId, never by name.
