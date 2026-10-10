@@ -1,16 +1,15 @@
 ---
 // Analytics + consent. Configured at build time from public env vars (GitHub repository
 // variables in the deploy workflow); a tool without its ID simply isn't loaded:
-//   PUBLIC_GOATCOUNTER  – GoatCounter code (cookie-less page counts, no consent needed)
+//   PUBLIC_UMAMI_ID     – Umami Cloud website ID (cookie-less page views and events, no consent needed)
 //   PUBLIC_CLARITY_ID   – Microsoft Clarity project (heatmaps, recordings) – after consent
-//   PUBLIC_POSTHOG_KEY  – PostHog project key (+ PUBLIC_POSTHOG_HOST, EU by default) – after consent
 // The banner shows once (first visit) when a consent-based tool is configured; the choice is kept
 // in localStorage "pht-consent" and can be changed via [data-consent-open] (footer link).
-const goat = import.meta.env.PUBLIC_GOATCOUNTER;
-const needsConsent = !!(import.meta.env.PUBLIC_CLARITY_ID || import.meta.env.PUBLIC_POSTHOG_KEY);
+const umami = import.meta.env.PUBLIC_UMAMI_ID;
+const needsConsent = !!import.meta.env.PUBLIC_CLARITY_ID;
 ---
 
-{goat && <script is:inline async data-goatcounter={`https://${goat}.goatcounter.com/count`} src="https://gc.zgo.at/count.js" />}
+{umami && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={umami} />}
 
 {
   needsConsent && (
@@ -49,8 +48,6 @@ const needsConsent = !!(import.meta.env.PUBLIC_CLARITY_ID || import.meta.env.PUB
 <script>
   const KEY = "pht-consent";
   const clarityId = import.meta.env.PUBLIC_CLARITY_ID as string | undefined;
-  const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY as string | undefined;
-  const posthogHost = (import.meta.env.PUBLIC_POSTHOG_HOST as string | undefined) ?? "https://eu.i.posthog.com";
   const banner = document.querySelector<HTMLElement>("[data-consent]");
 
   const get = () => {
@@ -61,7 +58,7 @@ const needsConsent = !!(import.meta.env.PUBLIC_CLARITY_ID || import.meta.env.PUB
     }
   };
   let loaded = false;
-  async function load() {
+  function load() {
     if (loaded) return;
     loaded = true;
     if (clarityId) {
@@ -72,10 +69,6 @@ const needsConsent = !!(import.meta.env.PUBLIC_CLARITY_ID || import.meta.env.PUB
       s.src = `https://www.clarity.ms/tag/${clarityId}`;
       document.head.append(s);
       w.clarity("consent");
-    }
-    if (posthogKey) {
-      const { default: posthog } = await import("posthog-js");
-      posthog.init(posthogKey, { api_host: posthogHost, person_profiles: "identified_only" });
     }
   }
   function decide(value: "yes" | "no") {

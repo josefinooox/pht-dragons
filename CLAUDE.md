@@ -104,9 +104,9 @@ Only re-download logos that are not already present.
 - Breadcrumbs (match and team pages) show the visited path within the visit (src/scripts/trail.ts,
   sessionStorage; each page names itself via Base `crumb`); arriving from outside, the built-in
   path (place in the site) stays.
-- Analytics (src/components/Consent.astro): GoatCounter (cookie-less, always), Microsoft Clarity
-  and PostHog (only after consent; banner on the first visit, "Nastavení cookies" in the footer).
-  IDs come from GitHub repository variables GOATCOUNTER, CLARITY_ID, POSTHOG_KEY; unset = off.
+- Analytics (src/components/Consent.astro): Umami Cloud (cookie-less, always) and Microsoft
+  Clarity (only after consent; banner on the first visit, "Nastavení cookies" in the footer).
+  IDs come from GitHub repository variables UMAMI_ID and CLARITY_ID; unset = off.
 - A 404 page.
 
 ## Opponent summary and match recap
