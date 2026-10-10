@@ -83,7 +83,8 @@ Only re-download logos that are not already present.
   their recent results with each opponent's rank, common opponents, the other
   meeting this season, table excerpt with both teams highlighted.
 - `/tabulka` – full standings; each team links to its profile.
-- `/tymy` – every team of the group as a tile, in table order; `/tym/[slug]` – team profile:
+- `/tymy` – every team of the group (us included) as a tile, in table order; `/tym/[slug]` – team profile
+  (ours without comparison / common-opponent tabs, with a door to Dragons Intelligence):
   place, form, our games with them (this season + all seasons) and the opponent analysis
   (src/components/OpponentCard.astro, shared with the match page). Team names on game cards and
   in the match header link here (hover-only underline, `.link-hover`).

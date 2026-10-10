@@ -25,6 +25,8 @@ interface Props {
   profileLink?: boolean;
 }
 const { o, earlier = [], profileLink = false } = Astro.props;
+// Our own profile: no comparison or common opponents with ourselves, "naši" instead of "jejich".
+const self = o === OUR;
 const them = team(o);
 const themShort = them.shortName ?? them.name;
 const a = stats(OUR);
@@ -52,10 +54,10 @@ const rows = [
 // Tabs (panel ids double as URL hashes).
 const tabs = [
   { id: "shrnuti", label: "Shrnutí" },
-  { id: "srovnani", label: "Srovnání" },
-  ...(scorers.players.length ? [{ id: "jejich-hraci", label: "Jejich hráči" }] : []),
-  { id: "posledni-zapasy", label: "Jejich poslední zápasy" },
-  { id: "spolecni-souperi", label: "Společní soupeři" },
+  ...(self ? [] : [{ id: "srovnani", label: "Srovnání" }]),
+  ...(scorers.players.length ? [{ id: "jejich-hraci", label: self ? "Naši hráči" : "Jejich hráči" }] : []),
+  { id: "posledni-zapasy", label: self ? "Naše poslední zápasy" : "Jejich poslední zápasy" },
+  ...(self ? [] : [{ id: "spolecni-souperi", label: "Společní soupeři" }]),
   ...(earlier.length ? [{ id: "predchozi-zapasy", label: earlier.length === 1 ? "Předchozí vzájemný zápas" : "Předchozí vzájemné zápasy" }] : []),
 ];
 const h2 = "font-display text-[1.875rem] leading-[1.4] font-black text-grey-950 uppercase";
@@ -98,6 +100,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
       <p class="max-w-3xl text-lg leading-[1.6] text-grey-950 md:text-xl">{opponentSummary(o)}</p>
     </div>
 
+    {!self && (
     <div role="tabpanel" id="srovnani" aria-labelledby="tab-srovnani" tabindex="0" class="tab-panel flex flex-col gap-4">
       <h3 data-tab-title class={h3}>Srovnání</h3>
       <CompareTable
@@ -106,11 +109,12 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
         note="Barevně je lepší hodnota. Průměry na zápas, protože týmy mají různý počet odehraných zápasů."
       />
     </div>
+    )}
 
     {
       scorers.players.length > 0 && (
         <div role="tabpanel" id="jejich-hraci" aria-labelledby="tab-jejich-hraci" tabindex="0" class="tab-panel flex flex-col gap-4">
-          <h3 data-tab-title class={h3}>Jejich hráči</h3>
+          <h3 data-tab-title class={h3}>{self ? "Naši hráči" : "Jejich hráči"}</h3>
           <p class="max-w-3xl text-lg leading-[1.6] text-grey-950 md:text-xl">
             Nejproduktivnější je {scorers.players[0].name}: {goalWord(scorers.players[0].goals)} a {assistWord(scorers.players[0].assists)}
             {scorers.teamGoals > 0 && scorers.players[0].goals > 0 && <> (dal {scorers.players[0].goals} {z(scorers.teamGoals)} gólů týmu)</>}.
@@ -144,7 +148,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
     }
 
     <div role="tabpanel" id="posledni-zapasy" aria-labelledby="tab-posledni-zapasy" tabindex="0" class="tab-panel flex flex-col gap-4">
-      <h3 data-tab-title class={h3}>Jejich poslední zápasy</h3>
+      <h3 data-tab-title class={h3}>{self ? "Naše poslední zápasy" : "Jejich poslední zápasy"}</h3>
       {
         theirs.length ? (
           <div>
@@ -173,6 +177,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
       }
     </div>
 
+    {!self && (
     <div role="tabpanel" id="spolecni-souperi" aria-labelledby="tab-spolecni-souperi" tabindex="0" class="tab-panel flex flex-col gap-4">
       <h3 data-tab-title class={h3}>Společní soupeři</h3>
       {
@@ -229,6 +234,7 @@ const h3 = "font-display text-2xl leading-[1.4] font-black text-grey-950 upperca
         )
       }
     </div>
+    )}
 
     {
       earlier.length > 0 && (

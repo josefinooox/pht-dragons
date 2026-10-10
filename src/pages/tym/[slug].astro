@@ -1,8 +1,9 @@
 ---
-// Team profile (every team of the group except us): who they are, the opponent analysis, then
-// all our games with them (every season as a result run, this season as cards).
+// Team profile (every team of the group, us included): who they are, the analysis, then all our
+// games with them (every season as a result run, this season as cards). Our own profile has a
+// door to Dragons Intelligence instead of "our games with them".
 import type { GetStaticPaths } from "astro";
-import { ChevronLeft } from "@lucide/astro";
+import { ArrowRight, ChevronLeft } from "@lucide/astro";
 import Base from "../../layouts/Base.astro";
 import GameCard from "../../components/GameCard.astro";
 import Logo from "../../components/Logo.astro";
@@ -16,9 +17,10 @@ import { plural } from "../../lib/format";
 import { url } from "../../lib/url";
 
 export const getStaticPaths = (() =>
-  standings.filter((r) => r.teamId !== OUR).map((r) => ({ params: { slug: teamSlug(r.teamId) }, props: { id: r.teamId } }))) satisfies GetStaticPaths;
+  standings.map((r) => ({ params: { slug: teamSlug(r.teamId) }, props: { id: r.teamId } }))) satisfies GetStaticPaths;
 
 const id = Astro.props.id as string;
+const self = id === OUR;
 const t = team(id);
 const row = standingOf(id);
 const form = played(id)
@@ -31,8 +33,8 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
 ---
 
 <Base
-  title={`${t.name} – PHT Dragons`}
-  description={`${t.name}: ${row ? `${row.rank}. místo, ${row.points} bodů. ` : ""}Naše zápasy s nimi, jejich forma a nejproduktivnější hráči.`}
+  title={self ? "Náš tým – PHT Dragons" : `${t.name} – PHT Dragons`}
+  description={`${t.name}: ${row ? `${row.rank}. místo, ${row.points} bodů. ` : ""}${self ? "Forma, nejproduktivnější hráči a poslední zápasy." : "Naše zápasy s nimi, jejich forma a nejproduktivnější hráči."}`}
   nav="tymy"
   bare
 >
@@ -88,31 +90,45 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
           </div>
         </OpponentCard>
 
-        <!-- our games with them -->
-        <section aria-labelledby="nase-zapasy" class="flex flex-col gap-4">
-          <h2 id="nase-zapasy" class={h2}>Naše zápasy s nimi</h2>
-          {
-            h2h && (
-              <div class="flex flex-col gap-3 rounded-lg bg-grey-100 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
-                <p class="text-lg text-grey-950">
-                  Ve všech sezónách: <strong class="font-semibold">{recordText(h2h)}</strong>, skóre {h2h.gf}:{h2h.ga}
-                </p>
-                <ResultDots results={h2h.results} />
-              </div>
-            )
-          }
-          {
-            ours.length ? (
-              <ul class="flex flex-col gap-4">
-                {ours.map((g) => (
-                  <GameCard game={g} />
-                ))}
-              </ul>
-            ) : (
-              <p class="text-grey-600">V této sezóně spolu nehrajeme.</p>
-            )
-          }
-        </section>
+        {
+          self ? (
+            <a
+              href={url("radar")}
+              class="group flex items-center justify-between gap-6 rounded-lg bg-grey-100 p-6 transition-colors duration-300 hover:bg-grey-200 md:p-8"
+            >
+              <span class="flex flex-col gap-1">
+                <span class="font-display text-2xl leading-tight font-black text-grey-950 uppercase">Dragons Intelligence</span>
+                <span class="text-base text-grey-600">Všechny naše statistiky: sezóna zápas po zápase, hráči, historie a porovnání sezón.</span>
+              </span>
+              <ArrowRight size={24} class="shrink-0 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+            </a>
+          ) : (
+          <section aria-labelledby="nase-zapasy" class="flex flex-col gap-4">
+            <h2 id="nase-zapasy" class={h2}>Naše zápasy s nimi</h2>
+            {
+              h2h && (
+                <div class="flex flex-col gap-3 rounded-lg bg-grey-100 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+                  <p class="text-lg text-grey-950">
+                    Ve všech sezónách: <strong class="font-semibold">{recordText(h2h)}</strong>, skóre {h2h.gf}:{h2h.ga}
+                  </p>
+                  <ResultDots results={h2h.results} />
+                </div>
+              )
+            }
+            {
+              ours.length ? (
+                <ul class="flex flex-col gap-4">
+                  {ours.map((g) => (
+                    <GameCard game={g} />
+                  ))}
+                </ul>
+              ) : (
+                <p class="text-grey-600">V této sezóně spolu nehrajeme.</p>
+              )
+            }
+          </section>
+          )
+        }
       </div>
     </div>
 

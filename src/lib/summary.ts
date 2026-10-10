@@ -48,6 +48,8 @@ export function opponentSummary(o: string): string {
     for (const g of c.them) dThem += forT(g, o).f - forT(g, o).a;
   }
   const signed = (x: number) => `${x > 0 ? "+" : ""}${x}`;
+  // our own profile: no comparison with ourselves
+  if (o === OUR) return out.join(" ");
   if (common.length)
     out.push(
       `Proti ${common.length === 1 ? "společnému soupeři" : `${common.length} společným soupeřům`} si vedli ${dThem > dUs ? "lépe než my" : dThem < dUs ? "hůř než my" : "podobně jako my"} (rozdíl skóre ${signed(dThem)} oproti našim ${signed(dUs)}).`,

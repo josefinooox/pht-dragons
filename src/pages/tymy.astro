@@ -9,17 +9,17 @@ import { OUR, forT, isFinal, meta, mine, opp, played, standings, team, teamSlug 
 import { dayMonthDot, plural, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 
-// Us included, in our place and looking like the others, leading to Dragons Intelligence.
+// Us included, in our place and looking like the others, leading to our own profile.
 const tiles = standings.map((r) => {
     if (r.teamId === OUR)
       return {
         row: r,
         us: true,
-        href: url("radar"),
+        href: url(`tym/${teamSlug(r.teamId)}`),
         form: played(r.teamId)
           .slice(-5)
           .map((x) => forT(x, r.teamId).r),
-        note: "Naše statistiky",
+        note: "Náš tým",
       };
     const vs = mine.filter((g) => opp(g) === r.teamId);
     const next = vs.find((g) => !isFinal(g));
