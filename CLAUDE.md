@@ -97,6 +97,9 @@ Only re-download logos that are not already present.
   template fallback); AI text written by the same morning routine (`rounds` in
   `npm run narratives:pending`, saved as "round:<monday>" in data/narratives.json), shown only
   while its key still matches the week's facts.
+- Breadcrumbs (match and team pages) show the visited path within the visit (src/scripts/trail.ts,
+  sessionStorage; each page names itself via Base `crumb`); arriving from outside, the built-in
+  path (place in the site) stays.
 - A 404 page.
 
 ## Opponent summary and match recap

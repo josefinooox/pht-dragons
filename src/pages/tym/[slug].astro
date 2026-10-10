@@ -42,7 +42,8 @@ const label = "font-display text-sm font-bold text-grey-500 uppercase";
     <div class="min-w-0 flex-1">
       <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
         <nav aria-label="Drobečková navigace">
-          <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
+          <!-- built-in path (place in the site); src/scripts/trail.ts swaps in the visited path -->
+          <ol data-breadcrumb class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
             <li>
               <a href={url("tymy")} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
                 <ChevronLeft size={18} aria-hidden="true" />

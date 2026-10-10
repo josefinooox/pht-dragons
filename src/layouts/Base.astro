@@ -18,8 +18,10 @@ interface Props {
   bare?: boolean;
   /** Link-preview image (site path, 1200 × 630); defaults to the team logo. */
   image?: string;
+  /** Short name of this page in the visited-path breadcrumb (src/scripts/trail.ts). */
+  crumb?: string;
 }
-const { title, description, nav, back, bare = false, image } = Astro.props;
+const { title, description, nav, back, bare = false, image, crumb } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const me = team(OUR);
 const links = [
@@ -47,6 +49,7 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <meta name="pht-crumb" content={crumb ?? title.split(" – ")[0]} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PHT Dragons" />
     <meta property="og:locale" content="cs_CZ" />
@@ -263,6 +266,9 @@ const updatedText = `${part("day")}. ${part("month")}. v ${part("hour")}:${part(
       import "../scripts/live.ts";
     </script>
 
+    <script>
+      import "../scripts/trail.ts";
+    </script>
     <script>
       // Theme switches (header icon on desktop, switch in the mobile menu):
       // html[data-theme="dark"] + localStorage "pht-theme".

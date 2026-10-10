@@ -56,24 +56,14 @@ const description = narrative
 
 ---
 
-<Base title={title} description={description} nav="rozpis" bare image={url(`zapas/${gameSlug(g)}.png`)}>
+<Base title={title} description={description} nav="rozpis" crumb={`${home} vs ${away}`} bare image={url(`zapas/${gameSlug(g)}.png`)}>
   <div class="flex items-stretch">
     <div class="min-w-0 flex-1">
       <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-8 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
         <div class="flex flex-col gap-3">
-          <!-- Context back link, only when the visitor came here from Dragons Intelligence (the breadcrumb
-               stays the match's place in the site; this just offers the way back). -->
-          <a
-            data-back-radar
-            hidden
-            href={url("radar")}
-            class="flex w-fit items-center gap-1 rounded-full bg-grey-100 py-2 pr-4 pl-3 font-sans text-base leading-6 font-semibold text-grey-600 transition-colors duration-300 ease-out hover:bg-grey-200 hover:text-grey-950"
-          >
-            <ChevronLeft size={18} aria-hidden="true" />
-            Zpět na Dragons Intelligence
-          </a>
           <nav aria-label="Drobečková navigace">
-            <ol class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
+            <!-- built-in path (place in the site); src/scripts/trail.ts swaps in the visited path -->
+          <ol data-breadcrumb class="flex flex-wrap items-center gap-x-1 gap-y-1 text-base leading-6">
               <li>
                 <a href={url()} class="flex items-center gap-1 text-grey-500 transition-colors hover:text-grey-950">
                   <ChevronLeft size={18} aria-hidden="true" />
@@ -111,14 +101,4 @@ const description = narrative
 <script>
   import "../../scripts/tabs.ts";
 
-  // Show "Zpět na Dragons Intelligence" when the previous page was a radar page (same site), and lead
-  // back to exactly that page (season and sub-page included).
-  const back = document.querySelector<HTMLAnchorElement>("[data-back-radar]");
-  try {
-    const from = document.referrer ? new URL(document.referrer) : null;
-    if (back && from && from.origin === location.origin && from.pathname.startsWith(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/radar`)) {
-      back.href = from.pathname + from.search;
-      back.hidden = false;
-    }
-  } catch {}
 </script>

@@ -28,10 +28,15 @@ const tabs = [
 ] as const;
 // On Historie the switch leads to the overview of the picked season.
 const target = tab === "historie" ? "prehled" : tab;
+// breadcrumb name: "Dragons Intelligence", "Intelligence: Hráči 2024/2025", …
+const crumb =
+  tab === "prehled" && (!season || season.current)
+    ? "Dragons Intelligence"
+    : `Intelligence: ${tabs.find((t) => t.key === tab)!.label}${season && !season.current ? ` ${season.name}` : ""}`;
 const gamesWord = (n: number) => (n === 1 ? "zápas" : n < 5 ? "zápasy" : "zápasů");
 ---
 
-<Base title={title} description={description} nav="radar" bare>
+<Base title={title} description={description} nav="radar" crumb={crumb} bare>
   <div class="bg-grey-100">
     <div class="mr-4 ml-(--gutter) flex max-w-7xl flex-col gap-4 pt-8 pb-20 md:mr-20 md:pt-10 md:pb-32">
       <div class="flex flex-col gap-6 pb-4 md:gap-8">
