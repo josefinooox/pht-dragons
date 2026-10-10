@@ -65,6 +65,10 @@ export const OUR = meta.ourTeamId;
 export const teams = teamsJson as Team[];
 export const games = gamesJson as Game[];
 export const standings = standingsJson as StandingRow[];
+/** False at the start of a season, before the league publishes the table. */
+export const tableKnown = standings.length > 0;
+/** Teams of the group in table order (by name until the table is known). */
+export const groupTeamIds = (): string[] => (tableKnown ? standings.map((r) => r.teamId) : teams.map((t) => t.teamId));
 
 /** Build time; NOW=2026-10-07T09:00 overrides it for testing states. */
 export const NOW = process.env.NOW ? new Date(process.env.NOW) : new Date();

@@ -5,12 +5,13 @@ import Base from "../layouts/Base.astro";
 import Logo from "../components/Logo.astro";
 import ResultChip from "../components/ResultChip.astro";
 import SubBar from "../components/SubBar.astro";
-import { OUR, forT, isFinal, meta, mine, opp, played, standings, team, teamSlug } from "../lib/data";
+import { OUR, forT, groupTeamIds, isFinal, meta, mine, opp, played, standingOf, tableKnown, team, teamSlug } from "../lib/data";
 import { dayMonthDot, plural, weekdayShort } from "../lib/format";
 import { url } from "../lib/url";
 
 // Us included, in our place and looking like the others, leading to our own profile.
-const tiles = standings.map((r) => {
+const tiles = groupTeamIds().map((teamId) => {
+    const r = { teamId, rank: standingOf(teamId)?.rank ?? null, points: standingOf(teamId)?.points ?? null };
     if (r.teamId === OUR)
       return {
         row: r,
@@ -49,7 +50,7 @@ const tiles = standings.map((r) => {
     <div class="flex flex-col gap-4">
       <h1 class="font-display text-[2.75rem] leading-none font-black text-grey-950 uppercase md:text-[3.5rem] md:leading-[56px]">Týmy</h1>
       <p class="font-sans text-xl font-semibold text-grey-500">
-        Skupina {meta.group.name}, sezóna {meta.season.name.replace("-", "/")}. Seřazeno podle tabulky.
+        Skupina {meta.group.name}, sezóna {meta.season.name.replace("-", "/")}. {tableKnown ? "Seřazeno podle tabulky." : "Pořadí se ukáže, jakmile liga zveřejní tabulku."}
       </p>
     </div>
 
@@ -68,7 +69,9 @@ const tiles = standings.map((r) => {
                   <span class="link-hover group-hover:[background-size:100%_1px]">{team(row.teamId).name}</span>
                 </span>
                 <span class="text-sm text-grey-600">
-                  {row.rank}. místo · {row.points} {plural(row.points, "bod", "body", "bodů")}
+                  {row.rank != null && row.points != null
+                    ? `${row.rank}. místo · ${row.points} ${plural(row.points, "bod", "body", "bodů")}`
+                    : "Zatím bez tabulky"}
                   {note && <> · {note}</>}
                 </span>
                 {form.length > 0 && (

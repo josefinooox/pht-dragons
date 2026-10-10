@@ -94,7 +94,10 @@ test("pragueToIso handles winter time", () => {
 test("checkConsistency flags missing data", () => {
   assert.deepEqual(checkConsistency(normalize({ rawGames, rawStandings }), DRAGONS), []);
   const empty = normalize({ rawGames: [], rawStandings: [] });
-  assert.equal(checkConsistency(empty, DRAGONS).length, 4);
+  // no games, our team missing; empty standings alone are fine (start of a season)
+  assert.equal(checkConsistency(empty, DRAGONS).length, 2);
+  const noTable = normalize({ rawGames, rawStandings: [] });
+  assert.deepEqual(checkConsistency(noTable, DRAGONS), []);
 });
 
 test("schema rejects an unknown game status", () => {

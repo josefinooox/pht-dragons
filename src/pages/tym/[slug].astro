@@ -11,13 +11,13 @@ import OpponentCard from "../../components/OpponentCard.astro";
 import ResultChip from "../../components/ResultChip.astro";
 import TablePanel from "../../components/TablePanel.astro";
 import ResultDots from "../../components/radar/ResultDots.astro";
-import { OUR, forT, mine, opp, played, standingOf, standings, team, teamSlug } from "../../lib/data";
+import { OUR, forT, groupTeamIds, mine, opp, played, standingOf, team, teamSlug } from "../../lib/data";
 import { headToHead, recordText } from "../../lib/brain";
 import { plural } from "../../lib/format";
 import { url } from "../../lib/url";
 
 export const getStaticPaths = (() =>
-  standings.map((r) => ({ params: { slug: teamSlug(r.teamId) }, props: { id: r.teamId } }))) satisfies GetStaticPaths;
+  groupTeamIds().map((id) => ({ params: { slug: teamSlug(id) }, props: { id } }))) satisfies GetStaticPaths;
 
 const id = Astro.props.id as string;
 const self = id === OUR;

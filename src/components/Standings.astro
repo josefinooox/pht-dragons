@@ -4,7 +4,7 @@
 // The numbers sit close to the team names with generous spacing between them (the free space
 // is left at the end of the row). Rows are grid links (not <tr>), so the whole row is one link.
 // Narrow screens drop V–R–P.
-import { OUR, standings, team, teamSlug } from "../lib/data";
+import { OUR, standings, tableKnown, team, teamSlug } from "../lib/data";
 import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -27,6 +27,7 @@ const wide = "hidden md:block";
     <span class="px-2">Skóre</span>
     <span class="px-2">Body</span>
   </div>
+  {!tableKnown && <p class="px-4 py-8 font-sans text-base text-grey-600">Tabulka se zobrazí, jakmile ji liga zveřejní.</p>}
   <ol>
     {
       rows.map(({ row, href }) => {

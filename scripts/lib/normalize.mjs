@@ -281,8 +281,9 @@ export function normalizeReport(raw) {
 export function checkConsistency({ teams, games, standings }, ourTeamId) {
   const problems = [];
   if (games.length === 0) problems.push(`no ${GROUP_NAME} games`);
-  if (standings.length === 0) problems.push("empty standings");
+  // Empty standings are fine at the start of a season (the league publishes the table later);
+  // the site then shows "the table will appear once it's known".
   if (!teams.some((t) => t.teamId === ourTeamId)) problems.push(`our team ${ourTeamId} missing`);
-  if (!standings.some((s) => s.teamId === ourTeamId)) problems.push("our team missing from standings");
+  if (standings.length && !standings.some((s) => s.teamId === ourTeamId)) problems.push("our team missing from standings");
   return problems;
 }

@@ -4,7 +4,7 @@
 // State lives on <html data-table="open">, set before first paint by the inline script in Base,
 // so a restored state doesn't animate; toggling animates the width and cross-fades the content.
 import { TableProperties, X } from "@lucide/astro";
-import { OUR, standings, team, teamSlug } from "../lib/data";
+import { OUR, standings, tableKnown, team, teamSlug } from "../lib/data";
 import { plural } from "../lib/format";
 import { url } from "../lib/url";
 import Logo from "./Logo.astro";
@@ -59,6 +59,7 @@ const grid = "grid grid-cols-[56px_56px_minmax(0,1fr)_56px_56px] items-center";
         <span class="px-2" title="Odehrané zápasy">Z</span>
         <span class="px-2">Body</span>
       </div>
+      {!tableKnown && <p class="px-4 py-8 font-sans text-base text-grey-600">Tabulka se zobrazí, jakmile ji liga zveřejní.</p>}
       <ol data-table-list class="min-h-0 overflow-y-auto overscroll-contain [scrollbar-width:thin]">
         {
           rows.map(({ row, href }) => {
