@@ -71,22 +71,20 @@ for (const btn of document.querySelectorAll<HTMLButtonElement>("[data-share]")) 
   });
 }
 
-// "Do dalšího zápasu zbývá: 3 dny" (sub-bar). The server renders the date as a fallback.
+// Sub-bar countdown, same wording on desktop and phones: "Další zápas za 3 dny" / "zítra" /
+// "za 05:12:33" (under 24 hours, ticking every second) / "dnes" / the game state.
+// The server renders the date and time as a fallback.
 for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
   const { date = "", start = "", status = "" } = el.dataset;
   const state = stateLabel(start, status);
   const label = el.querySelector<HTMLElement>("[data-countdown-label]");
-  const short = el.querySelector<HTMLElement>("[data-countdown-short]");
   const value = el.querySelector<HTMLElement>("[data-countdown-value]");
   if (!label || !value) continue;
   const n = dayNumber(date) - today;
-  // Full label on desktop, short one on phones (keeps the sub-bar on one line).
-  const set = (full: string, brief: string, v: string) => {
-    label.textContent = full;
-    if (short) short.textContent = brief;
+  const set = (l: string, v: string) => {
+    label.textContent = l;
     value.textContent = v;
   };
-  // Under 24 hours to the start: a live HH:MM:SS countdown, ticking every second.
   const startMs = Date.parse(start);
   const left = () => startMs - (now.getTime() + (performance.now() - loadedAt));
   if (!state && left() > 0 && left() < 864e5) {
@@ -95,16 +93,17 @@ for (const el of document.querySelectorAll<HTMLElement>("[data-countdown]")) {
       const ms = left();
       if (ms <= 0) {
         clearInterval(timer);
-        set("Další zápas:", "Zápas:", "právě začíná");
+        set("Další zápas", "právě začíná");
         return;
       }
       const t = Math.floor(ms / 1000);
       const pad = (x: number) => String(x).padStart(2, "0");
-      set("Do zápasu zbývá:", "Zápas za", `${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:${pad(t % 60)}`);
+      set("Další zápas", `za ${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:${pad(t % 60)}`);
     };
     const timer = setInterval(tick, 1000);
     tick();
-  } else if (state) set("Další zápas:", "Zápas:", state[1]);
-  else if (n === 0) set("Další zápas:", "Zápas:", "dnes");
-  else if (n > 0) set("Do dalšího zápasu zbývá:", "Zápas za", `${n} ${plural(n, "den", "dny", "dní")}`);
+  } else if (state) set("Další zápas", state[1].toLowerCase());
+  else if (n === 0) set("Další zápas", "dnes");
+  else if (n === 1) set("Další zápas", "zítra");
+  else if (n > 1) set("Další zápas", `za ${n} ${plural(n, "den", "dny", "dní")}`);
 }

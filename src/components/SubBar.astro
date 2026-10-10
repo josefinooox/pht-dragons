@@ -19,7 +19,7 @@ const text = "font-sans text-sm leading-[1.4] font-extrabold uppercase";
         data-start={heroGame.start}
         data-status={heroGame.status}
       >
-        <span data-countdown-label class="max-md:hidden">Další zápas:</span><span data-countdown-short class="md:hidden">Zápas:</span> <span data-countdown-value class="text-grey-950">{shortDate(heroGame.date)} {heroGame.time}</span>
+        <span data-countdown-label>Další zápas</span> <span data-countdown-value class="text-grey-950">{shortDate(heroGame.date)} {heroGame.time}</span>
       </p>
     ) : (
       <p class:list={[text, "text-grey-500"]}>Sezóna skončila</p>
