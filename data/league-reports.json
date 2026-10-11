@@ -1041,7 +1041,7 @@
   },
   "F629B421-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1791745444855,
+    "checkedAt": 1791746447978,
     "complete": true,
     "goals": [
       {
@@ -8892,7 +8892,7 @@
   },
   "F62F0B5A-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1791745444448,
+    "checkedAt": 1791746447673,
     "complete": true,
     "goals": [
       {
@@ -12609,6 +12609,315 @@
         "playerId": "8DFDA157-00FF-4A93-B9B7-263132510B6E",
         "name": "David Svoboda",
         "number": 7,
+        "position": "Ú"
+      }
+    ]
+  },
+  "F6312E31-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 1,
+    "checkedAt": 1791746448282,
+    "complete": true,
+    "goals": [
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "scorer": {
+          "playerId": "A132D32C-EB33-4326-BB84-B1B1F53840AE",
+          "name": "Pavol Džama",
+          "number": 17
+        },
+        "assists": [
+          {
+            "playerId": "4C785C70-7818-11F0-961C-DB78262ABAD2",
+            "name": "Petr Skalník",
+            "number": 70
+          }
+        ]
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "scorer": {
+          "playerId": "A304379B-BEA7-4EEB-A9A4-127C88F55FE9",
+          "name": "Michal Hnízdil",
+          "number": 15
+        },
+        "assists": [
+          {
+            "playerId": "D4FCAA50-0B69-4ED4-BBB8-8FD035682A64",
+            "name": "Daniel Hnízdil",
+            "number": 77
+          }
+        ]
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "scorer": {
+          "playerId": "B2DC3230-A19E-4728-9772-DFC647F8F590",
+          "name": "Vojtěch Šika",
+          "number": 16
+        },
+        "assists": [
+          {
+            "playerId": "2E5A7DAB-E36C-44CD-9BE1-BB4C725E9102",
+            "name": "Josef Gubáni",
+            "number": 9
+          }
+        ]
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "scorer": {
+          "playerId": "56304741-86F8-11EE-8257-450E02AC6AB7",
+          "name": "Adam Šnajberk",
+          "number": 3
+        },
+        "assists": [
+          {
+            "playerId": "7544674A-62FD-4FDA-968C-CFFE39497FEA",
+            "name": "Tomáš Adamec",
+            "number": 42
+          }
+        ]
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "scorer": {
+          "playerId": "9FCDF730-6F5A-11EF-937E-D5DB16F8F967",
+          "name": "Patrik Sýkora",
+          "number": 91
+        },
+        "assists": [
+          {
+            "playerId": "7544674A-62FD-4FDA-968C-CFFE39497FEA",
+            "name": "Tomáš Adamec",
+            "number": 42
+          }
+        ]
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "scorer": {
+          "playerId": "A304379B-BEA7-4EEB-A9A4-127C88F55FE9",
+          "name": "Michal Hnízdil",
+          "number": 15
+        },
+        "assists": [
+          {
+            "playerId": "D4FCAA50-0B69-4ED4-BBB8-8FD035682A64",
+            "name": "Daniel Hnízdil",
+            "number": 77
+          },
+          {
+            "playerId": "49B2AC50-6B0B-4FCD-8D03-8D2A4295DBF5",
+            "name": "Martin Švančárek",
+            "number": 38
+          }
+        ]
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "scorer": {
+          "playerId": "C0751F10-73FC-11F1-AC2F-BD32956023E5",
+          "name": "Lukáš Opelík",
+          "number": 58
+        },
+        "assists": [
+          {
+            "playerId": "F52B7A8E-91AF-4EB4-8559-48627C0996C4",
+            "name": "Richard Sopko",
+            "number": 99
+          }
+        ]
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "scorer": {
+          "playerId": "7544674A-62FD-4FDA-968C-CFFE39497FEA",
+          "name": "Tomáš Adamec",
+          "number": 42
+        },
+        "assists": [
+          {
+            "playerId": "EC41407B-61B8-4805-8EC3-0F7A37098589",
+            "name": "Jakub Najberk",
+            "number": 44
+          }
+        ]
+      }
+    ],
+    "lineup": [
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "808516CA-F77F-4A80-BB6B-8E51E9AF58EC",
+        "name": "Ondřej Kolínek",
+        "number": 71,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "6FAB8101-5E28-4233-BF5E-0223055EB06D",
+        "name": "Lukáš Kocman",
+        "number": 57,
+        "position": "Ú"
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "C0751F10-73FC-11F1-AC2F-BD32956023E5",
+        "name": "Lukáš Opelík",
+        "number": 58,
+        "position": "Ú"
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "A132D32C-EB33-4326-BB84-B1B1F53840AE",
+        "name": "Pavol Džama",
+        "number": 17,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "4C785C70-7818-11F0-961C-DB78262ABAD2",
+        "name": "Petr Skalník",
+        "number": 70,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "90F4F395-8D26-4A3E-84F6-1FC950226146",
+        "name": "Ján Guttek",
+        "number": 73,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "CE5045F0-F3A7-11EF-8C8E-677EA47FDC8C",
+        "name": "Jakub Vrabec",
+        "number": 30,
+        "position": "G"
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "FF0FC2E0-87EC-11F0-898E-6B58B365CF05",
+        "name": "František Rochl",
+        "number": 61,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "F52B7A8E-91AF-4EB4-8559-48627C0996C4",
+        "name": "Richard Sopko",
+        "number": 99,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "E0786CDF-7375-449F-ADCF-8F4DEAC79CE9",
+        "name": "German Bodnar",
+        "number": 95,
+        "position": null
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "playerId": "825450B7-DE80-4A04-BA2E-3A4450FA75AD",
+        "name": "Peter Fedorik",
+        "number": 83,
+        "position": null
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "49B2AC50-6B0B-4FCD-8D03-8D2A4295DBF5",
+        "name": "Martin Švančárek",
+        "number": 38,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "D4FCAA50-0B69-4ED4-BBB8-8FD035682A64",
+        "name": "Daniel Hnízdil",
+        "number": 77,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "A304379B-BEA7-4EEB-A9A4-127C88F55FE9",
+        "name": "Michal Hnízdil",
+        "number": 15,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "EC41407B-61B8-4805-8EC3-0F7A37098589",
+        "name": "Jakub Najberk",
+        "number": 44,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "B2DC3230-A19E-4728-9772-DFC647F8F590",
+        "name": "Vojtěch Šika",
+        "number": 16,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "80AE38F0-907C-11EE-98E6-7D9FB690A427",
+        "name": "Tomáš Meduna",
+        "number": 14,
+        "position": "O"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "8AB72CC0-4CC6-11EE-B18C-19428222FF1A",
+        "name": "Petr Stokuč",
+        "number": 64,
+        "position": "O"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "7544674A-62FD-4FDA-968C-CFFE39497FEA",
+        "name": "Tomáš Adamec",
+        "number": 42,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "E627B6EF-58E7-4664-81CA-257B1D21EFC9",
+        "name": "Vladimír Beran",
+        "number": 93,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "2E5A7DAB-E36C-44CD-9BE1-BB4C725E9102",
+        "name": "Josef Gubáni",
+        "number": 9,
+        "position": "Ú"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "BCBE1AC6-C0D1-4CB1-9414-080D580A4129",
+        "name": "Filip Kudrev",
+        "number": 39,
+        "position": "O"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "56304741-86F8-11EE-8257-450E02AC6AB7",
+        "name": "Adam Šnajberk",
+        "number": 3,
+        "position": "O"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "E92F5603-D154-443F-B197-27498401AC33",
+        "name": "Martin Pazdera",
+        "number": 1,
+        "position": "G"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "playerId": "9FCDF730-6F5A-11EF-937E-D5DB16F8F967",
+        "name": "Patrik Sýkora",
+        "number": 91,
         "position": "Ú"
       }
     ]
