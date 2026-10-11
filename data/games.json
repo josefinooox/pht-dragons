@@ -1353,10 +1353,17 @@
     "status": "running",
     "homeTeamId": "7B35DB20-5849-11F1-9FC5-B7618A8B7F6A",
     "awayTeamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
-    "homeGoals": 0,
-    "awayGoals": 0,
+    "homeGoals": 1,
+    "awayGoals": 10,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "number": 85,
+        "firstName": "Pavel",
+        "lastName": "Reznák"
+      }
+    ]
   },
   {
     "gameId": "F6312E31-98CA-11F1-8BDF-EF2495D048F3",
