@@ -1382,9 +1382,16 @@
     "homeTeamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
     "awayTeamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
     "homeGoals": 5,
-    "awayGoals": 1,
+    "awayGoals": 2,
     "venue": "SPM Aréna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "number": 15,
+        "firstName": "Michal",
+        "lastName": "Hnízdil"
+      }
+    ]
   },
   {
     "gameId": "F62BFE13-98CA-11F1-8BDF-EF2495D048F3",
@@ -1399,7 +1406,14 @@
     "homeGoals": 0,
     "awayGoals": 3,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "number": 9,
+        "firstName": "Petr",
+        "lastName": "Mezera"
+      }
+    ]
   },
   {
     "gameId": "F81B23E7-98CA-11F1-8BDF-EF2495D048F3",
