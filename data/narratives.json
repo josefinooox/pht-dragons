@@ -1,4 +1,17 @@
 {
+  "F62BFE13-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "0819d5451adf0bc0",
+    "model": "claude-code",
+    "generatedAt": "2026-10-12T05:06:27.306Z",
+    "summary": "V neděli 11. října jsme na ICEARENĚ Kateřinky prohráli s Gaston Seals 0:7. Soupeř rozhodl už v první třetině a ve třetí přidal další čtyři góly; nejvíc nás potrápil Matyáš Hájek se třemi góly a jednou asistencí.",
+    "narrative": [
+      "Neděle na ICEARENĚ Kateřinky se nám nepovedla. S Gaston Seals jsme prohráli 0:7 a hned od úvodu bylo znát, že soupeř má navrch. Už ve 3. minutě otevřel skóre Tomáš Korndörfer po přihrávkách Petra Mezery a Jaroslava Blechy.",
+      "V první třetině to pokračovalo. V 6. minutě zvýšil Matyáš Hájek na 0:2 a ve 12. minutě přidal Michal Zamlinský po asistencích Matyáše Krijta a Martina Dojčara třetí gól. Do druhé třetiny jsme šli s mankem 0:3.",
+      "Druhá třetina přinesla trochu uklidnění: žádný gól nepadl a skóre zůstalo 0:3. V 25. minutě jsme šli do oslabení kvůli hákování Martina Znamenáčka, ale gól jsme z něj nedostali. Jenže skórovat se nám nepodařilo.",
+      "Ve třetí třetině se soupeř znovu prosadil. Ve 38. minutě skóroval Hájek, ve 40. znovu on, ve 43. přidal druhý gól Korndörfer a ve 45. minutě stanovil na 0:7 Jaroslav Blecha, a to dokonce v oslabení soupeře po vyloučení Miloše Benedikta. Hájek tak skončil se třemi góly a asistencí, Mezera měl tři asistence.",
+      "Na střely jsme prohráli 13:42, ve vhazování to bylo vyrovnané, 15:16 pro soupeře. Trestné minuty měly oba týmy stejně, 1:45. Za nás byl hvězdou zápasu vyhlášen Josef Zimanzl. Příště to chceme otočit."
+    ]
+  },
   "F62D5DA8-98CA-11F1-8BDF-EF2495D048F3": {
     "key": "54375bc4a75546e9",
     "model": "claude-code",
@@ -70,14 +83,14 @@
     ]
   },
   "round:2026-10-05": {
-    "key": "ad7247f4d8ec8fa3",
+    "key": "7294e8a22a79c401",
     "model": "claude-code",
-    "generatedAt": "2026-10-09T20:36:22.967Z",
-    "summary": "Týden ve skupině KLASIK zatím ve znamení kanonád: v šesti zápasech padlo 52 gólů a Golden Bears nasázeli Projektovému ústavu šestnáct. Naši se tentokrát na HC Raptors nechytali a prohráli 0:6, v tabulce držíme 8. místo.",
+    "generatedAt": "2026-10-12T05:06:27.306Z",
+    "summary": "Týden 5.–11. října nejvíc zapůsobil Golden Bears s výhrou 16:1 nad Projektovým ústavem. My jsme měli horší týden: s HC Raptors jsme prohráli 0:6 a s Gaston Seals 0:7, a jsme devátí se šesti body.",
     "narrative": [
-      "Kdo má rád góly, tenhle týden si přišel na své. Šest zápasů, dvaapadesát branek, tedy skoro devět na zápas. Hlavní podíl na tom mají Golden Bears, kteří porazili Projektový ústav 16:1 a z prvního místa jen tak neslezou: mají 14 bodů ze 7 zápasů.",
-      "Hodně zvučnou výhru si připsali i HC Gladiators, kteří přejeli HC Rekreanti Praha 9:1. HC Prague Wolves B porazili HC Taste 5:1 a poskočili z 11. na 9. místo. HC Alligators zažili týden na houpačce: nejdřív porazili Prague Pigeons B 3:1, pak prohráli s HC Car-Back 3:6, a v tabulce se přesto posunuli ze 14. na 11. příčku.",
-      "Největším skokanem týdne jsou HC Raptors, kteří vystoupali ze 7. na 4. místo, a to i díky výhře 6:0 nad námi. Na naší straně tentokrát nebylo co slavit, ale s 6 body jsme pořád osmí ze 17 a týden ještě nekončí."
+      "Ve skupině KLASIK padlo za týden 85 gólů a nejvíc jich padlo v zápase Golden Bears, kteří doma smetli Projektový ústav 16:1. Golden Bears zůstávají lídrem se 14 body po sedmi zápasech. Výrazně se prosadil i HC Gladiators, který vyhrál 9:1 nad HC Rekreanti Praha a pak 6:2 nad Prague Pigeons B, a HC Ducks Stars, který v neděli porazil HC Scorpions Praha 13:1.",
+      "V tabulce se nejvíc posunuli HC Alligators z 14. na 11. místo, HC Raptors ze 7. na 5. místo a HC Car-Back z 15. na 13. místo. Strašáci a Winter Foxes se v neděli rozešli smírně 2:2.",
+      "Pro nás to byl těžký týden. S HC Raptors jsme prohráli 0:6 a v neděli s Gaston Seals 0:7, takže jsme bez vstřeleného gólu. Teď jsme devátí ze 17 týmů se šesti body, takže je pořád za co hrát. "
     ]
   }
 }
