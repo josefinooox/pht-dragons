@@ -1929,6 +1929,433 @@
       }
     ]
   },
+  "F630E011-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 3,
+    "homeNick": "Dragons",
+    "awayNick": "Strašáci",
+    "complete": true,
+    "shots": {
+      "home": 22,
+      "away": 33
+    },
+    "faceoffs": {
+      "home": 15,
+      "away": 18
+    },
+    "penaltyMinutes": {
+      "home": 5.25,
+      "away": 8.75
+    },
+    "stars": [
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "401E1A20-2FEB-11F0-A074-D54B116105BC",
+        "name": "Jakub Vožeh",
+        "number": 4,
+        "goals": 1,
+        "assists": 0
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "BAB07A78-49E9-40CE-B1B0-9CB91A57B691",
+        "name": "Tomáš Zikmund",
+        "number": 94,
+        "goals": 2,
+        "assists": 0
+      }
+    ],
+    "saves": {
+      "home": 29,
+      "away": 21
+    },
+    "lineup": [
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "97ADEF80-6620-11EF-95FA-476577036877",
+        "name": "Jakub Jarošek",
+        "number": 28,
+        "position": "O"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "3FB77700-4344-11EF-862B-9F1C7F83A93C",
+        "name": "Jakub Douděra",
+        "number": 77,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "CF5165B0-4344-11EF-862B-9F1C7F83A93C",
+        "name": "Richard Siuda",
+        "number": 5,
+        "position": "O"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "4362F140-75CC-11EE-8374-57872550D816",
+        "name": "Michal Salaj",
+        "number": 1,
+        "position": "G"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "61D95EC0-8E53-11EF-862A-192122876EED",
+        "name": "Martin Znamenáček",
+        "number": 88,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "401E1A20-2FEB-11F0-A074-D54B116105BC",
+        "name": "Jakub Vožeh",
+        "number": 4,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "A4511F40-6F63-11EF-937E-D5DB16F8F967",
+        "name": "Josef Zimanzl",
+        "number": 86,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "94735EA0-A533-11F1-AEB1-F75ACD055096",
+        "name": "Martin Vrbka",
+        "number": 39,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "7EBBD810-0FD0-11F1-83B6-E36F4E52D436",
+        "name": "Pavel Dorničák",
+        "number": 19,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "5B9DCC80-4344-11EF-862B-9F1C7F83A93C",
+        "name": "Jakub Vlček",
+        "number": 13,
+        "position": "O"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "3EC175B0-BD3F-11EF-B96E-47CBB009A025",
+        "name": "Zdeněk Soukup",
+        "number": 23,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+        "name": "Ondřej Babka",
+        "number": 44,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "59DB22A0-9BB2-4428-AEC8-2B829BD80220",
+        "name": "Robert Kysela",
+        "number": 17,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "33CAC320-6014-4122-9474-12A947AEA8C3",
+        "name": "Luděk Bureš",
+        "number": 33,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "723C796F-BA77-484B-A324-2D88852BA184",
+        "name": "David Volf",
+        "number": 55,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "8AFF7420-7070-11EF-BC0F-FFB3829F1053",
+        "name": "Jan Tichý",
+        "number": 43,
+        "position": "G"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "BAB07A78-49E9-40CE-B1B0-9CB91A57B691",
+        "name": "Tomáš Zikmund",
+        "number": 94,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "1BCA9821-3076-4B57-99FF-16699925DC45",
+        "name": "Jakub Voslář",
+        "number": 24,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "71202821-937A-4EE5-B0F3-233F565D0B38",
+        "name": "Petr Kadlec",
+        "number": 12,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "5325E0D0-65A3-11EE-A3B9-A793F763BE58",
+        "name": "Marek Wimmer",
+        "number": 89,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "BC1FF5C0-643E-46EA-8814-B1C2803798DC",
+        "name": "Marek Nejedlý",
+        "number": 18,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+        "name": "Jaromír Vacek",
+        "number": 63,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "0B82ED40-4A46-11EE-BCF4-89F908A00E12",
+        "name": "Petr Benzl",
+        "number": 20,
+        "position": "Ú"
+      }
+    ],
+    "events": [
+      {
+        "type": "penalty",
+        "period": "2",
+        "time": "15:48",
+        "sec": 948,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "59DB22A0-9BB2-4428-AEC8-2B829BD80220",
+          "name": "Robert Kysela",
+          "number": 17
+        },
+        "duration": "1:45",
+        "reason": "Napadení"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "17:47",
+        "sec": 1067,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "scorer": {
+          "playerId": "401E1A20-2FEB-11F0-A074-D54B116105BC",
+          "name": "Jakub Vožeh",
+          "number": 4
+        },
+        "assists": [
+          {
+            "playerId": "94735EA0-A533-11F1-AEB1-F75ACD055096",
+            "name": "Martin Vrbka",
+            "number": 39
+          },
+          {
+            "playerId": "5B9DCC80-4344-11EF-862B-9F1C7F83A93C",
+            "name": "Jakub Vlček",
+            "number": 13
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "20:08",
+        "sec": 1208,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "scorer": {
+          "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+          "name": "Ondřej Babka",
+          "number": 44
+        },
+        "assists": [
+          {
+            "playerId": "33CAC320-6014-4122-9474-12A947AEA8C3",
+            "name": "Luděk Bureš",
+            "number": 33
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "penalty",
+        "period": "2",
+        "time": "24:02",
+        "sec": 1442,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "player": {
+          "playerId": "61D95EC0-8E53-11EF-862A-192122876EED",
+          "name": "Martin Znamenáček",
+          "number": 88
+        },
+        "duration": "1:45",
+        "reason": "Hrubost"
+      },
+      {
+        "type": "penalty",
+        "period": "2",
+        "time": "24:02",
+        "sec": 1442,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+          "name": "Jaromír Vacek",
+          "number": 63
+        },
+        "duration": "1:45",
+        "reason": "Hrubost"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "25:56",
+        "sec": 1556,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "scorer": {
+          "playerId": "BAB07A78-49E9-40CE-B1B0-9CB91A57B691",
+          "name": "Tomáš Zikmund",
+          "number": 94
+        },
+        "assists": [
+          {
+            "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+            "name": "Ondřej Babka",
+            "number": 44
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "28:35",
+        "sec": 1715,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "scorer": {
+          "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+          "name": "Ondřej Babka",
+          "number": 44
+        },
+        "assists": [
+          {
+            "playerId": "71202821-937A-4EE5-B0F3-233F565D0B38",
+            "name": "Petr Kadlec",
+            "number": 12
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "goal",
+        "period": "3",
+        "time": "35:10",
+        "sec": 2110,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "scorer": {
+          "playerId": "BAB07A78-49E9-40CE-B1B0-9CB91A57B691",
+          "name": "Tomáš Zikmund",
+          "number": 94
+        },
+        "assists": [
+          {
+            "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+            "name": "Ondřej Babka",
+            "number": 44
+          },
+          {
+            "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+            "name": "Jaromír Vacek",
+            "number": 63
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "39:42",
+        "sec": 2382,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "player": {
+          "playerId": "3EC175B0-BD3F-11EF-B96E-47CBB009A025",
+          "name": "Zdeněk Soukup",
+          "number": 23
+        },
+        "duration": "1:45",
+        "reason": "Podrážení"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "42:30",
+        "sec": 2550,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+          "name": "Jaromír Vacek",
+          "number": 63
+        },
+        "duration": "1:45",
+        "reason": "Nedovolené bránění"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "42:47",
+        "sec": 2567,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "player": {
+          "playerId": "3EC175B0-BD3F-11EF-B96E-47CBB009A025",
+          "name": "Zdeněk Soukup",
+          "number": 23
+        },
+        "duration": "1:45",
+        "reason": "Sekání"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "44:16",
+        "sec": 2656,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "59DB22A0-9BB2-4428-AEC8-2B829BD80220",
+          "name": "Robert Kysela",
+          "number": 17
+        },
+        "duration": "1:45",
+        "reason": "Sekání"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "44:58",
+        "sec": 2698,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "33CAC320-6014-4122-9474-12A947AEA8C3",
+          "name": "Luděk Bureš",
+          "number": 33
+        },
+        "duration": "1:45",
+        "reason": "Hákování"
+      }
+    ]
+  },
   "F631A36E-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 3,
     "homeNick": "Taste",
