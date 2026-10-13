@@ -92,5 +92,16 @@
       "V tabulce se nejvíc posunuli HC Alligators z 14. na 11. místo, HC Raptors ze 7. na 5. místo a HC Car-Back z 15. na 13. místo. Strašáci a Winter Foxes se v neděli rozešli smírně 2:2.",
       "Pro nás to byl těžký týden. S HC Raptors jsme prohráli 0:6 a v neděli s Gaston Seals 0:7, takže jsme bez vstřeleného gólu. Teď jsme devátí ze 17 týmů se šesti body, takže je pořád za co hrát. "
     ]
+  },
+  "round:2026-10-12": {
+    "key": "0e2f462b6a97e057",
+    "model": "claude-code",
+    "generatedAt": "2026-10-13T05:06:16.021Z",
+    "summary": "Týden 12.–18. října se teprve rozjíždí: zatím se odehrály dva zápasy a padlo v nich čtrnáct gólů. Golden Bears drží vedení se 14 body ze 7 zápasů a my jsme zatím bez zápasu a držíme 9. místo.",
+    "narrative": [
+      "V pondělí se hrály zatím jediné dva zápasy týdne. HC Car-Back porazil HC Rekreanti Praha 3:1 a posunul se z 13. na 11. místo, což je zatím největší posun v tabulce. Rekreanti šli do zápasu jako šestnáctí.",
+      "Střelecky se pobavili v zápase Projektového ústavu s HC Raptors. Raptors vyhráli 6:4 a a celkem v něm padlo deset gólů, nejvíc z obou zápasů. Žádné velké překvapení to ale nebylo, Raptors byli před týdnem pátí, Projektový ústav patnáctý.",
+      "Na čele tabulky se nic nehýbe: Golden Bears vedou se 14 body po sedmi zápasech. My jsme tento týden zatím nenastoupili, stojíme na 9. místě mezi sedmnácti týmy se 6 body a týden teprve čeká na další zápasy."
+    ]
   }
 }
