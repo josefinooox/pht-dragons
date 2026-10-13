@@ -2,14 +2,14 @@
   {
     "rank": 1,
     "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
-    "played": 7,
-    "wins": 7,
+    "played": 8,
+    "wins": 8,
     "draws": 0,
     "losses": 0,
-    "points": 14,
-    "goalsFor": 58,
-    "goalsAgainst": 15,
-    "penaltyMinutes": 44.25
+    "points": 16,
+    "goalsFor": 68,
+    "goalsAgainst": 19,
+    "penaltyMinutes": 46
   },
   {
     "rank": 2,
@@ -109,6 +109,18 @@
   },
   {
     "rank": 10,
+    "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+    "played": 7,
+    "wins": 3,
+    "draws": 0,
+    "losses": 4,
+    "points": 6,
+    "goalsFor": 25,
+    "goalsAgainst": 52,
+    "penaltyMinutes": 57.75
+  },
+  {
+    "rank": 11,
     "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
     "played": 4,
     "wins": 2,
@@ -120,7 +132,7 @@
     "penaltyMinutes": 19.25
   },
   {
-    "rank": 11,
+    "rank": 12,
     "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
     "played": 7,
     "wins": 2,
@@ -132,7 +144,7 @@
     "penaltyMinutes": 31.5
   },
   {
-    "rank": 12,
+    "rank": 13,
     "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
     "played": 7,
     "wins": 1,
@@ -144,28 +156,16 @@
     "penaltyMinutes": 19.25
   },
   {
-    "rank": 13,
-    "teamId": "1004F911-326D-4952-8D08-B07517442A86",
-    "played": 6,
-    "wins": 2,
-    "draws": 0,
-    "losses": 4,
-    "points": 4,
-    "goalsFor": 20,
-    "goalsAgainst": 48,
-    "penaltyMinutes": 52.5
-  },
-  {
     "rank": 14,
     "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
-    "played": 5,
+    "played": 6,
     "wins": 1,
     "draws": 0,
-    "losses": 4,
+    "losses": 5,
     "points": 2,
-    "goalsFor": 24,
-    "goalsAgainst": 20,
-    "penaltyMinutes": 22.75
+    "goalsFor": 28,
+    "goalsAgainst": 25,
+    "penaltyMinutes": 24.5
   },
   {
     "rank": 15,
@@ -194,13 +194,13 @@
   {
     "rank": 17,
     "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
-    "played": 5,
+    "played": 6,
     "wins": 0,
     "draws": 0,
-    "losses": 5,
+    "losses": 6,
     "points": 0,
-    "goalsFor": 6,
-    "goalsAgainst": 79,
-    "penaltyMinutes": 15.25
+    "goalsFor": 10,
+    "goalsAgainst": 89,
+    "penaltyMinutes": 17
   }
 ]

@@ -1490,11 +1490,11 @@
     "date": "2026-10-13",
     "time": "21:15",
     "start": "2026-10-13T21:15:00+02:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
     "awayTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
     "homeGoals": 4,
-    "awayGoals": 9,
+    "awayGoals": 10,
     "venue": "ICEARENA Kateřinky",
     "stars": [
       {
@@ -1518,13 +1518,26 @@
     "date": "2026-10-13",
     "time": "21:30",
     "start": "2026-10-13T21:30:00+02:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
     "awayTeamId": "1004F911-326D-4952-8D08-B07517442A86",
-    "homeGoals": 1,
+    "homeGoals": 4,
     "awayGoals": 5,
     "venue": "ICERINK (Red)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "number": 12,
+        "firstName": "Peter",
+        "lastName": "Legnavský"
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "number": 70,
+        "firstName": "Petr",
+        "lastName": "Skalník"
+      }
+    ]
   },
   {
     "gameId": "F630E011-98CA-11F1-8BDF-EF2495D048F3",
@@ -1536,8 +1549,8 @@
     "status": "running",
     "homeTeamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
     "awayTeamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
-    "homeGoals": 0,
-    "awayGoals": 0,
+    "homeGoals": 1,
+    "awayGoals": 3,
     "venue": "Sportovní hala Fortuna",
     "stars": []
   },
