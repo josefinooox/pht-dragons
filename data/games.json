@@ -1496,7 +1496,20 @@
     "homeGoals": 4,
     "awayGoals": 9,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+        "number": 48,
+        "firstName": "František",
+        "lastName": "Heřman"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "number": 93,
+        "firstName": "Martin",
+        "lastName": "Kefurt"
+      }
+    ]
   },
   {
     "gameId": "F6321892-98CA-11F1-8BDF-EF2495D048F3",
