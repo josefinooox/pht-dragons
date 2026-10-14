@@ -5935,7 +5935,7 @@
   },
   "F62D84B6-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1791997156170,
+    "checkedAt": 1791998663351,
     "complete": true,
     "goals": [
       {
@@ -15202,7 +15202,7 @@
   },
   "F6321892-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1791997156481,
+    "checkedAt": 1791998663723,
     "complete": true,
     "goals": [
       {
@@ -15217,6 +15217,11 @@
             "playerId": "8CBC7FB0-B6DF-11EE-85A4-FD1FD0BE8FA1",
             "name": "Martin Zvoníček",
             "number": 3
+          },
+          {
+            "playerId": "43B8EE00-5331-11EE-9D2A-8132BCBD7336",
+            "name": "Michal Šťastný",
+            "number": 99
           }
         ]
       },
