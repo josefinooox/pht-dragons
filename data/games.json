@@ -1577,10 +1577,23 @@
     "status": "running",
     "homeTeamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
     "awayTeamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
-    "homeGoals": 5,
+    "homeGoals": 7,
     "awayGoals": 0,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "number": 31,
+        "firstName": "Michal",
+        "lastName": "Zamlinský"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "number": 38,
+        "firstName": "Martin",
+        "lastName": "Švančárek"
+      }
+    ]
   },
   {
     "gameId": "F62EE449-98CA-11F1-8BDF-EF2495D048F3",
@@ -1589,11 +1602,11 @@
     "date": "2026-10-14",
     "time": "19:45",
     "start": "2026-10-14T19:45:00+02:00",
-    "status": "scheduled",
+    "status": "running",
     "homeTeamId": "053398E3-FF69-470F-87F2-7D570FF36820",
     "awayTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 1,
+    "awayGoals": 0,
     "venue": "ICEARENA Kateřinky",
     "stars": []
   },
