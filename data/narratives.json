@@ -59,6 +59,18 @@
       "Na střely jsme prohráli 17:26 a branku soupeře se nám tentokrát překonat nepodařilo. Nejlepším hráčem za nás byl vyhlášen Tomáš Pražan."
     ]
   },
+  "F630E011-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "2a70f1c1e2d005ae",
+    "model": "claude-code",
+    "generatedAt": "2026-10-14T05:06:35.285Z",
+    "summary": "S HC Strašáci jsme v úterý prohráli 1:4. Do vedení jsme šli gólem Jakuba Vožeha, ale ve druhé třetině soupeř tři góly v řadě otočil a Ondřej Babka na nich měl podíl u všech tří.",
+    "narrative": [
+      "Zápas se Strašáky na Sportovní hale Fortuna začal bez gólů, první třetina skončila 0:0. Ani jedna strana se nedokázala prosadit.",
+      "Ve druhé třetině jsme se dočkali. V 18. minutě otevřel skóre Jakub Vožeh po přihrávkách Martina Vrbky a Jakuba Vlčka a vedli jsme 1:0. Jenže radost nevydržela dlouho: už ve 21. minutě vyrovnal Ondřej Babka a v 26. minutě poslal Tomáš Zikmund Strašáky do vedení.",
+      "Ve 29. minutě pak Babka přidal svůj druhý gól a bylo 1:3. Ze stavu 1:0 jsme tak během pár minut skončili o dva góly pozadu. Ve třetí třetině přidal Zikmund ve 36. minutě druhý gól a bylo 1:4, což zůstalo až do konce.",
+      "Na střely jsme prohráli 22:33 a vhazování šlo za soupeřem 18:15. Přesilovky nerozhodly, ani jeden tým v nich nedal gól. Za nás byl hvězdou zápasu vyhlášen Jakub Vožeh, za soupeře Tomáš Zikmund. Babka zapsal dva góly a dvě asistence, tentokrát byli lepší Strašáci."
+    ]
+  },
   "F631A36E-98CA-11F1-8BDF-EF2495D048F3": {
     "key": "220e24c9d5eb638c",
     "model": "claude-code",
@@ -94,14 +106,14 @@
     ]
   },
   "round:2026-10-12": {
-    "key": "0e2f462b6a97e057",
+    "key": "8c73c5eebcc8059a",
     "model": "claude-code",
-    "generatedAt": "2026-10-13T05:06:16.021Z",
-    "summary": "Týden 12.–18. října se teprve rozjíždí: zatím se odehrály dva zápasy a padlo v nich čtrnáct gólů. Golden Bears drží vedení se 14 body ze 7 zápasů a my jsme zatím bez zápasu a držíme 9. místo.",
+    "generatedAt": "2026-10-14T05:06:35.286Z",
+    "summary": "V týdnu 12.–18. října se v naší skupině odehrálo pět zápasů a Golden Bears si na Mechenice Caesars připsali nejvyšší výhru 10:4. My jsme v úterý prohráli s HC Strašáci 1:4 a jsme devátí.",
     "narrative": [
-      "V pondělí se hrály zatím jediné dva zápasy týdne. HC Car-Back porazil HC Rekreanti Praha 3:1 a posunul se z 13. na 11. místo, což je zatím největší posun v tabulce. Rekreanti šli do zápasu jako šestnáctí.",
-      "Střelecky se pobavili v zápase Projektového ústavu s HC Raptors. Raptors vyhráli 6:4 a a celkem v něm padlo deset gólů, nejvíc z obou zápasů. Žádné velké překvapení to ale nebylo, Raptors byli před týdnem pátí, Projektový ústav patnáctý.",
-      "Na čele tabulky se nic nehýbe: Golden Bears vedou se 14 body po sedmi zápasech. My jsme tento týden zatím nenastoupili, stojíme na 9. místě mezi sedmnácti týmy se 6 body a týden teprve čeká na další zápasy."
+      "Týden byl bohatý na góly, ve všech pěti zápasech jich padlo dohromady 42. Nejvýraznější byla výhra lídra: Golden Bears porazili Mechenice Caesars 10:4. Golden Bears vedou tabulku s 16 body z osmi zápasů a ani po tomto týdnu se na čele nic nezměnilo.",
+      "Ostatní výsledky: HC Car-Back vyhrál nad HC Rekreanti Praha 3:1, HC Raptors zvítězili v Projektovém ústavu 6:4 a HC Taste vyhrál těsně 5:4 nad Prague Pigeons B. Taste se díky tomu v tabulce posunuli z 12. na 10. místo. Naopak Winter Foxes klesli ze čtvrtého na šesté místo a HC Alligators z 11. na 13.",
+      "My jsme v úterý podlehli HC Strašáci 1:4. Strašáci byli před týdnem šestí, my devátí, a po zápase jsme zůstali na devátém místě se šesti body. Tabulka je těsná, takže se to dá rychle zase obrátit."
     ]
   }
 }
