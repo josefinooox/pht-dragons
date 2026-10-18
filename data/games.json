@@ -1661,10 +1661,23 @@
     "status": "running",
     "homeTeamId": "1004F911-326D-4952-8D08-B07517442A86",
     "awayTeamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
-    "homeGoals": 0,
-    "awayGoals": 0,
+    "homeGoals": 4,
+    "awayGoals": 5,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "number": 12,
+        "firstName": "Peter",
+        "lastName": "Legnavský"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "number": 85,
+        "firstName": "Pavel",
+        "lastName": "Reznák"
+      }
+    ]
   },
   {
     "gameId": "F62C9A51-98CA-11F1-8BDF-EF2495D048F3",
