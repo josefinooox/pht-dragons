@@ -2242,6 +2242,450 @@
       }
     ]
   },
+  "F62A5067-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 1,
+    "checkedAt": 1792346925762,
+    "complete": true,
+    "goals": [
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "scorer": {
+          "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+          "name": "Peter Legnavský",
+          "number": 12
+        },
+        "assists": [
+          {
+            "playerId": "9BC29554-0D08-4BA5-B018-8A0B59F3B8E9",
+            "name": "Jan Veselý",
+            "number": 97
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+          "name": "Gamil Sharafutdinov",
+          "number": 97
+        },
+        "assists": [
+          {
+            "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+            "name": "Jáchym Rezek",
+            "number": 25
+          },
+          {
+            "playerId": "1A7A9257-88E7-4E00-B2E8-70835B28DBDF",
+            "name": "Pavel Reznák",
+            "number": 85
+          }
+        ]
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "scorer": {
+          "playerId": "AF065CF0-84CC-11F0-AC23-B1E6886F6516",
+          "name": "Marek Langhammer",
+          "number": 43
+        },
+        "assists": [
+          {
+            "playerId": "43B8EE00-5331-11EE-9D2A-8132BCBD7336",
+            "name": "Michal Šťastný",
+            "number": 99
+          },
+          {
+            "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+            "name": "Peter Legnavský",
+            "number": 12
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9E00CC65-FACC-4D77-A97B-7CE27120FB42",
+          "name": "Vít Veverka",
+          "number": 13
+        },
+        "assists": [
+          {
+            "playerId": "895EB7AE-E34E-4B79-A3FD-DCE75B7DC742",
+            "name": "Mário Ábel",
+            "number": 61
+          },
+          {
+            "playerId": "23BB005F-971B-4B91-90CF-079836A489C0",
+            "name": "Martin Fabík",
+            "number": 88
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+          "name": "Jáchym Rezek",
+          "number": 25
+        },
+        "assists": [
+          {
+            "playerId": "1A7A9257-88E7-4E00-B2E8-70835B28DBDF",
+            "name": "Pavel Reznák",
+            "number": 85
+          }
+        ]
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "scorer": {
+          "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+          "name": "Peter Legnavský",
+          "number": 12
+        },
+        "assists": [
+          {
+            "playerId": "AF065CF0-84CC-11F0-AC23-B1E6886F6516",
+            "name": "Marek Langhammer",
+            "number": 43
+          },
+          {
+            "playerId": "43B8EE00-5331-11EE-9D2A-8132BCBD7336",
+            "name": "Michal Šťastný",
+            "number": 99
+          }
+        ]
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "scorer": {
+          "playerId": "AF065CF0-84CC-11F0-AC23-B1E6886F6516",
+          "name": "Marek Langhammer",
+          "number": 43
+        },
+        "assists": [
+          {
+            "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+            "name": "Peter Legnavský",
+            "number": 12
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+          "name": "Jáchym Rezek",
+          "number": 25
+        },
+        "assists": [
+          {
+            "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+            "name": "Gamil Sharafutdinov",
+            "number": 97
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+          "name": "Gamil Sharafutdinov",
+          "number": 97
+        },
+        "assists": [
+          {
+            "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+            "name": "Jáchym Rezek",
+            "number": 25
+          },
+          {
+            "playerId": "1A7A9257-88E7-4E00-B2E8-70835B28DBDF",
+            "name": "Pavel Reznák",
+            "number": 85
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+          "name": "Jáchym Rezek",
+          "number": 25
+        },
+        "assists": [
+          {
+            "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+            "name": "Gamil Sharafutdinov",
+            "number": 97
+          },
+          {
+            "playerId": "1A7A9257-88E7-4E00-B2E8-70835B28DBDF",
+            "name": "Pavel Reznák",
+            "number": 85
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+          "name": "Jáchym Rezek",
+          "number": 25
+        },
+        "assists": [
+          {
+            "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+            "name": "Gamil Sharafutdinov",
+            "number": 97
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9E00CC65-FACC-4D77-A97B-7CE27120FB42",
+          "name": "Vít Veverka",
+          "number": 13
+        },
+        "assists": [
+          {
+            "playerId": "895EB7AE-E34E-4B79-A3FD-DCE75B7DC742",
+            "name": "Mário Ábel",
+            "number": 61
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+          "name": "Jáchym Rezek",
+          "number": 25
+        },
+        "assists": []
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "scorer": {
+          "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+          "name": "Peter Legnavský",
+          "number": 12
+        },
+        "assists": [
+          {
+            "playerId": "AF065CF0-84CC-11F0-AC23-B1E6886F6516",
+            "name": "Marek Langhammer",
+            "number": 43
+          }
+        ]
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "scorer": {
+          "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+          "name": "Jáchym Rezek",
+          "number": 25
+        },
+        "assists": [
+          {
+            "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+            "name": "Gamil Sharafutdinov",
+            "number": 97
+          },
+          {
+            "playerId": "1A7A9257-88E7-4E00-B2E8-70835B28DBDF",
+            "name": "Pavel Reznák",
+            "number": 85
+          }
+        ]
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "scorer": {
+          "playerId": "43B8EE00-5331-11EE-9D2A-8132BCBD7336",
+          "name": "Michal Šťastný",
+          "number": 99
+        },
+        "assists": [
+          {
+            "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+            "name": "Peter Legnavský",
+            "number": 12
+          },
+          {
+            "playerId": "AF065CF0-84CC-11F0-AC23-B1E6886F6516",
+            "name": "Marek Langhammer",
+            "number": 43
+          }
+        ]
+      }
+    ],
+    "lineup": [
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "895EB7AE-E34E-4B79-A3FD-DCE75B7DC742",
+        "name": "Mário Ábel",
+        "number": 61,
+        "position": "Ú"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "CD7B7094-74B8-42B4-B656-63A60B71631C",
+        "name": "Radek Postupa",
+        "number": 77,
+        "position": "O"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "05B79466-206C-4F07-82DE-12B9175B1FEF",
+        "name": "Jiří Ulbrich",
+        "number": 38,
+        "position": "O"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "EBAA09F5-54D6-43E7-B4BD-B0DA36B9003D",
+        "name": "Martin Zbránek",
+        "number": 34,
+        "position": "Ú"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "9355E930-5BC5-11EE-815E-33DF03E6C622",
+        "name": "Jáchym Rezek",
+        "number": 25,
+        "position": "Ú"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "23BB005F-971B-4B91-90CF-079836A489C0",
+        "name": "Martin Fabík",
+        "number": 88,
+        "position": "O"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "6A06C930-F69E-11EF-A10C-FF640EAA3149",
+        "name": "Gamil Sharafutdinov",
+        "number": 97,
+        "position": "Ú"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "5127AA20-5F65-4EA1-82B5-5167A4BAA434",
+        "name": "Petr Pilař",
+        "number": 84,
+        "position": "O"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "1A7A9257-88E7-4E00-B2E8-70835B28DBDF",
+        "name": "Pavel Reznák",
+        "number": 85,
+        "position": "Ú"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "9E00CC65-FACC-4D77-A97B-7CE27120FB42",
+        "name": "Vít Veverka",
+        "number": 13,
+        "position": "Ú"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "54BF0A86-9420-45DE-89CF-C4F183C348A4",
+        "name": "Robert Švalbach",
+        "number": 33,
+        "position": "G"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "playerId": "B6013B28-D6E0-4AB1-8AC5-84549B310C0D",
+        "name": "Michal Kapcala",
+        "number": 27,
+        "position": "O"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "43B8EE00-5331-11EE-9D2A-8132BCBD7336",
+        "name": "Michal Šťastný",
+        "number": 99,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "1FF924EC-71D1-4D5E-AB10-CE014B12EEDD",
+        "name": "Kryštof Knorr",
+        "number": 48,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "9BC29554-0D08-4BA5-B018-8A0B59F3B8E9",
+        "name": "Jan Veselý",
+        "number": 97,
+        "position": "O"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "CC7CDBA9-63C1-40F6-BE2D-2D83019456F1",
+        "name": "Peter Legnavský",
+        "number": 12,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "FE1B22DC-DCD6-403F-AC72-5B308DFBBFCC",
+        "name": "Marek Blaževič",
+        "number": 9,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "0A633FE0-4CCC-11EE-B18C-19428222FF1A",
+        "name": "Michal Malík",
+        "number": 98,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "B3BE0E98-C1E7-42C8-A60B-5D347073EE95",
+        "name": "Tomáš Jícha",
+        "number": 7,
+        "position": "O"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "2E35039F-45ED-4999-A8C5-3A04D3E396C3",
+        "name": "Michal Dráb",
+        "number": 70,
+        "position": "G"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "0B21A9B0-CA61-11F1-99FA-E3FDDC4A94B4",
+        "name": "Jiří Vávra",
+        "number": 66,
+        "position": null
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "AF065CF0-84CC-11F0-AC23-B1E6886F6516",
+        "name": "Marek Langhammer",
+        "number": 43,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "playerId": "9740958D-CB73-4FE7-A9AB-453386B88B20",
+        "name": "Filip Semrád",
+        "number": 3,
+        "position": "O"
+      }
+    ]
+  },
   "F62A7770-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
     "checkedAt": 1791577758041,
@@ -6974,7 +7418,7 @@
   },
   "F62DF9E0-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1792345549944,
+    "checkedAt": 1792346925414,
     "complete": true,
     "goals": [],
     "lineup": [
