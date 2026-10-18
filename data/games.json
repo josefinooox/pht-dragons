@@ -1636,7 +1636,20 @@
     "homeGoals": 0,
     "awayGoals": 0,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "number": 1,
+        "firstName": "Ondřej",
+        "lastName": "Frössl"
+      },
+      {
+        "teamId": "3F423CC6-FBE3-4999-9234-0000F5BC5E8C",
+        "number": 1,
+        "firstName": "Miroslav",
+        "lastName": "Bílek"
+      }
+    ]
   },
   {
     "gameId": "F62A5067-98CA-11F1-8BDF-EF2495D048F3",
