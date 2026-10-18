@@ -1661,8 +1661,8 @@
     "status": "running",
     "homeTeamId": "1004F911-326D-4952-8D08-B07517442A86",
     "awayTeamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
-    "homeGoals": 4,
-    "awayGoals": 5,
+    "homeGoals": 5,
+    "awayGoals": 10,
     "venue": "ICERINK (Yellow)",
     "stars": [
       {
