@@ -1718,7 +1718,7 @@
     "homeTeamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
     "awayTeamId": "053398E3-FF69-470F-87F2-7D570FF36820",
     "homeGoals": 1,
-    "awayGoals": 0,
+    "awayGoals": 1,
     "venue": "ICEARENA Kateřinky",
     "stars": []
   },
@@ -1729,11 +1729,11 @@
     "date": "2026-10-19",
     "time": "20:00",
     "start": "2026-10-19T20:00:00+02:00",
-    "status": "scheduled",
+    "status": "running",
     "homeTeamId": "7B35DB20-5849-11F1-9FC5-B7618A8B7F6A",
     "awayTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 1,
+    "awayGoals": 1,
     "venue": "SPM Aréna",
     "stars": []
   },
