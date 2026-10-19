@@ -12,6 +12,18 @@
       "Na střely jsme prohráli 13:42, ve vhazování to bylo vyrovnané, 15:16 pro soupeře. Trestné minuty měly oba týmy stejně, 1:45. Za nás byl hvězdou zápasu vyhlášen Josef Zimanzl. Příště to chceme otočit."
     ]
   },
+  "F62C9A51-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "2f5e15ab7fafd904",
+    "model": "claude-code",
+    "generatedAt": "2026-10-19T05:15:41.304Z",
+    "summary": "S HC Alligators jsme v neděli 18. října vyhráli 5:1 a rozhodli to už v první třetině, kde jsme vedli 3:0. Dvěma góly se postaral Pavel Dorničák, kterého liga vyhlásila hvězdou zápasu.",
+    "narrative": [
+      "V SPM Aréně jsme to rozjeli, jak se patří. Už ve 3. minutě otevřel skóre Josef Zimanzl a bylo 1:0. V 10. minutě pak zvýšil Pavel Dorničák po přihrávce Martina Vrbky na 2:0.",
+      "Hned o minutu později přidal další gól Jakub Vožeh, kterému přihrával David Štros, a bylo 3:0. První třetinu jsme tak vyhráli 3:0 a Alligators měli co dohánět. Ve 14. minutě šel navíc na trestnou lavici Milan Kovář za podrážení.",
+      "Ve druhé třetině se soupeř dočkal. V 18. minutě snížil Martin Žák na 3:1. Odpověď přišla v 26. minutě, kdy David Štros po přihrávkách Jakuba Vlčka a Martina Vrbky vrátil náš náskok na 4:1. Druhá třetina skončila 1:1.",
+      "Ve třetí třetině jsme už nic nepustili a ve 31. minutě zlomil zápas definitivně Pavel Dorničák, který si připsal druhý gól večera, 5:1. Střel bylo skoro stejně, my jsme jich měli 26 a Alligators 25. Rozdíl byl v tom, jak jsme využili začátek zápasu. Dorničák byl právem vyhlášen hvězdou zápasu a Martin Vrbka přidal dvě asistence."
+    ]
+  },
   "F62D5DA8-98CA-11F1-8BDF-EF2495D048F3": {
     "key": "54375bc4a75546e9",
     "model": "claude-code",
@@ -106,14 +118,14 @@
     ]
   },
   "round:2026-10-12": {
-    "key": "9dd9d36911e75225",
+    "key": "c6a7fc1dc9cc1ec3",
     "model": "claude-code",
-    "generatedAt": "2026-10-15T05:05:45.305Z",
-    "summary": "Týden 12.–18. října zatím přinesl sedm zápasů a 53 gólů, největší porci dostali Gaston Seals od HC Gladiators (0:7). My jsme doma prohráli s HC Strašáci 1:4 a jsme desátí.",
+    "generatedAt": "2026-10-19T05:15:41.305Z",
+    "summary": "V týdnu 12.–18. října jsme si připsali jednu prohru s HC Strašáci 1:4 a pak výhru 5:1 nad HC Alligators, díky které jsme poskočili z 9. na 7. místo. Tabulce stále vládne Golden Bears, kteří vyhráli 10:4 u Mechenice Caesars.",
     "narrative": [
-      "Týden je teprve rozehraný, ale střelců si užil dost: v sedmi zápasech padlo 53 gólů. Nejvyšší výhru si připsali HC Gladiators, kteří doma vyprali Gaston Seals 7:0. Golden Bears zase v Mechenicích vyhráli 10:4 a s 16 body po osmi zápasech drží vedení v tabulce. Střelecky nejbohatší zápas týdne byl právě ten, 14 gólů.",
-      "Gólů bylo dost i jinde. HC Raptors vyhráli v Projektovém ústavu 6:4, HC Car-Back porazili HC Rekreanti Praha 3:1 a HC Taste urvali těsnou výhru 5:4 na ledě Prague Pigeons B. HC Prague Wolves B si s Winter Foxes rozdělili body za 2:2. Wolves se v tabulce posunuli z desátého na osmé místo, naopak Winter Foxes klesli ze čtvrtého na šesté a HC Alligators ze 11. na 13.",
-      "My jsme doma nastoupili proti HC Strašáci a prohráli jsme 1:4. Strašáci byli před týdnem šestí, my jsme teď na 10. místě se šesti body ze sedmnácti týmů. Není to nic, co by se nedalo spravit, tak ať další zápas přinese lepší zprávy."
+      "Týden začal tak, že jsme v úterý podlehli HC Strašáci 1:4, ale v neděli jsme to napravili a HC Alligators jsme porazili 5:1. Po těch dvou zápasech máme 8 bodů a sedmé místo ze sedmnácti, o dvě místa výš než před týdnem.",
+      "Nejvyšší výhru týdne si připsal HC Gladiators, který rozstřílel Gaston Seals 7:0. Gólů padlo nejvíc v zápase HC Taste s HC Ducks Stars, kde vyhrál hostující tým 10:6. Golden Bears vyhráli 10:4 u Mechenice Caesars. Překvapení podle pořadí v tabulce se tentokrát nekonalo.",
+      "V tabulce se kromě nás posunul nahoru HC Car-Back, který stoupl z 13. na 11. místo. Naopak Winter Foxes klesli ze 4. na 6. místo. Čelo drží beze změny Golden Bears, kteří mají po osmi zápasech 16 bodů. Prague Pigeons B a HC Car-Back si v neděli nevstřelili ani gól a remizovali 0:0."
     ]
   }
 }
