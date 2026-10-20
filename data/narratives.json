@@ -127,5 +127,16 @@
       "Nejvyšší výhru týdne si připsal HC Gladiators, který rozstřílel Gaston Seals 7:0. Gólů padlo nejvíc v zápase HC Taste s HC Ducks Stars, kde vyhrál hostující tým 10:6. Golden Bears vyhráli 10:4 u Mechenice Caesars. Překvapení podle pořadí v tabulce se tentokrát nekonalo.",
       "V tabulce se kromě nás posunul nahoru HC Car-Back, který stoupl z 13. na 11. místo. Naopak Winter Foxes klesli ze 4. na 6. místo. Čelo drží beze změny Golden Bears, kteří mají po osmi zápasech 16 bodů. Prague Pigeons B a HC Car-Back si v neděli nevstřelili ani gól a remizovali 0:0."
     ]
+  },
+  "round:2026-10-19": {
+    "key": "eb6a9858ca3c0065",
+    "model": "claude-code",
+    "generatedAt": "2026-10-20T05:15:44.121Z",
+    "summary": "Týden začal třemi zápasy v pondělí a nejhlasitější byl výprask, který Golden Bears uštědřili Gladiators 9:1. Překvapení dodal Projektový ústav, který vyhrál 9:6 u Scorpions Praha a posunul se z 15. na 13. místo. My jsme zatím nehráli a držíme sedmé místo s 8 body.",
+    "narrative": [
+      "Pondělí přineslo tři zápasy a dohromady 32 gólů, takže nudit se nikdo nemusel. HC Raptors porazili HC Prague Wolves B těsně 4:3, a to byla v podstatě jediná vyrovnaná partie dne. Raptors šli do zápasu jako čtvrtí, Wolves B jako devátí.",
+      "Největší rána týdne padla v souboji dvou nejlepších týmů před kolem: Golden Bears, kteří vedou tabulku, smetli druhé Gladiators 9:1. Bears mají po devíti zápasech 18 bodů a v čele zůstávají. Překvapení ale přišlo jinde: Projektový ústav, který byl před týdnem patnáctý, vyhrál 9:6 na ledě osmých Scorpions Praha a vyškrábal se na 13. místo.",
+      "My jsme v tomhle týdnu zatím na ledě nebyli, takže se pořád držíme na sedmém místě s 8 body. Týden ale teprve začal, tak uvidíme, jestli se do tabulky ještě zapíšeme."
+    ]
   }
 }
