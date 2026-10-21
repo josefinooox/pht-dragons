@@ -1798,13 +1798,26 @@
     "date": "2026-10-21",
     "time": "19:45",
     "start": "2026-10-21T19:45:00+02:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
     "awayTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
-    "homeGoals": 2,
-    "awayGoals": 3,
+    "homeGoals": 3,
+    "awayGoals": 8,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+        "number": 10,
+        "firstName": "Ondřej",
+        "lastName": "Strádal"
+      },
+      {
+        "teamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
+        "number": 3,
+        "firstName": "Jakub",
+        "lastName": "Vožeh"
+      }
+    ]
   },
   {
     "gameId": "F629B427-98CA-11F1-8BDF-EF2495D048F3",
