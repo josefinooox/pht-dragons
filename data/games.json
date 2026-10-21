@@ -1801,8 +1801,8 @@
     "status": "running",
     "homeTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
     "awayTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
-    "homeGoals": 0,
-    "awayGoals": 0,
+    "homeGoals": 2,
+    "awayGoals": 3,
     "venue": "ICEARENA Kateřinky",
     "stars": []
   },
