@@ -1882,13 +1882,26 @@
     "date": "2026-10-25",
     "time": "17:15",
     "start": "2026-10-25T17:15:00+01:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
     "awayTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
     "homeGoals": 1,
-    "awayGoals": 10,
+    "awayGoals": 11,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
+        "number": 3,
+        "firstName": "Zdeněk ",
+        "lastName": "Zezulák"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "number": 4,
+        "firstName": "Jiří",
+        "lastName": "Gabauer"
+      }
+    ]
   },
   {
     "gameId": "F632B4D5-98CA-11F1-8BDF-EF2495D048F3",
