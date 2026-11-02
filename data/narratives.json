@@ -138,5 +138,16 @@
       "Největší překvapení přišlo hned v pondělí: Projektový ústav, tehdy patnáctý, vyhrál na hřišti HC Scorpions Praha 9:6, přestože Scorpions byli v tabulce osmí. Golden Bears k tomu přidali dvě výhry, 9:1 nad druhými HC Gladiators a 8:3 v zápase s Projektovým ústavem, a vedou tabulku s 20 body z deseti zápasů. Za zmínku stojí i výhry HC Raptors 4:3 nad HC Prague Wolves B a HC Strašáci 4:2 nad HC Rekreanti Praha.",
       "My jsme tento týden volno a zůstáváme na osmém místě z 17 týmů s 8 body. Příště je na čase přidat do tabulky další body."
     ]
+  },
+  "round:2026-10-26": {
+    "key": "6182f0693649508d",
+    "model": "claude-code",
+    "generatedAt": "2026-11-02T06:22:09.314Z",
+    "summary": "Týden byl ve skupině klidný, odehrály se jen dva zápasy a my jsme mezi nimi nebyli. Nejvíc zaujalo vysoké vítězství Winter Foxes 8:0 nad Prague Pigeons B.",
+    "narrative": [
+      "Od 26. října do 1. listopadu se v naší skupině odehrály jen dva zápasy, oba v neděli. HC Taste a HC Car-Back si to rozdaly na plné pecky a skončilo to remízou 4:4, tedy osmi góly a bez vítěze.",
+      "Hlavní událost týdne přišla ze druhého zápasu: Winter Foxes rozdrtili Prague Pigeons B 8:0. Foxes tím poskočili z šestého na čtvrté místo tabulky, Car-Back po remíze posunul z jedenáctého na deváté a HC Prague Wolves B naopak klesly z desátého na dvanácté místo.",
+      "V čele tabulky se nic nezměnilo, vede dál Golden Bears s 20 body z deseti zápasů. My jsme tento týden nehráli a zůstáváme osmí s 8 body z celkových 17 týmů."
+    ]
   }
 }
