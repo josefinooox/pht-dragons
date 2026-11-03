@@ -149,5 +149,16 @@
       "Hlavní událost týdne přišla ze druhého zápasu: Winter Foxes rozdrtili Prague Pigeons B 8:0. Foxes tím poskočili z šestého na čtvrté místo tabulky, Car-Back po remíze posunul z jedenáctého na deváté a HC Prague Wolves B naopak klesly z desátého na dvanácté místo.",
       "V čele tabulky se nic nezměnilo, vede dál Golden Bears s 20 body z deseti zápasů. My jsme tento týden nehráli a zůstáváme osmí s 8 body z celkových 17 týmů."
     ]
+  },
+  "round:2026-11-02": {
+    "key": "c0d31e70ba60074c",
+    "model": "claude-code",
+    "generatedAt": "2026-11-03T06:15:37.547Z",
+    "summary": "Týden v lize začal jediným zápasem: HC Gladiators porazili HC Ducks Stars 4:3. My jsme zatím nehráli a držíme osmé místo se 8 body.",
+    "narrative": [
+      "Týden 2.–8. listopadu zatím odstartoval jediný odehraný zápas. HC Gladiators, tehdy třetí v tabulce, přehráli druhý HC Ducks Stars 4:3. Gól rozdílu a sedm branek dohromady, takže se dalo koukat.",
+      "Žádné velké překvapení to nebylo, protože oba týmy patřily před týdnem k tabulkové špici. V pořadí se zatím nic výrazně nepohnulo a vedení drží Golden Bears s 20 body z 10 zápasů.",
+      "Naši kluci tento týden ještě nenastoupili. Jsme osmí z 17 týmů s 8 body, takže je pořád co zlepšovat a hodně se dá změnit v dalších kolech."
+    ]
   }
 }
