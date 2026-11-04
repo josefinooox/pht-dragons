@@ -1994,13 +1994,26 @@
     "date": "2026-11-04",
     "time": "18:45",
     "start": "2026-11-04T18:45:00+01:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
     "awayTeamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
     "homeGoals": 2,
-    "awayGoals": 3,
+    "awayGoals": 4,
     "venue": "ICEARENA Letňany",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "number": 38,
+        "firstName": "Filip",
+        "lastName": "Nováček"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "number": 19,
+        "firstName": "Pavel",
+        "lastName": "Dorničák"
+      }
+    ]
   },
   {
     "gameId": "F631CA70-98CA-11F1-8BDF-EF2495D048F3",
@@ -2009,11 +2022,11 @@
     "date": "2026-11-04",
     "time": "19:45",
     "start": "2026-11-04T19:45:00+01:00",
-    "status": "scheduled",
+    "status": "running",
     "homeTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
     "awayTeamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 7,
+    "awayGoals": 1,
     "venue": "ICEARENA Kateřinky",
     "stars": []
   },

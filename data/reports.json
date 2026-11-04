@@ -775,6 +775,450 @@
       }
     ]
   },
+  "F62CC165-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 3,
+    "homeNick": "Strašáci",
+    "awayNick": "Dragons",
+    "complete": true,
+    "shots": {
+      "home": 31,
+      "away": 27
+    },
+    "faceoffs": {
+      "home": 18,
+      "away": 15
+    },
+    "penaltyMinutes": {
+      "home": 8.75,
+      "away": 1.75
+    },
+    "stars": [
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "7EBBD810-0FD0-11F1-83B6-E36F4E52D436",
+        "name": "Pavel Dorničák",
+        "number": 19,
+        "goals": 2,
+        "assists": 0
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "D7D0F278-ACD4-48DE-A76D-82985B5FCB4E",
+        "name": "Filip Nováček",
+        "number": 38,
+        "goals": 1,
+        "assists": 0
+      }
+    ],
+    "saves": {
+      "home": 23,
+      "away": 29
+    },
+    "lineup": [
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "97ADEF80-6620-11EF-95FA-476577036877",
+        "name": "Jakub Jarošek",
+        "number": 28,
+        "position": "O"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "3A8FBE10-A533-11F1-AEB1-F75ACD055096",
+        "name": "Přemysl Brabec",
+        "number": 49,
+        "position": "O"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "3EC175B0-BD3F-11EF-B96E-47CBB009A025",
+        "name": "Zdeněk Soukup",
+        "number": 23,
+        "position": "O"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "BF238C10-8933-11EF-98A4-DD4AE3BA1FAF",
+        "name": "Vojtěch Chloupek",
+        "number": 9,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "61D95EC0-8E53-11EF-862A-192122876EED",
+        "name": "Martin Znamenáček",
+        "number": 88,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "94735EA0-A533-11F1-AEB1-F75ACD055096",
+        "name": "Martin Vrbka",
+        "number": 39,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "D7337AD0-8957-11EF-98A4-DD4AE3BA1FAF",
+        "name": "David Štros",
+        "number": 17,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "3FB77700-4344-11EF-862B-9F1C7F83A93C",
+        "name": "Jakub Douděra",
+        "number": 77,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "B38D509C-3E09-4C37-86AB-9FE395E413CD",
+        "name": "Michal Kružlík",
+        "number": 1,
+        "position": "G"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "A0A6CED0-2FE8-11F0-A074-D54B116105BC",
+        "name": "Robert Komarovský",
+        "number": 87,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "647F01C0-6950-11EF-A7A8-C329A5CE7DFE",
+        "name": "Michal Lázňovský",
+        "number": 22,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "401E1A20-2FEB-11F0-A074-D54B116105BC",
+        "name": "Jakub Vožeh",
+        "number": 4,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "7EBBD810-0FD0-11F1-83B6-E36F4E52D436",
+        "name": "Pavel Dorničák",
+        "number": 19,
+        "position": "Ú"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "playerId": "99DEC440-F9DC-11F0-8FD7-59EDBBD8BA2F",
+        "name": "Tomáš Pražan",
+        "number": 61,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "71202821-937A-4EE5-B0F3-233F565D0B38",
+        "name": "Petr Kadlec",
+        "number": 12,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "D7D0F278-ACD4-48DE-A76D-82985B5FCB4E",
+        "name": "Filip Nováček",
+        "number": 38,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "1BCA9821-3076-4B57-99FF-16699925DC45",
+        "name": "Jakub Voslář",
+        "number": 24,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "4D736F21-036D-4BDA-BC5D-7F95504C90D4",
+        "name": "Martin Žitník",
+        "number": 10,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "BAB07A78-49E9-40CE-B1B0-9CB91A57B691",
+        "name": "Tomáš Zikmund",
+        "number": 94,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "33CAC320-6014-4122-9474-12A947AEA8C3",
+        "name": "Luděk Bureš",
+        "number": 33,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+        "name": "Ondřej Babka",
+        "number": 44,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "72F462FD-04CC-4273-A0C5-71EFC31202FF",
+        "name": "Matouš Forman",
+        "number": 88,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "5325E0D0-65A3-11EE-A3B9-A793F763BE58",
+        "name": "Marek Wimmer",
+        "number": 89,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "CD7B7094-74B8-42B4-B656-63A60B71631C",
+        "name": "Radek Postupa",
+        "number": 1,
+        "position": "O"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "59DB22A0-9BB2-4428-AEC8-2B829BD80220",
+        "name": "Robert Kysela",
+        "number": 17,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "8AFF7420-7070-11EF-BC0F-FFB3829F1053",
+        "name": "Jan Tichý",
+        "number": 43,
+        "position": "G"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "0B82ED40-4A46-11EE-BCF4-89F908A00E12",
+        "name": "Petr Benzl",
+        "number": 20,
+        "position": "Ú"
+      },
+      {
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+        "name": "Jaromír Vacek",
+        "number": 63,
+        "position": "Ú"
+      }
+    ],
+    "events": [
+      {
+        "type": "goal",
+        "period": "1",
+        "time": "4:29",
+        "sec": 269,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "scorer": {
+          "playerId": "7EBBD810-0FD0-11F1-83B6-E36F4E52D436",
+          "name": "Pavel Dorničák",
+          "number": 19
+        },
+        "assists": [
+          {
+            "playerId": "BF238C10-8933-11EF-98A4-DD4AE3BA1FAF",
+            "name": "Vojtěch Chloupek",
+            "number": 9
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "goal",
+        "period": "1",
+        "time": "9:02",
+        "sec": 542,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "scorer": {
+          "playerId": "647F01C0-6950-11EF-A7A8-C329A5CE7DFE",
+          "name": "Michal Lázňovský",
+          "number": 22
+        },
+        "assists": [
+          {
+            "playerId": "D7337AD0-8957-11EF-98A4-DD4AE3BA1FAF",
+            "name": "David Štros",
+            "number": 17
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "19:26",
+        "sec": 1166,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "scorer": {
+          "playerId": "7EBBD810-0FD0-11F1-83B6-E36F4E52D436",
+          "name": "Pavel Dorničák",
+          "number": 19
+        },
+        "assists": [
+          {
+            "playerId": "3FB77700-4344-11EF-862B-9F1C7F83A93C",
+            "name": "Jakub Douděra",
+            "number": 77
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "penalty",
+        "period": "2",
+        "time": "20:24",
+        "sec": 1224,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "72F462FD-04CC-4273-A0C5-71EFC31202FF",
+          "name": "Matouš Forman",
+          "number": 88
+        },
+        "duration": "1:45",
+        "reason": "Podrážení"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "25:42",
+        "sec": 1542,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "scorer": {
+          "playerId": "72F462FD-04CC-4273-A0C5-71EFC31202FF",
+          "name": "Matouš Forman",
+          "number": 88
+        },
+        "assists": [
+          {
+            "playerId": "A9DB7F28-37BF-48E1-BAAD-F5E4A9222087",
+            "name": "Ondřej Babka",
+            "number": 44
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "penalty",
+        "period": "2",
+        "time": "25:58",
+        "sec": 1558,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "player": {
+          "playerId": "99DEC440-F9DC-11F0-8FD7-59EDBBD8BA2F",
+          "name": "Tomáš Pražan",
+          "number": 61
+        },
+        "duration": "1:45",
+        "reason": "Krosček"
+      },
+      {
+        "type": "goal",
+        "period": "2",
+        "time": "28:21",
+        "sec": 1701,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "scorer": {
+          "playerId": "D7D0F278-ACD4-48DE-A76D-82985B5FCB4E",
+          "name": "Filip Nováček",
+          "number": 38
+        },
+        "assists": [
+          {
+            "playerId": "5325E0D0-65A3-11EE-A3B9-A793F763BE58",
+            "name": "Marek Wimmer",
+            "number": 89
+          }
+        ],
+        "strength": "even"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "33:13",
+        "sec": 1993,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+          "name": "Jaromír Vacek",
+          "number": 63
+        },
+        "duration": "1:45",
+        "reason": "Hákování"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "37:13",
+        "sec": 2233,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "8AF063FF-21EC-4B2C-BA46-1BC6C7725E9C",
+          "name": "Jaromír Vacek",
+          "number": 63
+        },
+        "duration": "1:45",
+        "reason": "Zásah do hlavy nebo krku"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "37:53",
+        "sec": 2273,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "CD7B7094-74B8-42B4-B656-63A60B71631C",
+          "name": "Radek Postupa",
+          "number": 1
+        },
+        "duration": "1:45",
+        "reason": "Nesportovní chování"
+      },
+      {
+        "type": "penalty",
+        "period": "3",
+        "time": "37:53",
+        "sec": 2273,
+        "teamId": "1F80FDBA-3DC1-4F77-87D7-905ADD68B1A3",
+        "player": {
+          "playerId": "CD7B7094-74B8-42B4-B656-63A60B71631C",
+          "name": "Radek Postupa",
+          "number": 1
+        },
+        "duration": "1:45",
+        "reason": "Nedovolené bránění"
+      },
+      {
+        "type": "goal",
+        "period": "3",
+        "time": "38:36",
+        "sec": 2316,
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "scorer": {
+          "playerId": "61D95EC0-8E53-11EF-862A-192122876EED",
+          "name": "Martin Znamenáček",
+          "number": 88
+        },
+        "assists": [
+          {
+            "playerId": "A0A6CED0-2FE8-11F0-A074-D54B116105BC",
+            "name": "Robert Komarovský",
+            "number": 87
+          }
+        ],
+        "strength": "pp"
+      }
+    ]
+  },
   "F62D5DA8-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 3,
     "homeNick": "Dragons",
