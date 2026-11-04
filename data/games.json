@@ -2025,10 +2025,23 @@
     "status": "running",
     "homeTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
     "awayTeamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
-    "homeGoals": 7,
+    "homeGoals": 9,
     "awayGoals": 1,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "number": 87,
+        "firstName": "Marek",
+        "lastName": "Pihorňa"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "number": 20,
+        "firstName": "Lukáš ",
+        "lastName": "Maršík "
+      }
+    ]
   },
   {
     "gameId": "F62FF5B5-98CA-11F1-8BDF-EF2495D048F3",
