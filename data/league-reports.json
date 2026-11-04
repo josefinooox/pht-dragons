@@ -18251,6 +18251,420 @@
       }
     ]
   },
+  "F631CA70-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 1,
+    "checkedAt": 1793824685904,
+    "complete": true,
+    "goals": [
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "DA3A7511-8AED-4525-B70D-CC0E5D5FF1B9",
+          "name": "Jan Kadlec",
+          "number": 10
+        },
+        "assists": [
+          {
+            "playerId": "28D07450-75BE-11EE-8374-57872550D816",
+            "name": "Ladislav Folkman",
+            "number": 18
+          },
+          {
+            "playerId": "392EDD20-2C4A-11F0-913E-D59041A43C9C",
+            "name": "Sami Virtanen",
+            "number": 88
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "9E3E6720-CDE5-11F0-8A06-53C33CEFE191",
+          "name": "Jakub Čejka",
+          "number": 22
+        },
+        "assists": []
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "A4CFEEC0-F392-11EF-8C8E-677EA47FDC8C",
+          "name": "Marek Goldman",
+          "number": 26
+        },
+        "assists": [
+          {
+            "playerId": "B9E2FCCA-09CB-4DE3-B746-4F93CE1E0C9E",
+            "name": "Marek Pihorňa",
+            "number": 87
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "392EDD20-2C4A-11F0-913E-D59041A43C9C",
+          "name": "Sami Virtanen",
+          "number": 88
+        },
+        "assists": [
+          {
+            "playerId": "28D07450-75BE-11EE-8374-57872550D816",
+            "name": "Ladislav Folkman",
+            "number": 18
+          },
+          {
+            "playerId": "7303AA66-3185-4FF8-AFFB-11F1569ADD89",
+            "name": "Daniel Vecko",
+            "number": 64
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "7303AA66-3185-4FF8-AFFB-11F1569ADD89",
+          "name": "Daniel Vecko",
+          "number": 64
+        },
+        "assists": [
+          {
+            "playerId": "B3795858-5ED4-4643-985D-E8C167C8B40C",
+            "name": "Martin Žák",
+            "number": 68
+          },
+          {
+            "playerId": "B9E2FCCA-09CB-4DE3-B746-4F93CE1E0C9E",
+            "name": "Marek Pihorňa",
+            "number": 87
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "7303AA66-3185-4FF8-AFFB-11F1569ADD89",
+          "name": "Daniel Vecko",
+          "number": 64
+        },
+        "assists": [
+          {
+            "playerId": "B3795858-5ED4-4643-985D-E8C167C8B40C",
+            "name": "Martin Žák",
+            "number": 68
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "B9AAB5B0-C985-11EE-A64C-0534D88DA4C9",
+          "name": "Václav Nečas",
+          "number": 40
+        },
+        "assists": [
+          {
+            "playerId": "B3795858-5ED4-4643-985D-E8C167C8B40C",
+            "name": "Martin Žák",
+            "number": 68
+          }
+        ]
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "scorer": {
+          "playerId": "A091E5E0-745E-11F1-B1BE-7BA2EEA55DCE",
+          "name": "Lukáš Maršík",
+          "number": 20
+        },
+        "assists": [
+          {
+            "playerId": "068B3B40-C738-11F1-A727-A533D1487FD1",
+            "name": "Petr Král",
+            "number": 88
+          },
+          {
+            "playerId": "7FAC0FB0-A82E-11F0-837D-F9857374B798",
+            "name": "Michal Grivalský",
+            "number": 8
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "3D451420-CDD9-11F0-8A06-53C33CEFE191",
+          "name": "Patrik Horáček",
+          "number": 92
+        },
+        "assists": []
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "28D07450-75BE-11EE-8374-57872550D816",
+          "name": "Ladislav Folkman",
+          "number": 18
+        },
+        "assists": [
+          {
+            "playerId": "392EDD20-2C4A-11F0-913E-D59041A43C9C",
+            "name": "Sami Virtanen",
+            "number": 88
+          },
+          {
+            "playerId": "DA3A7511-8AED-4525-B70D-CC0E5D5FF1B9",
+            "name": "Jan Kadlec",
+            "number": 10
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "DA3A7511-8AED-4525-B70D-CC0E5D5FF1B9",
+          "name": "Jan Kadlec",
+          "number": 10
+        },
+        "assists": [
+          {
+            "playerId": "392EDD20-2C4A-11F0-913E-D59041A43C9C",
+            "name": "Sami Virtanen",
+            "number": 88
+          },
+          {
+            "playerId": "28D07450-75BE-11EE-8374-57872550D816",
+            "name": "Ladislav Folkman",
+            "number": 18
+          }
+        ]
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "scorer": {
+          "playerId": "1A489C40-55AF-11F1-946D-FD2CBED7EE1D",
+          "name": "Tomáš Antoš",
+          "number": 17
+        },
+        "assists": [
+          {
+            "playerId": "A091E5E0-745E-11F1-B1BE-7BA2EEA55DCE",
+            "name": "Lukáš Maršík",
+            "number": 20
+          },
+          {
+            "playerId": "068B3B40-C738-11F1-A727-A533D1487FD1",
+            "name": "Petr Král",
+            "number": 88
+          }
+        ]
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "scorer": {
+          "playerId": "DA3A7511-8AED-4525-B70D-CC0E5D5FF1B9",
+          "name": "Jan Kadlec",
+          "number": 10
+        },
+        "assists": [
+          {
+            "playerId": "28D07450-75BE-11EE-8374-57872550D816",
+            "name": "Ladislav Folkman",
+            "number": 18
+          },
+          {
+            "playerId": "392EDD20-2C4A-11F0-913E-D59041A43C9C",
+            "name": "Sami Virtanen",
+            "number": 88
+          }
+        ]
+      }
+    ],
+    "lineup": [
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "640FD750-73E9-11F1-AC2F-BD32956023E5",
+        "name": "Erich Zakopal",
+        "number": 7,
+        "position": "O"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "CDAC1B10-79B3-11EF-9EF2-1BA748F3F4C3",
+        "name": "Mathias Porubský",
+        "number": 98,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "068B3B40-C738-11F1-A727-A533D1487FD1",
+        "name": "Petr Král",
+        "number": 88,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "04740D40-7013-11F1-AE11-89EC3FB27116",
+        "name": "Petr Janouškovec",
+        "number": 89,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "7FAC0FB0-A82E-11F0-837D-F9857374B798",
+        "name": "Michal Grivalský",
+        "number": 8,
+        "position": "O"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "1A489C40-55AF-11F1-946D-FD2CBED7EE1D",
+        "name": "Tomáš Antoš",
+        "number": 17,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "A40B37C0-73A6-11F1-AC2F-BD32956023E5",
+        "name": "Jan Čihák",
+        "number": 79,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "FEF805A0-5CD6-11F1-AE4F-AFE651CFA428",
+        "name": "Milan Holeček",
+        "number": 9,
+        "position": "O"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "A091E5E0-745E-11F1-B1BE-7BA2EEA55DCE",
+        "name": "Lukáš Maršík",
+        "number": 20,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "F7654DEF-7C01-49CC-8F67-33F94256BF66",
+        "name": "Jindřich Berka",
+        "number": 1,
+        "position": "Ú"
+      },
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "playerId": "D8A6B810-D864-11F1-BCB8-8554B28558EC",
+        "name": "Pavel Štěpánovský",
+        "number": 77,
+        "position": "G"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "3D451420-CDD9-11F0-8A06-53C33CEFE191",
+        "name": "Patrik Horáček",
+        "number": 92,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "AEB70540-CDDA-11F0-8A06-53C33CEFE191",
+        "name": "Petr Blejštil",
+        "number": 89,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "28D07450-75BE-11EE-8374-57872550D816",
+        "name": "Ladislav Folkman",
+        "number": 18,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "392EDD20-2C4A-11F0-913E-D59041A43C9C",
+        "name": "Sami Virtanen",
+        "number": 88,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "F436A5C0-3CB3-11F0-B991-9FDE3B856598",
+        "name": "Pavel Šikýř",
+        "number": 83,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "7303AA66-3185-4FF8-AFFB-11F1569ADD89",
+        "name": "Daniel Vecko",
+        "number": 64,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "2D782F40-B105-11F1-B381-1D9B42645A41",
+        "name": "Dalibor Manďák",
+        "number": 20,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "9E3E6720-CDE5-11F0-8A06-53C33CEFE191",
+        "name": "Jakub Čejka",
+        "number": 22,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "943101DD-63A2-4CC6-888B-68A4C2DEB72F",
+        "name": "Vojtěch Bartoš",
+        "number": 27,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "B3795858-5ED4-4643-985D-E8C167C8B40C",
+        "name": "Martin Žák",
+        "number": 68,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "B9AAB5B0-C985-11EE-A64C-0534D88DA4C9",
+        "name": "Václav Nečas",
+        "number": 40,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "A4CFEEC0-F392-11EF-8C8E-677EA47FDC8C",
+        "name": "Marek Goldman",
+        "number": 26,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "B9E2FCCA-09CB-4DE3-B746-4F93CE1E0C9E",
+        "name": "Marek Pihorňa",
+        "number": 87,
+        "position": "O"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "4FA03E60-B0AC-11EF-8B5D-DF6DEAEB3838",
+        "name": "Petr Linhart",
+        "number": 21,
+        "position": "G"
+      },
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "playerId": "DA3A7511-8AED-4525-B70D-CC0E5D5FF1B9",
+        "name": "Jan Kadlec",
+        "number": 10,
+        "position": "Ú"
+      }
+    ]
+  },
   "F631CA7A-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
     "checkedAt": 1792520466227,

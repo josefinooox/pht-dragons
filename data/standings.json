@@ -146,14 +146,14 @@
   {
     "rank": 13,
     "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
-    "played": 8,
-    "wins": 1,
+    "played": 9,
+    "wins": 2,
     "draws": 2,
     "losses": 5,
-    "points": 4,
-    "goalsFor": 26,
-    "goalsAgainst": 37,
-    "penaltyMinutes": 22.75
+    "points": 6,
+    "goalsFor": 37,
+    "goalsAgainst": 39,
+    "penaltyMinutes": 24.5
   },
   {
     "rank": 14,
@@ -194,13 +194,13 @@
   {
     "rank": 17,
     "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
-    "played": 7,
+    "played": 8,
     "wins": 0,
     "draws": 0,
-    "losses": 7,
+    "losses": 8,
     "points": 0,
-    "goalsFor": 11,
-    "goalsAgainst": 100,
-    "penaltyMinutes": 22.25
+    "goalsFor": 13,
+    "goalsAgainst": 111,
+    "penaltyMinutes": 24
   }
 ]
