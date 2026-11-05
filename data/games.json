@@ -2078,13 +2078,26 @@
     "date": "2026-11-05",
     "time": "22:00",
     "start": "2026-11-05T22:00:00+01:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
     "awayTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
-    "homeGoals": 1,
-    "awayGoals": 1,
+    "homeGoals": 5,
+    "awayGoals": 3,
     "venue": "Sportovní hala Fortuna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "number": 20,
+        "firstName": "Jakub",
+        "lastName": "Svitana"
+      },
+      {
+        "teamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
+        "number": 8,
+        "firstName": "Jan",
+        "lastName": "Rychtář"
+      }
+    ]
   },
   {
     "gameId": "F62F0B5D-98CA-11F1-8BDF-EF2495D048F3",
