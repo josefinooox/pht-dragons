@@ -24,6 +24,18 @@
       "Ve třetí třetině jsme už nic nepustili a ve 31. minutě zlomil zápas definitivně Pavel Dorničák, který si připsal druhý gól večera, 5:1. Střel bylo skoro stejně, my jsme jich měli 26 a Alligators 25. Rozdíl byl v tom, jak jsme využili začátek zápasu. Dorničák byl právem vyhlášen hvězdou zápasu a Martin Vrbka přidal dvě asistence."
     ]
   },
+  "F62CC165-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "1f61addaa1986615",
+    "model": "claude-code",
+    "generatedAt": "2026-11-05T05:15:34.378Z",
+    "summary": "V ICEARENA Letňany jsme porazili HC Strašáci 4:2. O výhře jsme rozhodli už v první třetině a dvěma góly se postaral Pavel Dorničák, vyhlášený nejlepším hráčem zápasu za nás.",
+    "narrative": [
+      "Do zápasu s HC Strašáci jsme vstoupili skvěle. V 5. minutě otevřel skóre Pavel Dorničák po přihrávce Vojtěcha Chloupka a v 10. minutě zvýšil Michal Lázňovský na 2:0, gól mu připravil David Štros. První třetinu jsme tak vyhráli 2:0.",
+      "Ve druhé třetině přidal další gól zase Dorničák, tentokrát po přihrávce Jakuba Douděry, a v 20. minutě jsme vedli 3:0. Soupeř se ale nevzdal. Ve 26. minutě snížil Matouš Forman a ve 29. minutě po přihrávce Marka Wimmera i Filip Nováček na 3:2. Druhou třetinu jsme tak prohráli 1:2 a bylo najednou na co koukat.",
+      "Rozhodnutí přišlo ve 39. minutě. V přesilovce zvýšil na 4:2 Martin Znamenáček po přihrávce Roberta Komarovského a ve třetí třetině už se skóre nezměnilo. Soupeř si v závěru nadělal několik vyloučení, my jsme za celý zápas seděli jen jednou.",
+      "Soupeř sice vystřelil víc, 31 střel proti našim 27, ale my jsme měli víc gólů. Za nás skórovali Dorničák dvakrát, Lázňovský a Znamenáček a Dorničák byl právem vyhlášen hvězdou zápasu. Za Strašáky byl mezi hvězdami Nováček. Tři body jdou k nám."
+    ]
+  },
   "F62D5DA8-98CA-11F1-8BDF-EF2495D048F3": {
     "key": "54375bc4a75546e9",
     "model": "claude-code",
@@ -151,14 +163,14 @@
     ]
   },
   "round:2026-11-02": {
-    "key": "c0d31e70ba60074c",
+    "key": "5df108190566a3d1",
     "model": "claude-code",
-    "generatedAt": "2026-11-03T06:15:37.547Z",
-    "summary": "Týden v lize začal jediným zápasem: HC Gladiators porazili HC Ducks Stars 4:3. My jsme zatím nehráli a držíme osmé místo se 8 body.",
+    "generatedAt": "2026-11-05T05:15:34.378Z",
+    "summary": "V týdnu 2.–8. listopadu jsme porazili HC Strašáci 4:2. Nejvýraznější byl výsledek HC Alligators, kteří rozstříleli Mechenice Caesars 11:2.",
     "narrative": [
-      "Týden 2.–8. listopadu zatím odstartoval jediný odehraný zápas. HC Gladiators, tehdy třetí v tabulce, přehráli druhý HC Ducks Stars 4:3. Gól rozdílu a sedm branek dohromady, takže se dalo koukat.",
-      "Žádné velké překvapení to nebylo, protože oba týmy patřily před týdnem k tabulkové špici. V pořadí se zatím nic výrazně nepohnulo a vedení drží Golden Bears s 20 body z 10 zápasů.",
-      "Naši kluci tento týden ještě nenastoupili. Jsme osmí z 17 týmů s 8 body, takže je pořád co zlepšovat a hodně se dá změnit v dalších kolech."
+      "Týden začal v pondělí těsným výsledkem. HC Gladiators porazili HC Ducks Stars 4:3, tedy třetí tým tabulky porazil druhého. Ve středu pak přišel nejvýraznější výsledek týdne: HC Alligators vyhráli nad Mechenice Caesars 11:2, což byla s rozdílem devíti gólů nejvyšší výhra týdne.",
+      "My jsme ve středu hráli na ledě HC Strašáci a vyhráli 4:2. Strašáci byli před týdnem šestí, my osmí, takže radost je dvojnásobná. Ve stejný den si Prague Pigeons B a HC Rekreanti Praha rozdělili body za remízu 1:1.",
+      "V čele tabulky se nic nezměnilo, vede Golden Bears s 20 body z 10 zápasů. My jsme sedmí se 10 body ze 17 týmů. Celkem padlo 28 gólů, z toho 13 v zápase Alligators s Caesars."
     ]
   }
 }
