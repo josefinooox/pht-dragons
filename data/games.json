@@ -2106,13 +2106,26 @@
     "date": "2026-11-08",
     "time": "15:45",
     "start": "2026-11-08T15:45:00+01:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
     "awayTeamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
-    "homeGoals": 3,
-    "awayGoals": 2,
+    "homeGoals": 6,
+    "awayGoals": 3,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
+        "number": 88,
+        "firstName": "Ondřej",
+        "lastName": "Hrabánek"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "number": 90,
+        "firstName": "Jan",
+        "lastName": "Carboch"
+      }
+    ]
   },
   {
     "gameId": "F629DB3E-98CA-11F1-8BDF-EF2495D048F3",
@@ -2121,13 +2134,26 @@
     "date": "2026-11-08",
     "time": "17:15",
     "start": "2026-11-08T17:15:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
     "awayTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 12,
+    "awayGoals": 2,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "number": 64,
+        "firstName": "Daniel",
+        "lastName": "Vecko"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "number": 88,
+        "firstName": "Petr",
+        "lastName": "Volek"
+      }
+    ]
   },
   {
     "gameId": "F62DD2D0-98CA-11F1-8BDF-EF2495D048F3",
@@ -2136,13 +2162,26 @@
     "date": "2026-11-08",
     "time": "17:15",
     "start": "2026-11-08T17:15:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "053398E3-FF69-470F-87F2-7D570FF36820",
     "awayTeamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 2,
+    "awayGoals": 6,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "number": 23,
+        "firstName": "Petr",
+        "lastName": "Morávek"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "number": 10,
+        "firstName": "Petr",
+        "lastName": "Kapička"
+      }
+    ]
   },
   {
     "gameId": "F62A506E-98CA-11F1-8BDF-EF2495D048F3",
@@ -2151,13 +2190,26 @@
     "date": "2026-11-08",
     "time": "18:45",
     "start": "2026-11-08T18:45:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "1004F911-326D-4952-8D08-B07517442A86",
     "awayTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 2,
+    "awayGoals": 5,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+        "number": 12,
+        "firstName": "Petr",
+        "lastName": "Kadlec"
+      },
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "number": 33,
+        "firstName": "Michal",
+        "lastName": "Povolný"
+      }
+    ]
   },
   {
     "gameId": "F631554E-98CA-11F1-8BDF-EF2495D048F3",
@@ -2166,11 +2218,11 @@
     "date": "2026-11-08",
     "time": "20:00",
     "start": "2026-11-08T20:00:00+01:00",
-    "status": "scheduled",
+    "status": "running",
     "homeTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
     "awayTeamId": "7B35DB20-5849-11F1-9FC5-B7618A8B7F6A",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 6,
+    "awayGoals": 3,
     "venue": "SPM Aréna",
     "stars": []
   },
