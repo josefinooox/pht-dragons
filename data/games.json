@@ -2218,13 +2218,26 @@
     "date": "2026-11-08",
     "time": "20:00",
     "start": "2026-11-08T20:00:00+01:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
     "awayTeamId": "7B35DB20-5849-11F1-9FC5-B7618A8B7F6A",
-    "homeGoals": 6,
-    "awayGoals": 3,
+    "homeGoals": 8,
+    "awayGoals": 4,
     "venue": "SPM Aréna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "number": 17,
+        "firstName": "Radim",
+        "lastName": "Kolář"
+      },
+      {
+        "teamId": "7B35DB20-5849-11F1-9FC5-B7618A8B7F6A",
+        "number": 14,
+        "firstName": "Lukáš",
+        "lastName": "Hradil"
+      }
+    ]
   },
   {
     "gameId": "F62A7774-98CA-11F1-8BDF-EF2495D048F3",
