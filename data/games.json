@@ -2246,13 +2246,26 @@
     "date": "2026-11-09",
     "time": "19:30",
     "start": "2026-11-09T19:30:00+01:00",
-    "status": "scheduled",
-    "homeTeamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
-    "awayTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
-    "homeGoals": null,
-    "awayGoals": null,
+    "status": "finished",
+    "homeTeamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+    "awayTeamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+    "homeGoals": 8,
+    "awayGoals": 5,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
+        "number": 89,
+        "firstName": "Petr",
+        "lastName": "Janouškovec"
+      },
+      {
+        "teamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
+        "number": 17,
+        "firstName": "David",
+        "lastName": "Štros"
+      }
+    ]
   },
   {
     "gameId": "F62E962D-98CA-11F1-8BDF-EF2495D048F3",
