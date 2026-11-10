@@ -1,4 +1,16 @@
 {
+  "F62A7774-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "ba4b69552f92be5e",
+    "model": "claude-code",
+    "generatedAt": "2026-11-10T06:19:08.692Z",
+    "summary": "S Mechenice Caesars jsme vyhráli 8:5 a zápas jsme otočili ze stavu 0:1. Rozhodla třetí třetina, kterou jsme vyhráli 6:2. Nejlepším hráčem našich byl vyhlášen David Štros, který připsal gól a tři asistence.",
+    "narrative": [
+      "Do zápasu v ICEARENĚ Kateřinky jsme vstoupili špatně: už ve 2. minutě otevřel skóre Michal Boháč z Mechenice Caesars. Vyrovnat jsme dokázali v 11. minutě, kdy Jakub Douděra proměnil přesilovku po přihrávce Roberta Komarovského, a první třetina skončila 1:1.",
+      "Druhá část byla vyrovnaná, ale nakonec ji vyhrál soupeř 2:1. Vojtěch Chloupek nás po přihrávce Davida Štrose poslal do vedení 2:1, jenže Boháč za pár minut vyrovnal a Petr Janouškovec hned poté otočil na 2:3. Do třetí třetiny jsme tak šli o gól pozadu.",
+      "Ta nám ale patřila. Jakub Vožeh srovnal na 3:3 v oslabení a Robert Komarovský nás po jeho přihrávce poslal do vedení 4:3. Pak přišla krátká série: David Štros zvýšil na 5:3 a o minutu později Martin Vrbka na 6:3. Soupeř ještě snížil v přesilovce a po našem gólu Martina Znamenáčka na 7:4 přidal Jan Čihák další, jenže poslední slovo měl Komarovský, který ve 44. minutě uzavřel skóre na 8:5.",
+      "Na střely jsme vyhráli 34:22 a na vhazování 31:15. Vožeh a Štros měli oba po gólu a třech asistencích, Komarovský dal dva góly. Za soupeře se třikrát trefil Michal Boháč. Za otočku a šest gólů ve třetí třetině kluci zaslouží pochvalu."
+    ]
+  },
   "F62BFE13-98CA-11F1-8BDF-EF2495D048F3": {
     "key": "0819d5451adf0bc0",
     "model": "claude-code",
@@ -171,6 +183,17 @@
       "My jsme ve středu zajeli ke Strašákům a vyhráli 4:2. Vyhrál tak šestý tým nad osmým a po týdnu jsme v tabulce sedmí s 10 body.",
       "Nejvíc se střílelo na Alligators, ale pestrým způsobem. Ve středu rozstříleli Mechenice Caesars 11:2, v neděli pak sami dostali od HC Raptors 12:2, což byla nejvyšší výhra týdne. Překvapení přinesl Projektový ústav, který jako čtrnáctý porazil sedmé Gaston Seals 6:3. Ti klesli ze sedmého místa na deváté.",
       "Čelo drží Golden Bears s 22 body z 11 zápasů, v neděli porazili HC Taste 5:2. HC Gladiators zvítězili 4:3 nad HC Ducks Stars, ti ale v neděli vyhráli 6:2 u HC Prague Wolves B. Zbytek týdne: Winter Foxes 5:3 s HC Car-Back, ti se pak v neděli vzchopili a smetli HC Scorpions Praha 8:4, a Prague Pigeons B si s HC Rekreanti Praha rozdělili body za 1:1."
+    ]
+  },
+  "round:2026-11-09": {
+    "key": "955775e79d6c43e1",
+    "model": "claude-code",
+    "generatedAt": "2026-11-10T06:19:08.692Z",
+    "summary": "V týdnu 9.–15. listopadu zatím padlo v naší skupině jen to, co jsme sami přispěli: vyhráli jsme 8:5 nad Mechenice Caesars. Golden Bears vedou tabulku s 22 body z 11 zápasů a my jsme sedmí.",
+    "narrative": [
+      "Týden teprve začal a zatím máme v knize jediný zápas skupiny KLASIK, a to ten náš. S Mechenice Caesars jsme vyhráli 8:5, padlo v něm 13 gólů a byla to zatím nejvyšší výhra týdne.",
+      "Na papíře šlo o souboj sedmého týmu tabulky se sedmnáctým, takže o překvapení nešlo. Žádná překvapení ani velké posuny v tabulce se zatím nekonaly.",
+      "Čelo drží Golden Bears s 22 body po 11 zápasech a nic se na něm nezměnilo. My jsme po výhře stále sedmí z 17 týmů a máme 12 bodů. Uvidíme, co přinesou další dny."
     ]
   }
 }
