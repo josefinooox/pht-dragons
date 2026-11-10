@@ -2274,13 +2274,26 @@
     "date": "2026-11-10",
     "time": "22:00",
     "start": "2026-11-10T22:00:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
     "awayTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 4,
+    "awayGoals": 4,
     "venue": "Sportovní hala Fortuna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "number": 4,
+        "firstName": "Marek",
+        "lastName": "Josífek"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "number": 49,
+        "firstName": "Marek",
+        "lastName": "Voborník"
+      }
+    ]
   },
   {
     "gameId": "F62EBD3F-98CA-11F1-8BDF-EF2495D048F3",

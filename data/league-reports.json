@@ -13183,6 +13183,293 @@
       }
     ]
   },
+  "F62E962D-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 1,
+    "checkedAt": 1794354906125,
+    "complete": true,
+    "goals": [
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "scorer": {
+          "playerId": "AFE7A9F4-743B-4CE3-984A-404EC05CDA13",
+          "name": "Michal Černý",
+          "number": 32
+        },
+        "assists": [
+          {
+            "playerId": "57928B8B-3A2E-4EF1-A2B1-9B5418966146",
+            "name": "Eduard Synák",
+            "number": 18
+          },
+          {
+            "playerId": "15EBDCA4-5E59-4867-A52E-4F0197F99A46",
+            "name": "Lukáš Basík",
+            "number": 22
+          }
+        ]
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "scorer": {
+          "playerId": "AFE7A9F4-743B-4CE3-984A-404EC05CDA13",
+          "name": "Michal Černý",
+          "number": 32
+        },
+        "assists": [
+          {
+            "playerId": "15A43F62-738D-4113-9C2C-432FC769E5FB",
+            "name": "Marek Josífek",
+            "number": 4
+          }
+        ]
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "scorer": {
+          "playerId": "AFE7A9F4-743B-4CE3-984A-404EC05CDA13",
+          "name": "Michal Černý",
+          "number": 32
+        },
+        "assists": [
+          {
+            "playerId": "57928B8B-3A2E-4EF1-A2B1-9B5418966146",
+            "name": "Eduard Synák",
+            "number": 18
+          }
+        ]
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "scorer": {
+          "playerId": "B021A2A0-BB1F-11F0-884D-69BDC507CA9E",
+          "name": "Marek Voborník",
+          "number": 49
+        },
+        "assists": [
+          {
+            "playerId": "548CD64C-8151-474E-9538-12D6D30D7BAF",
+            "name": "Josef Odehnal",
+            "number": 21
+          }
+        ]
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "scorer": {
+          "playerId": "B021A2A0-BB1F-11F0-884D-69BDC507CA9E",
+          "name": "Marek Voborník",
+          "number": 49
+        },
+        "assists": [
+          {
+            "playerId": "74D08790-9C86-11F1-B898-4F4CF410ADD2",
+            "name": "Jan Anýž",
+            "number": 88
+          }
+        ]
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "scorer": {
+          "playerId": "57928B8B-3A2E-4EF1-A2B1-9B5418966146",
+          "name": "Eduard Synák",
+          "number": 18
+        },
+        "assists": []
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "scorer": {
+          "playerId": "548CD64C-8151-474E-9538-12D6D30D7BAF",
+          "name": "Josef Odehnal",
+          "number": 21
+        },
+        "assists": [
+          {
+            "playerId": "7D67901F-B221-4338-8529-5ACBFFFD8507",
+            "name": "Jiří Veverka",
+            "number": 91
+          },
+          {
+            "playerId": "74D08790-9C86-11F1-B898-4F4CF410ADD2",
+            "name": "Jan Anýž",
+            "number": 88
+          }
+        ]
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "scorer": {
+          "playerId": "2E2DC471-F075-4848-B19A-4E06A72728AE",
+          "name": "Luboš Tóth",
+          "number": 13
+        },
+        "assists": [
+          {
+            "playerId": "745BF650-BC55-11EE-9735-2F2DEBC56965",
+            "name": "Petr Malík",
+            "number": 97
+          }
+        ]
+      }
+    ],
+    "lineup": [
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "3A2A7741-B34E-4B92-8230-89D925CAAF22",
+        "name": "Ondřej Hausl",
+        "number": 16,
+        "position": "Ú"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "7D67901F-B221-4338-8529-5ACBFFFD8507",
+        "name": "Jiří Veverka",
+        "number": 91,
+        "position": "O"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "5F490CD0-A6F4-11F1-9A8E-FB6CC8E9C72D",
+        "name": "Pavel Tóth",
+        "number": 50,
+        "position": "O"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "2E2DC471-F075-4848-B19A-4E06A72728AE",
+        "name": "Luboš Tóth",
+        "number": 13,
+        "position": "Ú"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "89ECCEF9-E1AE-48DE-87D4-6E68D6F6533B",
+        "name": "Viktor Myslil",
+        "number": 85,
+        "position": "G"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "58B33B0B-5DD6-4A1D-925E-4E1A0D1382FE",
+        "name": "Robert Tabáček",
+        "number": 22,
+        "position": "O"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "745BF650-BC55-11EE-9735-2F2DEBC56965",
+        "name": "Petr Malík",
+        "number": 97,
+        "position": "Ú"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "B021A2A0-BB1F-11F0-884D-69BDC507CA9E",
+        "name": "Marek Voborník",
+        "number": 49,
+        "position": "Ú"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "F860C25B-566D-4F93-A13F-6E2FD4D06F8E",
+        "name": "Luděk Stašek",
+        "number": 3,
+        "position": "Ú"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "548CD64C-8151-474E-9538-12D6D30D7BAF",
+        "name": "Josef Odehnal",
+        "number": 21,
+        "position": "Ú"
+      },
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "playerId": "74D08790-9C86-11F1-B898-4F4CF410ADD2",
+        "name": "Jan Anýž",
+        "number": 88,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "15EBDCA4-5E59-4867-A52E-4F0197F99A46",
+        "name": "Lukáš Basík",
+        "number": 22,
+        "position": "O"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "15A43F62-738D-4113-9C2C-432FC769E5FB",
+        "name": "Marek Josífek",
+        "number": 4,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "710879D1-295A-478C-B50E-7385E15D73E9",
+        "name": "Tomáš Meruna",
+        "number": 8,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "27473A81-05AE-4245-B754-AE3776FE8CE7",
+        "name": "Ondřej Frössl",
+        "number": 1,
+        "position": "G"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "AFE7A9F4-743B-4CE3-984A-404EC05CDA13",
+        "name": "Michal Černý",
+        "number": 32,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "1E97C3BB-F5CE-4685-A1A0-192560D66BD0",
+        "name": "Radim Kolář",
+        "number": 17,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "57928B8B-3A2E-4EF1-A2B1-9B5418966146",
+        "name": "Eduard Synák",
+        "number": 18,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "52A28E70-34BC-41EE-BD09-56F151D44B57",
+        "name": "Petr Karadzos",
+        "number": 85,
+        "position": "O"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "051FF8B0-A80C-11EF-83C9-F74C56C0D4FE",
+        "name": "Martin Kešner",
+        "number": 99,
+        "position": "O"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "59B79300-8673-11F1-BDD5-8958B510B6A2",
+        "name": "Jakub Svitana",
+        "number": 20,
+        "position": "Ú"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "playerId": "025A494A-12DB-45FB-868C-82076D912A47",
+        "name": "Jakub Schmiedhuber",
+        "number": 23,
+        "position": "O"
+      }
+    ]
+  },
   "F62E962F-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
     "checkedAt": 1791577736254,
