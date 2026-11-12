@@ -2302,13 +2302,26 @@
     "date": "2026-11-11",
     "time": "20:00",
     "start": "2026-11-11T20:00:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
     "awayTeamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 4,
+    "awayGoals": 8,
     "venue": "SPM Aréna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "5774291A-3411-4FBE-907F-F0F4EA43821D",
+        "number": 44,
+        "firstName": "Michal",
+        "lastName": "Šíp"
+      },
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "number": 42,
+        "firstName": "Tomáš",
+        "lastName": "Adamec"
+      }
+    ]
   },
   {
     "gameId": "F62DF9EC-98CA-11F1-8BDF-EF2495D048F3",
@@ -2317,13 +2330,26 @@
     "date": "2026-11-11",
     "time": "21:45",
     "start": "2026-11-11T21:45:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
     "awayTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 2,
+    "awayGoals": 6,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+        "number": 87,
+        "firstName": "Matěj",
+        "lastName": "Půček"
+      },
+      {
+        "teamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
+        "number": 97,
+        "firstName": "Dominik",
+        "lastName": "Kamp"
+      }
+    ]
   },
   {
     "gameId": "F62A0242-98CA-11F1-8BDF-EF2495D048F3",
