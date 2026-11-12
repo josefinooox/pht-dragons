@@ -2947,6 +2947,260 @@
       }
     ]
   },
+  "F62A0242-98CA-11F1-8BDF-EF2495D048F3": {
+    "version": 1,
+    "checkedAt": 1794523657650,
+    "complete": true,
+    "goals": [
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "scorer": {
+          "playerId": "6A1FE680-A3F3-11EE-9783-D3230B67DDA3",
+          "name": "Matúš Machovič",
+          "number": 38
+        },
+        "assists": [
+          {
+            "playerId": "9B8386C0-9A52-11F1-ACC8-13CF907F4CF9",
+            "name": "Ondřej Viktorin",
+            "number": 7
+          },
+          {
+            "playerId": "10DD5170-1241-11F1-8E12-F3E4880CF45B",
+            "name": "Milan Žižka",
+            "number": 4
+          }
+        ]
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "scorer": {
+          "playerId": "F9C80120-56F3-11EE-998C-239024914A90",
+          "name": "Ondřej Hladík",
+          "number": 20
+        },
+        "assists": []
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "scorer": {
+          "playerId": "F9C80120-56F3-11EE-998C-239024914A90",
+          "name": "Ondřej Hladík",
+          "number": 20
+        },
+        "assists": [
+          {
+            "playerId": "BA964A5F-E119-4A97-8B6C-9CACE9836449",
+            "name": "Jonáš Krása",
+            "number": 25
+          },
+          {
+            "playerId": "2123E26B-3BE2-4D18-9856-01DF18BDC374",
+            "name": "Lukáš Popelka",
+            "number": 96
+          }
+        ]
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "scorer": {
+          "playerId": "BA964A5F-E119-4A97-8B6C-9CACE9836449",
+          "name": "Jonáš Krása",
+          "number": 25
+        },
+        "assists": [
+          {
+            "playerId": "22540280-9445-11EF-B47B-6F008F09C85F",
+            "name": "Ondřej Neubauer",
+            "number": 56
+          },
+          {
+            "playerId": "2123E26B-3BE2-4D18-9856-01DF18BDC374",
+            "name": "Lukáš Popelka",
+            "number": 96
+          }
+        ]
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "scorer": {
+          "playerId": "22540280-9445-11EF-B47B-6F008F09C85F",
+          "name": "Ondřej Neubauer",
+          "number": 56
+        },
+        "assists": []
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "scorer": {
+          "playerId": "897D4EF0-65B9-11EE-A3B9-A793F763BE58",
+          "name": "Petr Morávek",
+          "number": 23
+        },
+        "assists": [
+          {
+            "playerId": "6A1FE680-A3F3-11EE-9783-D3230B67DDA3",
+            "name": "Matúš Machovič",
+            "number": 38
+          },
+          {
+            "playerId": "10DD5170-1241-11F1-8E12-F3E4880CF45B",
+            "name": "Milan Žižka",
+            "number": 4
+          }
+        ]
+      }
+    ],
+    "lineup": [
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "BA964A5F-E119-4A97-8B6C-9CACE9836449",
+        "name": "Jonáš Krása",
+        "number": 25,
+        "position": "Ú"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "9B8386C0-9A52-11F1-ACC8-13CF907F4CF9",
+        "name": "Ondřej Viktorin",
+        "number": 7,
+        "position": "Ú"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "F9C80120-56F3-11EE-998C-239024914A90",
+        "name": "Ondřej Hladík",
+        "number": 20,
+        "position": "O"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "703144BA-50CA-4F99-87F4-66CC0FB365DC",
+        "name": "Jiří Janoušek",
+        "number": 12,
+        "position": "O"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "10DD5170-1241-11F1-8E12-F3E4880CF45B",
+        "name": "Milan Žižka",
+        "number": 4,
+        "position": "O"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "2123E26B-3BE2-4D18-9856-01DF18BDC374",
+        "name": "Lukáš Popelka",
+        "number": 96,
+        "position": "Ú"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "6FB5D2F0-7FB1-11EE-995D-DF773013F07F",
+        "name": "Lukáš Kramer",
+        "number": 86,
+        "position": "G"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "8609610C-F421-469E-B3DE-D56B857A5EC9",
+        "name": "Petr Cíp",
+        "number": 83,
+        "position": "O"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "897D4EF0-65B9-11EE-A3B9-A793F763BE58",
+        "name": "Petr Morávek",
+        "number": 23,
+        "position": "Ú"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "6A1FE680-A3F3-11EE-9783-D3230B67DDA3",
+        "name": "Matúš Machovič",
+        "number": 38,
+        "position": "Ú"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "playerId": "22540280-9445-11EF-B47B-6F008F09C85F",
+        "name": "Ondřej Neubauer",
+        "number": 56,
+        "position": "Ú"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "3D151C88-203D-434F-A157-43FF60EC6F5C",
+        "name": "Jakub Hrnčiřík",
+        "number": 28,
+        "position": "O"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "BDA81810-C61C-11F1-8127-4B93C5494A91",
+        "name": "Miroslav Mareš",
+        "number": 1,
+        "position": "G"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "17702751-5A85-4CB8-B8DC-EE3FCC996821",
+        "name": "Matyáš Hájek",
+        "number": 66,
+        "position": "Ú"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "542A3AA0-96EB-11F0-A2C9-C3A9EA2BA444",
+        "name": "Jan Carboch",
+        "number": 28,
+        "position": "Ú"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "997B93A6-C539-436B-A314-ACF6306737D7",
+        "name": "Zdeněk Paclt",
+        "number": 19,
+        "position": "Ú"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "5EBD3AD0-5548-11EE-8859-69DE710E1E07",
+        "name": "Michal Zamlinský",
+        "number": 31,
+        "position": "Ú"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "AA740E92-6198-4644-8C48-9078B3505B66",
+        "name": "Petr Mezera",
+        "number": 9,
+        "position": "O"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "1A974AE0-A93C-11F0-8D1A-7F7E320A9927",
+        "name": "Martin Dojčar",
+        "number": 50,
+        "position": "O"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "651CCC27-0A8F-4D3F-90A5-6C8ECA586525",
+        "name": "Miloš Benedikt",
+        "number": 22,
+        "position": "Ú"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "playerId": "AFF98664-51F4-4591-BC24-EAAB58266D1A",
+        "name": "Michal Peroutka",
+        "number": 70,
+        "position": "Ú"
+      }
+    ]
+  },
   "F62A295A-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
     "checkedAt": 1791577757450,
@@ -11311,7 +11565,7 @@
   },
   "F62DF9EC-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1794503549024,
+    "checkedAt": 1794523657331,
     "complete": true,
     "goals": [
       {
@@ -14023,7 +14277,7 @@
   },
   "F62EBD3F-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1794503548651,
+    "checkedAt": 1794523657012,
     "complete": true,
     "goals": [
       {
