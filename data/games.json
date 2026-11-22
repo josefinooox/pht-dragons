@@ -2442,13 +2442,26 @@
     "date": "2026-11-22",
     "time": "18:45",
     "start": "2026-11-22T18:45:00+01:00",
-    "status": "running",
+    "status": "finished",
     "homeTeamId": "1004F911-326D-4952-8D08-B07517442A86",
     "awayTeamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
-    "homeGoals": 0,
-    "awayGoals": 0,
+    "homeGoals": 2,
+    "awayGoals": 2,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "1004F911-326D-4952-8D08-B07517442A86",
+        "number": 18,
+        "firstName": "Luboš",
+        "lastName": "Turek"
+      },
+      {
+        "teamId": "6F6C0020-1BDC-11F1-A295-7F76C73382B7",
+        "number": 69,
+        "firstName": "Patrik",
+        "lastName": "Čejka"
+      }
+    ]
   },
   {
     "gameId": "F6301CCC-98CA-11F1-8BDF-EF2495D048F3",
