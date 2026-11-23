@@ -195,5 +195,16 @@
       "Ve středu přišly dvě jasné věci. HC Gladiators, před týdnem třetí v tabulce, vyhráli v Projektovém ústavu 8:4 a Golden Bears, tehdy čtvrtí, zvládli Winter Foxes 6:2. Mezitím si HC Raptors a HC Car-Back v úterý rozdělili body za remízu 4:4.",
       "Čtvrtek patřil HC Prague Wolves B. Gaston Seals porazili 6:0, což byla nejvyšší výhra týdne, a posunuli se z dvanáctého místa na deváté. Čelo tabulky drží Golden Bears s 24 body po dvanácti zápasech."
     ]
+  },
+  "round:2026-11-16": {
+    "key": "2189806b1728740e",
+    "model": "claude-code",
+    "generatedAt": "2026-11-23T06:15:18.781Z",
+    "summary": "V týdnu 16.–22. listopadu se v naší skupině hrály tři zápasy, dvě remízy a jedna přestřelka, ve které Golden Bears porazili HC Rekreanti Praha 8:5. My jsme tentokrát nehráli a držíme sedmé místo s 12 body.",
+    "narrative": [
+      "Neděle 22. listopadu byla jediným hracím dnem týdne a padlo v ní dohromady 23 gólů. Nejvíc se střílelo v Golden Bears, kteří porazili HC Rekreanti Praha 8:5. Byl to zároveň nejvyšší výsledek týdne, rozdíl tří gólů a dohromady 13 branek v jednom zápase.",
+      "Zbylé dva zápasy skončily smírně. Projektový ústav se dělil o body s Prague Pigeons B po remíze 3:3 a HC Taste remizoval s Winter Foxes 2:2. V tabulce se kvůli tomu nejvíc posunul Projektový ústav, který poskočil ze 14. na 12. místo. Opačným směrem šel HC Scorpions Praha, který klesl z 11. na 13. příčku.",
+      "Čelo tabulky drží beze změny Golden Bears s 26 body po 13 zápasech. My jsme měli týden volno, takže zůstáváme na sedmém místě ze sedmnácti s 12 body. Tabulka je ale hustá, tak uvidíme, co přinese příští kolo."
+    ]
   }
 }
