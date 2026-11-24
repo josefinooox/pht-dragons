@@ -2470,13 +2470,26 @@
     "date": "2026-11-23",
     "time": "20:00",
     "start": "2026-11-23T20:00:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
     "awayTeamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 4,
+    "awayGoals": 6,
     "venue": "SPM Aréna",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "number": 3,
+        "firstName": "Ondřej",
+        "lastName": "Veselý"
+      },
+      {
+        "teamId": "7973D5A7-0DF3-4175-9CDE-E430DCB9B657",
+        "number": 27,
+        "firstName": "Martin",
+        "lastName": "Srb"
+      }
+    ]
   },
   {
     "gameId": "F62D84B0-98CA-11F1-8BDF-EF2495D048F3",
