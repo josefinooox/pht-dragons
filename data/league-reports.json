@@ -19966,7 +19966,7 @@
   },
   "F6301CCC-98CA-11F1-8BDF-EF2495D048F3": {
     "version": 1,
-    "checkedAt": 1795518723455,
+    "checkedAt": 1795555437233,
     "complete": true,
     "goals": [
       {
@@ -20146,7 +20146,7 @@
       {
         "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
         "playerId": "A40A21C0-D77C-11F1-82AB-FF9B31CAD2FC",
-        "name": "Martin Novotny",
+        "name": "Martin Novotný",
         "number": 9,
         "position": "G"
       },
