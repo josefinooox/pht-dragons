@@ -206,5 +206,16 @@
       "Zbylé dva zápasy skončily smírně. Projektový ústav se dělil o body s Prague Pigeons B po remíze 3:3 a HC Taste remizoval s Winter Foxes 2:2. V tabulce se kvůli tomu nejvíc posunul Projektový ústav, který poskočil ze 14. na 12. místo. Opačným směrem šel HC Scorpions Praha, který klesl z 11. na 13. příčku.",
       "Čelo tabulky drží beze změny Golden Bears s 26 body po 13 zápasech. My jsme měli týden volno, takže zůstáváme na sedmém místě ze sedmnácti s 12 body. Tabulka je ale hustá, tak uvidíme, co přinese příští kolo."
     ]
+  },
+  "round:2026-11-23": {
+    "key": "8582c143074922cb",
+    "model": "claude-code",
+    "generatedAt": "2026-11-24T06:15:29.172Z",
+    "summary": "Týden 23.–29. listopadu zatím nabídl jediný zápas, a ten stál za to: HC Car-Back vyhrál na ledě HC Ducks Stars 6:4. Car-Back byl před zápasem osmý, Ducks Stars čtvrtí, takže šlo o překvapení.",
+    "narrative": [
+      "Zatím se v naší skupině odehrál jeden zápas, v pondělí 23. listopadu. HC Ducks Stars hostili HC Car-Back a padlo hned deset gólů. Hosté vyhráli 6:4, tedy o dva góly.",
+      "Je to pěkné překvapení: Car-Back byl před týdnem osmý v tabulce, kdežto Ducks Stars čtvrtí. Žádné velké posuny v tabulce to ale zatím nepřineslo.",
+      "Na čele pořád sedí Golden Bears s 26 body po 13 zápasech. My jsme tento týden zatím nehráli, takže zůstáváme osmí s 12 body z 17 týmů. Týden ještě neskončil, takže se uvidí."
+    ]
   }
 }
