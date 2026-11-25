@@ -193,6 +193,30 @@
   },
   {
     "rank": 17,
+    "teamId": "972AEA00-F832-11EF-89DD-F36742965964",
+    "played": 0,
+    "wins": 0,
+    "draws": 0,
+    "losses": 0,
+    "points": 0,
+    "goalsFor": 0,
+    "goalsAgainst": 0,
+    "penaltyMinutes": 0
+  },
+  {
+    "rank": 18,
+    "teamId": "B9B5D710-F832-11EF-89DD-F36742965964",
+    "played": 0,
+    "wins": 0,
+    "draws": 0,
+    "losses": 0,
+    "points": 0,
+    "goalsFor": 0,
+    "goalsAgainst": 0,
+    "penaltyMinutes": 0
+  },
+  {
+    "rank": 19,
     "teamId": "77F30C30-6960-11F1-901E-A1A35E19FF53",
     "played": 9,
     "wins": 0,

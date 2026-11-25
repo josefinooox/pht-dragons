@@ -100,5 +100,17 @@
     "name": "Winter Foxes",
     "shortName": "WFX",
     "logo": "logos/6F6C0020-1BDC-11F1-A295-7F76C73382B7.webp"
+  },
+  {
+    "teamId": "972AEA00-F832-11EF-89DD-F36742965964",
+    "name": "x  1. Tým",
+    "shortName": "1.t",
+    "logo": null
+  },
+  {
+    "teamId": "B9B5D710-F832-11EF-89DD-F36742965964",
+    "name": "x  2. Tým",
+    "shortName": "2. t",
+    "logo": null
   }
 ]

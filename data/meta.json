@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-11-25T04:22:45.416Z",
+  "fetchedAt": "2026-11-25T14:42:28.832Z",
   "ourTeamId": "E70C43E0-264E-11EF-BE38-052B0AF887CA",
   "competition": {
     "id": "C7C0BB15-5D29-415D-851E-5D777C6CC621",
@@ -20,8 +20,8 @@
     "name": "Základní část"
   },
   "counts": {
-    "teams": 17,
-    "games": 272,
-    "standings": 17
+    "teams": 19,
+    "games": 273,
+    "standings": 19
   }
 }
