@@ -2526,13 +2526,26 @@
     "date": "2026-11-25",
     "time": "18:30",
     "start": "2026-11-25T18:30:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
     "awayTeamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 4,
+    "awayGoals": 1,
     "venue": "ICEARENA Letňany",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "0CACFC00-6966-11F1-901E-A1A35E19FF53",
+        "number": 66,
+        "firstName": "Kamil",
+        "lastName": "Schvarcz"
+      },
+      {
+        "teamId": "6814C2F0-5632-11F0-AF34-49A61572EC3A",
+        "number": 33,
+        "firstName": "Robert",
+        "lastName": "Švalbach"
+      }
+    ]
   },
   {
     "gameId": "F632B4D7-98CA-11F1-8BDF-EF2495D048F3",
@@ -2541,13 +2554,26 @@
     "date": "2026-11-25",
     "time": "19:45",
     "start": "2026-11-25T19:45:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
     "awayTeamId": "053398E3-FF69-470F-87F2-7D570FF36820",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 7,
+    "awayGoals": 6,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "BD6D1D09-9BE7-4D43-AA42-DA729E10FF8F",
+        "number": 50,
+        "firstName": "Viktor ",
+        "lastName": "Herwig"
+      },
+      {
+        "teamId": "053398E3-FF69-470F-87F2-7D570FF36820",
+        "number": 25,
+        "firstName": "Jonáš",
+        "lastName": "Krása"
+      }
+    ]
   },
   {
     "gameId": "F62C252E-98CA-11F1-8BDF-EF2495D048F3",
@@ -2556,13 +2582,26 @@
     "date": "2026-11-25",
     "time": "21:15",
     "start": "2026-11-25T21:15:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
     "awayTeamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 5,
+    "awayGoals": 2,
     "venue": "ICEARENA Kateřinky",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "9072AFD0-F46B-4655-9A19-11658F2A390B",
+        "number": 83,
+        "firstName": "Lukáš",
+        "lastName": "Zahradník"
+      },
+      {
+        "teamId": "C06BA05B-F15F-4E2F-8055-BC21A7F8087E",
+        "number": 19,
+        "firstName": "Zdeněk",
+        "lastName": "Paclt"
+      }
+    ]
   },
   {
     "gameId": "F62EBD36-98CA-11F1-8BDF-EF2495D048F3",
@@ -2571,13 +2610,26 @@
     "date": "2026-11-25",
     "time": "21:45",
     "start": "2026-11-25T21:45:00+01:00",
-    "status": "scheduled",
+    "status": "finished",
     "homeTeamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
     "awayTeamId": "BC83FFA0-115E-11EF-ABB5-E111FF753123",
-    "homeGoals": null,
-    "awayGoals": null,
+    "homeGoals": 4,
+    "awayGoals": 1,
     "venue": "ICERINK (Yellow)",
-    "stars": []
+    "stars": [
+      {
+        "teamId": "7CD9D71C-D10A-43F2-A94B-E8E7ACCFD8F2",
+        "number": 7,
+        "firstName": "Marek",
+        "lastName": "Šikýř"
+      },
+      {
+        "teamId": "BC83FFA0-115E-11EF-ABB5-E111FF753123",
+        "number": 29,
+        "firstName": "Stanislav",
+        "lastName": "Tvrz"
+      }
+    ]
   },
   {
     "gameId": "F62F0B54-98CA-11F1-8BDF-EF2495D048F3",
