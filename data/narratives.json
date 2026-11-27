@@ -95,6 +95,19 @@
       "Na střely jsme prohráli 17:26 a branku soupeře se nám tentokrát překonat nepodařilo. Nejlepším hráčem za nás byl vyhlášen Tomáš Pražan."
     ]
   },
+  "F62F0B54-98CA-11F1-8BDF-EF2495D048F3": {
+    "key": "3986cc7a3d4641df",
+    "model": "claude-code",
+    "generatedAt": "2026-11-27T06:15:32.332Z",
+    "summary": "Projektový ústav jsme ve čtvrtek porazili 5:2. Rozhodli jsme ve druhé třetině, kde jsme si vypracovali vedení 4:2, a hlavní postavou byl Martin Vrbka se dvěma góly a dvěma asistencemi.",
+    "narrative": [
+      "První třetina skončila 0:0, takže se na góly čekalo. Soupeř z Projektového ústavu hrál vyrovnaně a branky z toho nebyly žádné.",
+      "Druhá třetina byla zlomová. V 18. minutě otevřel skóre Martin Vrbka po přihrávkách Roberta Komarovského a Michala Lázňovského. Hned v další minutě zvýšil Martin Znamenáček na 2:0 a ve 21. minutě přidal Tomáš Pražan na 3:0, k čemuž mu pomohli Vrbka se Znamenáčkem.",
+      "Soupeř se ale nevzdal. Petr Novák snížil ve 24. minutě na 3:1 a Petr Urban ve 27. minutě na 3:2. Z komfortního vedení tak byl najednou těsný zápas. Odpověď přišla ve 29. minutě: Znamenáček vsítil svůj druhý gól a ještě před koncem třetiny jsme vedli 4:2.",
+      "Ve třetí třetině už padl jen jeden gól. Ve 44. minutě v přesilovce zakončil Vrbka po přihrávce Lázňovského a bylo to 5:2. Vrbka si tak připsal dva góly a dvě asistence a byl vyhlášen nejlepším hráčem za nás, za soupeře dostal hvězdu Martin Veselý se dvěma asistencemi.",
+      "Střely byly vyrovnané, 28 našich proti 29 soupeřovým, takže jsme vyhráli i přesto, že soupeř střílel o kousek víc. Vyloučení jsme měli čtyři, soupeř tři, a jednu přesilovku jsme proměnili. Tři body jdou na naše konto."
+    ]
+  },
   "F630E011-98CA-11F1-8BDF-EF2495D048F3": {
     "key": "2a70f1c1e2d005ae",
     "model": "claude-code",
@@ -208,14 +221,15 @@
     ]
   },
   "round:2026-11-23": {
-    "key": "86e9df9f5f3b941f",
+    "key": "d13989a6e54d119e",
     "model": "claude-code",
-    "generatedAt": "2026-11-26T06:15:25.052Z",
-    "summary": "V týdnu 23.–29. listopadu jsme nehráli, ale ve skupině se dělo dost. HC Ducks Stars se po výhře 4:1 nad lídrem Golden Bears posunuly ze 4. na 2. místo a Gaston Seals překvapily výhrou 5:2 nad druhými Gladiators.",
+    "generatedAt": "2026-11-27T06:15:32.332Z",
+    "summary": "Týden 23.–29. listopadu přinesl dvě velká překvapení: čtvrtý HC Ducks Stars prohrál s osmým HC Car-Back a druhý HC Gladiators s desátými Gaston Seals. My jsme ve čtvrtek porazili Projektový ústav 5:2 a posunuli se na 6. místo.",
     "narrative": [
-      "Padlo celkem 49 gólů v šesti zápasech. Nejvíc jich bylo v duelu, kde HC Raptors těsně porazily HC Prague Wolves B 7:6. Nejvyšší výhru si připsaly Prague Pigeons B, které porazily HC Scorpions Praha 6:3.",
-      "Překvapení byla dvě. HC Car-Back, před týdnem osmé, vyhrály u HC Ducks Stars 6:4, přestože Ducks byly čtvrté. Gaston Seals, desáté před týdnem, porazily druhé HC Gladiators 5:2. Ducks Stars se ale z prohry rychle oklepaly a lídra Golden Bears porazily 4:1, čímž se posunuly na druhé místo. Mezi týmy, které se nejvíc posunuly, jsou ještě HC Alligators (ze 14. na 11.) a Prague Pigeons B (z 15. na 13.).",
-      "Golden Bears zůstávají na čele s 26 body po 14 zápasech. My jsme tentokrát stáli stranou a jsme osmí s 12 body z 19 týmů."
+      "V sedmi odehraných zápasech skupiny padlo 56 gólů. Nejvíc jich bylo v duelu HC Raptors s HC Prague Wolves B, který skončil 7:6 pro Raptors. Nejvyšší výhru si připsal Prague Pigeons B, když porazil HC Scorpions Praha 6:3.",
+      "Překvapení nechyběla. HC Car-Back vyhrál v Ducks Stars 6:4, přestože byl před týdnem osmý a soupeř čtvrtý. A Gaston Seals, desátý v tabulce, porazil druhý HC Gladiators 5:2. Ducks Stars si to ale vynahradili ve středu proti Golden Bears 4:1 a v tabulce se vyšplhali ze 4. na 2. místo.",
+      "Nejvíc se posunuli HC Alligators (ze 14. na 11. místo), HC Ducks Stars (ze 4. na 2.) a Prague Pigeons B (z 15. na 13.). Tabulku dál vede Golden Bears s 26 body ze 14 zápasů.",
+      "A my? Naši kluci porazili Projektový ústav 5:2 a s 14 body jsou teď šestí z devatenácti týmů."
     ]
   }
 }
